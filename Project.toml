@@ -1,0 +1,8 @@
+name = "PDFHighlights"
+uuid = "e9eb520e-30fd-490c-8483-b9cf365267e3"
+authors = ["Pavel Sobolev <paveloom@mail.ru>"]
+version = "0.1.0"
+
+[deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"

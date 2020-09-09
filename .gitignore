@@ -1,2 +1,11 @@
 # User's Makefile(s)
 *Makefile
+
+# Manifest files
+*Manifest.toml
+
+# Any PDF
+*.pdf
+
+# Any .csv
+*.csv
