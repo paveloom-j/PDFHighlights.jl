@@ -5,10 +5,10 @@ baremodule PDFHighlights
 module Internal
 
 # Include source code
-include("Exceptions.jl")
-include("Highlights.jl")
-include("Metadata.jl")
-include("Tables.jl")
+include("Exceptions/Exceptions.jl")
+include("Highlights/Highlights.jl")
+include("Metadata/Metadata.jl")
+include("Tables/Tables.jl")
 
 # Export contents of the modules into `Internal`
 using .Exceptions
