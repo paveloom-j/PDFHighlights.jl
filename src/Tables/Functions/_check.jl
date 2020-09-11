@@ -33,13 +33,21 @@ function _check(file::AbstractString)::Nothing
         inside_quotes = false
         commas = 0
 
-        for char in line
+        for (char_index, char) in pairs(line)
             if char == ','
                 if !inside_quotes
                     commas += 1
                 end
-            elseif char == '"'
-                inside_quotes ? inside_quotes = false : inside_quotes = true
+            else
+                if char_index == 1
+                    if char == '"'
+                        inside_quotes ? inside_quotes = false : inside_quotes = true
+                    end
+                else
+                    if char == '"' && line[prevind(line, char_index)] != '\\'
+                        inside_quotes ? inside_quotes = false : inside_quotes = true
+                    end
+                end
             end
         end
 

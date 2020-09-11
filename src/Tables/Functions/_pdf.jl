@@ -5,14 +5,14 @@ function _pdf(table::Table, pdf::AbstractString; show::Bool = false)::Nothing
     existing_lines = readlines(table.file)
 
     author, title = map(
-        collection -> replace.(collection, "\"" => "\"\""),
+        collection -> replace.(collection, "\"" => "\\\""),
         author_title(pdf)
     )
 
     highlights, comments, pages = highlights_comments_pages(pdf)
 
-    replace!(highlight -> replace(highlight, "\"" => "\"\""), highlights)
-    replace!(comment -> replace(comment, "\"" => "\"\""), comments)
+    replace!(highlight -> replace(highlight, "\"" => "\\\""), highlights)
+    replace!(comment -> replace(comment, "\"" => "\\\""), comments)
 
     new_lines = string.(
         "\"",

@@ -28,8 +28,16 @@ function _notes(table::Table)::Vector{String}
                         commas_counter == 4 && (fourth_comma_index = char_index)
                         commas_counter == 5 && (fifth_comma_index = char_index; break)
                     end
-                elseif char == '"'
-                    inside_quotes ? inside_quotes = false : inside_quotes = true
+                else
+                    if char_index == 1
+                        if char == '"'
+                            inside_quotes ? inside_quotes = false : inside_quotes = true
+                        end
+                    else
+                        if char == '"' && line[prevind(line, char_index)] != '\\'
+                            inside_quotes ? inside_quotes = false : inside_quotes = true
+                        end
+                    end
                 end
             end
 
@@ -56,7 +64,8 @@ function _notes(table::Table)::Vector{String}
 
         end
 
-        return notes
+        subs = Dict("\\\"" => "\"", "\"\"" => "\"")
+        replace.(notes, r"\\\\\"|\"\"" => s -> subs[s])
 
     else
         return []
