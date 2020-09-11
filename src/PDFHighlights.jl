@@ -18,11 +18,16 @@ using .Tables
 
 end
 
+# Export the second-level functions
 using .Internal.Highlights
 using .Internal.Metadata
 using .Internal.Tables
 
-export highlights_comments
+# Export the first level functions
+export comments_pages,
+       highlights_comments,
+       highlights_comments_pages,
+       highlights_pages
 export author_title
 export Table
 

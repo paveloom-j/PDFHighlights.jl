@@ -1,7 +1,8 @@
 function _concatenate(
     highlights::Vector{String},
-    comments::Vector{String}
-    )::Tuple{Vector{String}, Vector{String}}
+    comments::Vector{String},
+    pages::Vector{Int},
+    )::Tuple{Vector{String}, Vector{String}, Vector{Int}}
 
     # The initial concatenation identifier
     id = 1
@@ -28,12 +29,14 @@ function _concatenate(
 
             # If the last word ends with `-`, concatenate the halves
             if length(half_word) > 1 && endswith(half_word, '-')
-                highlights[index - id + 1] = first_highlight[1:end-1] * current_highlight
-                highlights[index] = ""
+                highlights[index - id + 1] =
+                chop(first_highlight; tail = 1) * current_highlight
             else
                 highlights[index - id + 1] *= ' ' * current_highlight
-                highlights[index] = ""
             end
+
+            highlights[index] = ""
+            pages[index] = 0
 
             id += 1
 
@@ -47,6 +50,7 @@ function _concatenate(
     end
 
     return filter(!isempty, highlights),
-           filter(element -> !startswith(element, r".c([2-9]|[1-9][0-9])+"), comments)
+           filter(element -> !startswith(element, r".c([2-9]|[1-9][0-9])+"), comments),
+           filter(element -> element != 0, pages)
 
 end

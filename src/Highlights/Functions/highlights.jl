@@ -1,4 +1,4 @@
 function highlights(pdf::AbstractString; concatenate = true)::Vector{String}
-    highlights, _ = highlights_comments(pdf; concatenate)
+    highlights, _, _ = highlights_comments_pages(pdf; concatenate)
     return highlights
 end
