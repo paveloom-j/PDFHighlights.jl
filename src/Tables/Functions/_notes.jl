@@ -15,7 +15,7 @@ function _notes(table::Table)::Vector{String}
         fourth_comma_index = 0
         fifth_comma_index = 0
 
-        # Find the first comma outside of quotes
+        # Find the fourth and fifth comma outside of quotes
         for (note_index, line) in enumerate(lines[2:end])
 
             inside_quotes = false

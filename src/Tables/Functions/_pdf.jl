@@ -9,10 +9,10 @@ function _pdf(table::Table, pdf::AbstractString; show::Bool = false)::Nothing
         author_title(pdf)
     )
 
-    highlights, comments = map(
-        collection -> replace.(collection, "\"" => "\"\""),
-        highlights_comments(pdf)
-    )
+    highlights, comments, pages = highlights_comments_pages(pdf)
+
+    replace!(highlight -> replace(highlight, "\"" => "\"\""), highlights)
+    replace!(comment -> replace(comment, "\"" => "\"\""), comments)
 
     new_lines = string.(
         "\"",
@@ -24,15 +24,20 @@ function _pdf(table::Table, pdf::AbstractString; show::Bool = false)::Nothing
         "\",",
         ",\"",
         comments,
-        "\","
+        "\",",
+        pages
     )
 
+    # Get the number of highlights found in the pdf
     found = length(new_lines)
 
+    # Filter existing strings
     new_lines = filter(line -> !(line in existing_lines), new_lines)
 
+    # Get the number of highlights that will be added to the table
     added = length(new_lines)
 
+    # Write the new lines
     if !isempty(new_lines)
         open(table.file, "a") do io
             println(io, join(new_lines, '\n'))

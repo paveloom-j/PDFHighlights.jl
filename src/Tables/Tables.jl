@@ -23,6 +23,9 @@ struct Table
     # Get the highlights for the table
     highlights::Function
 
+    # Get the locations from the table
+    locations::Function
+
     # Get the notes for the table
     notes::Function
 
@@ -55,6 +58,7 @@ struct Table
             () -> _check(this),
             () -> _info(this),
             () -> _highlights(this),
+            () -> _locations(this),
             () -> _notes(this),
             (pdf::AbstractString; show::Bool = false) -> _pdf(this, pdf; show),
         )
@@ -69,6 +73,7 @@ end
 include("Functions/_check.jl")
 include("Functions/_highlights.jl")
 include("Functions/_info.jl")
+include("Functions/_locations.jl")
 include("Functions/_notes.jl")
 include("Functions/_pdf.jl")
 
