@@ -20,17 +20,16 @@ struct Table
     # Print the info about the table
     info::Function
 
-    # Get the highlights for the table
-    highlights::Function
-
-    # Get the locations from the table
-    locations::Function
-
-    # Get the notes for the table
-    notes::Function
-
     # Import the highlights from the PDF
     pdf::Function
+
+    # Get the column values from the table
+    highlights::Function
+    titles::Function
+    authors::Function
+    urls::Function
+    notes::Function
+    locations::Function
 
     # Construct an object of this type
     function Table(file::AbstractString)
@@ -57,10 +56,13 @@ struct Table
             file,
             () -> _check(this),
             () -> _info(this),
-            () -> _highlights(this),
-            () -> _locations(this),
-            () -> _notes(this),
             (pdf::AbstractString; show::Bool = false) -> _pdf(this, pdf; show),
+            () -> _highlights(this),
+            () -> _titles(this),
+            () -> _authors(this),
+            () -> _urls(this),
+            () -> _notes(this),
+            () -> _locations(this),
         )
 
         return this
@@ -70,11 +72,22 @@ struct Table
 end
 
 # Load the functions
+
+# Check if the structure of the table is correct
 include("Functions/_check.jl")
-include("Functions/_highlights.jl")
+
+# Print the info about the table
 include("Functions/_info.jl")
-include("Functions/_locations.jl")
-include("Functions/_notes.jl")
+
+# Import the highlights from the PDF
 include("Functions/_pdf.jl")
+
+# Get the column values from the table
+include("Functions/_highlights.jl")
+include("Functions/_titles.jl")
+include("Functions/_authors.jl")
+include("Functions/_urls.jl")
+include("Functions/_notes.jl")
+include("Functions/_locations.jl")
 
 end
