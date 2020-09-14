@@ -13,6 +13,7 @@ function _concatenate(
         # Start a new chain of highlights
         if startswith(comment, ".c1")
 
+            comments[index] = chop(comment; head = 3)
             id = 2
 
         # Continue the current chain of highlights
@@ -35,6 +36,7 @@ function _concatenate(
                 highlights[index - id + 1] *= ' ' * current_highlight
             end
 
+            # Delete metadata
             highlights[index] = ""
             pages[index] = 0
 
