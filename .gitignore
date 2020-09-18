@@ -4,8 +4,13 @@
 # Manifest files
 *Manifest.toml
 
-# Any PDF
-*.pdf
+# Any PDF in the root directory
+/*.pdf
 
 # Any .csv
 *.csv
+
+# Side files when assembling PDF
+*.aux
+*.log
+*.gz

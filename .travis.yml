@@ -1,0 +1,36 @@
+language: julia
+dist: focal
+
+env:
+  global:
+    - PATH=/opt/python/3.8.1/bin:$PATH
+
+notifications:
+  email: false
+
+stages:
+  - name: Codecov
+  - name: Nightly
+    if: branch != master AND branch != develop AND NOT branch =~ /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+
+before_script:
+  - bash .github/scripts/install-poppler-unix.sh
+
+jobs:
+  fast_finish: true
+  allow_failures:
+    julia: nightly
+  include:
+    - stage: "Codecov"
+      name: "Code Coverage, Julia 1.5 (Linux, x64)"
+      julia: 1.5
+      os: linux
+      arch: amd64
+      script:
+        - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage;
+                    Pkg.test(coverage=true); Codecov.submit(process_folder())'
+    - stage: "Nightly"
+      name: "Julia Nightly (Linux, x64)"
+      julia: nightly
+      os: linux
+      arch: amd64

@@ -4,23 +4,26 @@ that they were created by.
 """
 module Exceptions
 
-export IncorrectExtension,
+export DoesNotExist,
        IncorrectHeader,
        IntegrityCheckFailed,
        LastElementIsNotAnInteger,
+       NotCSV,
+       NotCSVorPDF,
+       NotPDF,
        NotSixColumns
 
 # Load the auxiliary macros
-include("Macros/exception_with_line.jl")
-include("Macros/exception_without_line.jl")
+include("Macros/exception_with_one_arg.jl")
+include("Macros/exception_with_two_args.jl")
 
-@exception_without_line(
-    "IncorrectExtension",
-    "Exception thrown when the specified path does not end in `.csv`.",
-    "The specified path (\\\"\", e.file, \"\\\") does not end in `.csv`.",
+@exception_with_one_arg(
+    "DoesNotExist",
+    "Exception thrown when the specified file doesn't exist.",
+    "The specified file (\\\"\", e.file, \"\\\") doesn't exist.",
 )
 
-@exception_without_line(
+@exception_with_one_arg(
     "IncorrectHeader",
     "Exception thrown when the specified file has an incorrect header.",
     """
@@ -28,18 +31,36 @@ include("Macros/exception_without_line.jl")
     Check that the header is `Highlight,Title,Author,URL,Note,Location`.""",
 )
 
-@exception_without_line(
+@exception_with_one_arg(
     "IntegrityCheckFailed",
     """
-    An exception thrown when another exception was thrown while rechecking the status
-    of the file.
+    An exception thrown when another exception was thrown while checking the integrity
+    of the table.
     """,
     """
-    Another exception was thrown when rechecking the\e[s
-    \e[u\e[A structural correctness of the file \\\"\", e.file, \"\\\".""",
+    Another exception was thrown while checking the\e[s
+    \e[u\e[A integrity of the table \\\"\", e.file, \"\\\".""",
 )
 
-@exception_with_line(
+@exception_with_one_arg(
+    "NotCSV",
+    "Exception thrown when the specified path does not end in `.csv`.",
+    "The specified path (\\\"\", e.file, \"\\\") does not end in `.csv`.",
+)
+
+@exception_with_one_arg(
+    "NotCSVorPDF",
+    "An exception thrown when the specified path does not end in `.csv` or `.pdf`.",
+    "The specified path (\\\"\", e.file, \"\\\") does not end in `.csv` or `.pdf`."
+)
+
+@exception_with_one_arg(
+    "NotPDF",
+    "Exception thrown when the specified path does not end in `.pdf`.",
+    "The specified path (\\\"\", e.file, \"\\\") does not end in `.pdf`.",
+)
+
+@exception_with_two_args(
     "LastElementIsNotAnInteger",
     "Exception thrown when the last element in the line is not an integer.",
     """
@@ -47,7 +68,7 @@ include("Macros/exception_without_line.jl")
     \e[u\e[A file is not an integer.""",
 )
 
-@exception_with_line(
+@exception_with_two_args(
     "NotSixColumns",
     "Exception thrown when the row does not represent elements for 6 columns.",
     """

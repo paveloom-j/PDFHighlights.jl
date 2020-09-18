@@ -6,29 +6,45 @@ module Internal
 
 # Include source code
 include("Exceptions/Exceptions.jl")
-include("Highlights/Highlights.jl")
-include("Metadata/Metadata.jl")
-include("Tables/Tables.jl")
+include("PDF/PDF.jl")
+include("CSV/CSV.jl")
+include("Both/Both.jl")
 
 # Export contents of the modules into `Internal`
 using .Exceptions
-using .Highlights
-using .Metadata
-using .Tables
+using .PDF
+using .CSV
+using .Both
 
 end
 
 # Export the second-level functions
-using .Internal.Highlights
-using .Internal.Metadata
-using .Internal.Tables
+using .Internal.PDF
+using .Internal.CSV
+using .Internal.Both
 
 # Export the first level functions
-export comments_pages,
-       highlights_comments,
-       highlights_comments_pages,
-       highlights_pages
-export author_title
-export Table
+export #= PDF =#
+       get_author_title,
+       get_author,
+       get_comments_pages,
+       get_comments,
+       get_highlights_comments_pages,
+       get_highlights_comments,
+       get_highlights_pages,
+       get_highlights,
+       get_pages,
+       get_title,
+       #= CSV =#
+       get_authors,
+       get_locations,
+       get_notes,
+       get_titles,
+       get_urls,
+       import_highlights,
+       initialize,
+       print_info,
+       #= Both =#
+       get_highlights
 
 end
