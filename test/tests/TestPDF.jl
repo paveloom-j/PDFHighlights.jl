@@ -10,28 +10,6 @@ println("\e[1;32mRUNNING\e[0m: TestPDF.jl")
 
 const pdf = joinpath(@__DIR__, "..", "pdf", "TestPDF.pdf")
 
-@testset "get_author_title" begin
-
-    @test get_author_title(pdf) == ("Pavel Sobolev", "A dummy PDF for tests")
-
-    @test_throws(
-        PDFHighlights.Internal.Exceptions.NotPDF("oof"),
-        get_author_title("oof"),
-    )
-
-    @test_throws(
-        PDFHighlights.Internal.Exceptions.DoesNotExist("oof.pdf"),
-        get_author_title("oof.pdf"),
-    )
-
-end
-
-@testset "get_author" begin
-
-    @test get_author(pdf) == "Pavel Sobolev"
-
-end
-
 @testset "_concatenate" begin
 
     # Without halves of words
@@ -60,6 +38,80 @@ end
 
 end
 
+@testset "_get_authors_from_PDF" begin
+
+    dir = joinpath(@__DIR__, "..")
+
+    @test PDFHighlights.Internal.PDF._get_authors_from_PDF(dir) == String[
+        "Pavel Sobolev",
+    ]
+
+end
+
+@testset "_get_highlights_from_PDF" begin
+
+    # With concatenation
+    @test PDFHighlights.Internal.PDF._get_highlights_from_PDF(pdf) ==
+    String["Highlight 1", "Highlight 2 Highlight 3", "Highlight 4"]
+
+    # Without concatenation
+    @test PDFHighlights.Internal.PDF._get_highlights_from_PDF(pdf; concatenate = false) ==
+    String["Highlight 1", "Highlight 2", "Highlight 3", "High-", "light 4"]
+
+end
+
+@testset "_get_titles_from_PDF" begin
+
+    dir = joinpath(@__DIR__, "..")
+
+    @test PDFHighlights.Internal.PDF._get_titles_from_PDF(dir) == String[
+        "A dummy PDF for tests",
+    ]
+
+end
+
+@testset "get_author_title" begin
+
+    @test get_author_title(pdf) == ("Pavel Sobolev", "A dummy PDF for tests")
+
+    @test_throws(
+        PDFHighlights.Internal.Exceptions.FileDoesNotExist("oof"),
+        get_author_title("oof"),
+    )
+
+    touch("oof")
+
+    @test_throws(
+        PDFHighlights.Internal.Exceptions.NotPDF("oof"),
+        get_author_title("oof"),
+    )
+
+    isfile("oof") && rm("oof")
+
+end
+
+@testset "get_author" begin
+
+    @test get_author(pdf) == "Pavel Sobolev"
+
+end
+
+@testset "get_authors_titles" begin
+
+    dir = joinpath(@__DIR__, "..")
+
+    @test get_authors_titles(dir) == (
+        String["Pavel Sobolev"],
+        String["A dummy PDF for tests"]
+    )
+
+    @test_throws(
+        PDFHighlights.Internal.Exceptions.DirectoryDoesNotExist("oof"),
+        get_authors_titles("oof"),
+    )
+
+end
+
 @testset "get_highlights_comments_pages" begin
 
     # With concatenation
@@ -79,13 +131,35 @@ end
     )
 
     @test_throws(
+        PDFHighlights.Internal.Exceptions.DoesNotExist("oof"),
+        get_highlights_comments_pages("oof"),
+    )
+
+    touch("oof")
+
+    @test_throws(
         PDFHighlights.Internal.Exceptions.NotPDF("oof"),
         get_highlights_comments_pages("oof"),
     )
 
-    @test_throws(
-        PDFHighlights.Internal.Exceptions.DoesNotExist("oof.pdf"),
-        get_highlights_comments_pages("oof.pdf"),
+    isfile("oof") && rm("oof")
+
+    dir = joinpath(@__DIR__, "..")
+
+    # With concatenation
+    @test get_highlights_comments_pages(dir) ==
+    (
+        String["Highlight 1", "Highlight 2 Highlight 3", "Highlight 4"],
+        String["Comment 1", "Comment 2 Comment 3", "Comment 4"],
+        Int[1, 2, 4],
+    )
+
+    # Without concatenation
+    @test get_highlights_comments_pages(dir; concatenate = false) ==
+    (
+        String["Highlight 1", "Highlight 2", "Highlight 3", "High-", "light 4"],
+        String["Comment 1", ".c1 Comment 2", ".c2 Comment 3", ".c1 Comment 4", ".c2"],
+        Int[1, 2, 3, 4, 5],
     )
 
 end
@@ -153,18 +227,6 @@ end
     # Without concatenation
     @test get_comments(pdf) ==
     String["Comment 1", ".c1 Comment 2", ".c2 Comment 3", ".c1 Comment 4", ".c2"]
-
-end
-
-@testset "_get_highlights_from_pdf" begin
-
-    # With concatenation
-    @test PDFHighlights.Internal.PDF._get_highlights_from_pdf(pdf) ==
-    String["Highlight 1", "Highlight 2 Highlight 3", "Highlight 4"]
-
-    # Without concatenation
-    @test PDFHighlights.Internal.PDF._get_highlights_from_pdf(pdf; concatenate = false) ==
-    String["Highlight 1", "Highlight 2", "Highlight 3", "High-", "light 4"]
 
 end
 

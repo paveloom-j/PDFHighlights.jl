@@ -1,4 +1,4 @@
-function get_authors(csv::String)::Vector{String}
+function _get_authors_from_CSV(csv::String)::Vector{String}
 
     try
         initialize(csv)

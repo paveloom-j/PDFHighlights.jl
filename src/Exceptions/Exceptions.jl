@@ -4,7 +4,9 @@ that they were created by.
 """
 module Exceptions
 
-export DoesNotExist,
+export DirectoryDoesNotExist,
+       DoesNotExist,
+       FileDoesNotExist,
        IncorrectHeader,
        IntegrityCheckFailed,
        LastElementIsNotAnInteger,
@@ -18,7 +20,19 @@ include("Macros/exception_with_one_arg.jl")
 include("Macros/exception_with_two_args.jl")
 
 @exception_with_one_arg(
+    "DirectoryDoesNotExist",
+    "Exception thrown when the specified directory doesn't exist.",
+    "The specified directory (\\\"\", e.file, \"\\\") doesn't exist.",
+)
+
+@exception_with_one_arg(
     "DoesNotExist",
+    "Exception thrown when the specified file or directory doesn't exist.",
+    "The specified file or directory (\\\"\", e.file, \"\\\") doesn't exist.",
+)
+
+@exception_with_one_arg(
+    "FileDoesNotExist",
     "Exception thrown when the specified file doesn't exist.",
     "The specified file (\\\"\", e.file, \"\\\") doesn't exist.",
 )

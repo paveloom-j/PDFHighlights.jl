@@ -25,7 +25,7 @@ end
 
     @initialize
 
-    @test readlines(csv) == [header,]
+    @test readlines(csv) == String[header,]
     @test_nowarn initialize(csv)
     @test_throws PDFHighlights.Internal.Exceptions.NotCSV("oof") initialize("oof")
 
@@ -137,6 +137,79 @@ end
         import_highlights("oof", pdf),
     )
 
+    @initialize
+
+    dir = joinpath(@__DIR__, "..")
+
+    s1 = @capture_out import_highlights(csv, dir)
+    s2 = """
+
+        CSV: "$(basename(csv))"
+        Directory: "$(basename(dirname(normpath(dir))))"
+        Highlights (found / added): 3 / 3
+
+    """
+
+    @test s1 == s2
+
+    s1 = @capture_out import_highlights(csv, dir)
+    s2 = """
+
+        CSV: "$(basename(csv))"
+        Directory: "$(basename(dirname(normpath(dir))))"
+        Highlights (found / added): 3 / 0
+
+    """
+
+    @test s1 == s2
+
+    @initialize
+
+    dir = dirname(normpath(@__DIR__, ".."))
+
+    s1 = @capture_out import_highlights(csv, dir)
+    s2 = """
+
+        CSV: "$(basename(csv))"
+        Directory: "$(basename(dir))"
+        Highlights (found / added): 3 / 3
+
+    """
+
+    @test s1 == s2
+
+    s1 = @capture_out import_highlights(csv, dir)
+    s2 = """
+
+        CSV: "$(basename(csv))"
+        Directory: "$(basename(dir))"
+        Highlights (found / added): 3 / 0
+
+    """
+
+    @test s1 == s2
+
+    s1 = @capture_out import_highlights(csv, dir; show = true)
+    s2 = """
+
+        CSV: "$(basename(csv))"
+        Directory: "$(basename(dir))"
+        Highlights (found / added): 3 / 0
+
+        Found highlights:
+        [1] Highlight 1
+        [2] Highlight 2 Highlight 3
+        [3] Highlight 4
+
+        Found comments:
+        [1] Comment 1
+        [2] Comment 2 Comment 3
+        [3] Comment 4
+
+    """
+
+    @test s1 == s2
+
 end
 
 @testset "print_info" begin
@@ -172,91 +245,11 @@ end
 
 end
 
-@testset "_get_highlights_from_csv" begin
+@testset "_get_authors_from_CSV" begin
 
     @initialize
 
-    @test PDFHighlights.Internal.CSV._get_highlights_from_csv(csv) == []
-
-    line = "\"Highlight with \\\"quotes\\\"\",\"Title 1\",\"Author 1\",,\"Note 1\",1"
-
-    open(csv, "a") do io
-        println(io, line)
-    end
-
-    @test PDFHighlights.Internal.CSV._get_highlights_from_csv(csv) ==
-    ["Highlight with \"quotes\""]
-
-    line = "Highlight without quotes,\"Title 1\",\"Author 1\",,\"Note 1\",1"
-
-    open(csv, "w") do io
-        println(io, header, '\n', line)
-    end
-
-    @test PDFHighlights.Internal.CSV._get_highlights_from_csv(csv) ==
-    ["Highlight without quotes"]
-
-    line = ",\"Title 1\",\"Author 1\",,\"Note 1\",1"
-
-    open(csv, "w") do io
-        println(io, header, '\n', line)
-    end
-
-    @test PDFHighlights.Internal.CSV._get_highlights_from_csv(csv) ==
-    [""]
-
-    @test_throws(
-        PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
-        PDFHighlights.Internal.CSV._get_highlights_from_csv("oof"),
-    )
-
-end
-
-@testset "get_titles" begin
-
-    @initialize
-
-    @test get_titles(csv) == []
-
-    line = "\"Highlight 1\",\"Title with \\\"quotes\\\"\",\"Author 1\",,\"Note 1\",1"
-
-    open(csv, "a") do io
-        println(io, line)
-    end
-
-    @test get_titles(csv) ==
-    ["Title with \"quotes\""]
-
-    line = "\"Highlight 1\",Title without quotes,\"Author 1\",,\"Note 1\",1"
-
-    open(csv, "w") do io
-        println(io, header, '\n', line)
-    end
-
-    @test get_titles(csv) ==
-    ["Title without quotes"]
-
-    line = "\"Highlight 1\",,\"Author 1\",,\"Note 1\",1"
-
-    open(csv, "w") do io
-        println(io, header, '\n', line)
-    end
-
-    @test get_titles(csv) ==
-    [""]
-
-    @test_throws(
-        PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
-        get_titles("oof"),
-    )
-
-end
-
-@testset "get_authors" begin
-
-    @initialize
-
-    @test get_authors(csv) == []
+    @test PDFHighlights.Internal.CSV._get_authors_from_CSV(csv) == String[]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author with \\\"quotes\\\"\",,\"Note 1\",1"
 
@@ -264,8 +257,8 @@ end
         println(io, line)
     end
 
-    @test get_authors(csv) ==
-    ["Author with \"quotes\""]
+    @test PDFHighlights.Internal.CSV._get_authors_from_CSV(csv) ==
+    String["Author with \"quotes\""]
 
     line = "\"Highlight 1\",\"Title 1\",Author without quotes,,\"Note 1\",1"
 
@@ -273,8 +266,8 @@ end
         println(io, header, '\n', line)
     end
 
-    @test get_authors(csv) ==
-    ["Author without quotes"]
+    @test PDFHighlights.Internal.CSV._get_authors_from_CSV(csv) ==
+    String["Author without quotes"]
 
     line = "\"Highlight 1\",\"Title 1\",,,\"Note 1\",1"
 
@@ -282,12 +275,92 @@ end
         println(io, header, '\n', line)
     end
 
-    @test get_authors(csv) ==
-    [""]
+    @test PDFHighlights.Internal.CSV._get_authors_from_CSV(csv) ==
+    String[""]
 
     @test_throws(
         PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
-        get_authors("oof"),
+        PDFHighlights.Internal.CSV._get_authors_from_CSV("oof"),
+    )
+
+end
+
+@testset "_get_highlights_from_CSV" begin
+
+    @initialize
+
+    @test PDFHighlights.Internal.CSV._get_highlights_from_CSV(csv) == String[]
+
+    line = "\"Highlight with \\\"quotes\\\"\",\"Title 1\",\"Author 1\",,\"Note 1\",1"
+
+    open(csv, "a") do io
+        println(io, line)
+    end
+
+    @test PDFHighlights.Internal.CSV._get_highlights_from_CSV(csv) ==
+    String["Highlight with \"quotes\""]
+
+    line = "Highlight without quotes,\"Title 1\",\"Author 1\",,\"Note 1\",1"
+
+    open(csv, "w") do io
+        println(io, header, '\n', line)
+    end
+
+    @test PDFHighlights.Internal.CSV._get_highlights_from_CSV(csv) ==
+    String["Highlight without quotes"]
+
+    line = ",\"Title 1\",\"Author 1\",,\"Note 1\",1"
+
+    open(csv, "w") do io
+        println(io, header, '\n', line)
+    end
+
+    @test PDFHighlights.Internal.CSV._get_highlights_from_CSV(csv) ==
+    String[""]
+
+    @test_throws(
+        PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
+        PDFHighlights.Internal.CSV._get_highlights_from_CSV("oof"),
+    )
+
+end
+
+@testset "_get_titles_from_CSV" begin
+
+    @initialize
+
+    @test PDFHighlights.Internal.CSV._get_titles_from_CSV(csv) == String[]
+
+    line = "\"Highlight 1\",\"Title with \\\"quotes\\\"\",\"Author 1\",,\"Note 1\",1"
+
+    open(csv, "a") do io
+        println(io, line)
+    end
+
+    @test PDFHighlights.Internal.CSV._get_titles_from_CSV(csv) ==
+    String["Title with \"quotes\""]
+
+    line = "\"Highlight 1\",Title without quotes,\"Author 1\",,\"Note 1\",1"
+
+    open(csv, "w") do io
+        println(io, header, '\n', line)
+    end
+
+    @test PDFHighlights.Internal.CSV._get_titles_from_CSV(csv) ==
+    String["Title without quotes"]
+
+    line = "\"Highlight 1\",,\"Author 1\",,\"Note 1\",1"
+
+    open(csv, "w") do io
+        println(io, header, '\n', line)
+    end
+
+    @test PDFHighlights.Internal.CSV._get_titles_from_CSV(csv) ==
+    String[""]
+
+    @test_throws(
+        PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
+        PDFHighlights.Internal.CSV._get_titles_from_CSV("oof"),
     )
 
 end
@@ -296,7 +369,7 @@ end
 
     @initialize
 
-    @test get_urls(csv) == []
+    @test get_urls(csv) == String[]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",\"URL, \\\"quotes\\\"\",\"Note 1\",1"
 
@@ -305,7 +378,7 @@ end
     end
 
     @test get_urls(csv) ==
-    ["URL, \"quotes\""]
+    String["URL, \"quotes\""]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",URL without quotes,\"Note 1\",1"
 
@@ -314,7 +387,7 @@ end
     end
 
     @test get_urls(csv) ==
-    ["URL without quotes"]
+    String["URL without quotes"]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"Note 1\",1"
 
@@ -323,7 +396,7 @@ end
     end
 
     @test get_urls(csv) ==
-    [""]
+    String[""]
 
     @test_throws(
         PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
@@ -336,7 +409,7 @@ end
 
     @initialize
 
-    @test get_notes(csv) == []
+    @test get_notes(csv) == String[]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"Note with \\\"quotes\\\"\",1"
 
@@ -345,7 +418,7 @@ end
     end
 
     @test get_notes(csv) ==
-    ["Note with \"quotes\""]
+    String["Note with \"quotes\""]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,Note without quotes,1"
 
@@ -354,7 +427,7 @@ end
     end
 
     @test get_notes(csv) ==
-    ["Note without quotes"]
+    String["Note without quotes"]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,,1"
 
@@ -363,7 +436,7 @@ end
     end
 
     @test get_notes(csv) ==
-    [""]
+    String[""]
 
     @test_throws(
         PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
@@ -376,7 +449,7 @@ end
 
     @initialize
 
-    @test get_locations(csv) == []
+    @test get_locations(csv) == Int[]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"Note 1\","
 
@@ -385,7 +458,7 @@ end
     end
 
     @test get_locations(csv) ==
-    [0]
+    Int[0]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"Note 1\",1"
 
@@ -394,7 +467,7 @@ end
     end
 
     @test get_locations(csv) ==
-    [1]
+    Int[1]
 
     @test_throws(
         PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),

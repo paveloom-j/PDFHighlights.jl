@@ -9,7 +9,7 @@ function print_info(csv::String)::Nothing
     println("""
 
         Table path: "$(csv)"
-        Number of highlights: $(length(_get_highlights_from_csv(csv)))
+        Number of highlights: $(length(_get_highlights_from_CSV(csv)))
     """)
 
     return nothing

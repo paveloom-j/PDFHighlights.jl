@@ -1,21 +1,36 @@
 function get_highlights_comments_pages(
-    pdf::String;
+    target::String;
     concatenate::Bool = true,
 )::Tuple{Vector{String}, Vector{String}, Vector{Int}}
-
-    !endswith(pdf, ".pdf") && throw(NotPDF(pdf))
-    !isfile(pdf) && throw(DoesNotExist(pdf))
 
     highlights = String[]
     comments = String[]
     pages = Int[]
+
+    if isdir(target)
+
+        for (root, dirs, files) in walkdir(target), file in files
+            if endswith(file, ".pdf")
+                highlights, comments, pages = vcat.(
+                    (highlights, comments, pages),
+                    get_highlights_comments_pages(joinpath(root, file); concatenate)
+                )
+            end
+        end
+
+        return highlights, comments, pages
+
+    end
+
+    !isfile(target) && throw(DoesNotExist(target))
+    !endswith(target, ".pdf") && throw(NotPDF(target))
 
     # Import Python packages
     poppler = pyimport("popplerqt5")
     PyQt5 = pyimport("PyQt5")
 
     # Load the document
-    document = poppler.Poppler.Document.load(pdf)
+    document = poppler.Poppler.Document.load(target)
 
     for page_number in 0:(document.numPages() - 1)
 

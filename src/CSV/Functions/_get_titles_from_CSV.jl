@@ -1,4 +1,4 @@
-function get_titles(csv::String)::Vector{String}
+function _get_titles_from_CSV(csv::String)::Vector{String}
 
     try
         initialize(csv)

@@ -1,4 +1,4 @@
-function _get_highlights_from_csv(csv::String)::Vector{String}
+function _get_highlights_from_CSV(csv::String)::Vector{String}
 
     try
         initialize(csv)

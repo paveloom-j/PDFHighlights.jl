@@ -1,11 +1,11 @@
-function get_highlights(file::String; concatenate::Bool = true)
+function get_highlights(target::String; concatenate::Bool = true)::Vector{String}
 
-    if endswith(file, ".pdf")
-        _get_highlights_from_pdf(file; concatenate)
-    elseif endswith(file, ".csv")
-        _get_highlights_from_csv(file)
+    if isdir(target) || endswith(target, ".pdf")
+        _get_highlights_from_PDF(target; concatenate)
+    elseif endswith(target, ".csv")
+        _get_highlights_from_CSV(target)
     else
-        throw(NotCSVorPDF(file))
+        throw(NotCSVorPDF(target))
     end
 
 end

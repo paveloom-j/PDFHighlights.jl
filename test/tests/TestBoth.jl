@@ -11,17 +11,37 @@ println("\e[1;32mRUNNING\e[0m: TestBoth.jl")
 
 const pdf = joinpath(@__DIR__, "..", "pdf", "TestPDF.pdf")
 
-@testset "get_highlights" begin
+@testset "get_authors" begin
+
+    dir = joinpath(@__DIR__, "..")
+
+    @test get_authors(dir) == String["Pavel Sobolev",]
 
     csv = "oof.csv"
     @suppress_out import_highlights(csv, pdf)
 
+    @test get_authors(csv) == String[
+        "Pavel Sobolev",
+        "Pavel Sobolev",
+        "Pavel Sobolev",
+    ]
+
+    isfile(csv) && rm(csv)
+
+    @test_throws PDFHighlights.Internal.Exceptions.NotCSVorPDF("oof") get_authors("oof")
+
+end
+
+@testset "get_highlights" begin
+
+    # With concatenation
     @test get_highlights(pdf) == String[
         "Highlight 1",
         "Highlight 2 Highlight 3",
         "Highlight 4"
     ]
 
+    # Without concatenation
     @test get_highlights(pdf; concatenate = false) == String[
         "Highlight 1",
         "Highlight 2",
@@ -29,6 +49,27 @@ const pdf = joinpath(@__DIR__, "..", "pdf", "TestPDF.pdf")
         "High-",
         "light 4"
     ]
+
+    dir = joinpath(@__DIR__, "..")
+
+    # With concatenation
+    @test get_highlights(dir) == String[
+        "Highlight 1",
+        "Highlight 2 Highlight 3",
+        "Highlight 4"
+    ]
+
+    # Without concatenation
+    @test get_highlights(dir; concatenate = false) == String[
+        "Highlight 1",
+        "Highlight 2",
+        "Highlight 3",
+        "High-",
+        "light 4"
+    ]
+
+    csv = "oof.csv"
+    @suppress_out import_highlights(csv, pdf)
 
     @test get_highlights(csv) == String[
         "Highlight 1",
@@ -39,6 +80,27 @@ const pdf = joinpath(@__DIR__, "..", "pdf", "TestPDF.pdf")
     isfile(csv) && rm(csv)
 
     @test_throws PDFHighlights.Internal.Exceptions.NotCSVorPDF("oof") get_highlights("oof")
+
+end
+
+@testset "get_titles" begin
+
+    dir = joinpath(@__DIR__, "..")
+
+    @test get_titles(dir) == String["A dummy PDF for tests",]
+
+    csv = "oof.csv"
+    @suppress_out import_highlights(csv, pdf)
+
+    @test get_titles(csv) == String[
+        "A dummy PDF for tests",
+        "A dummy PDF for tests",
+        "A dummy PDF for tests",
+    ]
+
+    isfile(csv) && rm(csv)
+
+    @test_throws PDFHighlights.Internal.Exceptions.NotCSVorPDF("oof") get_titles("oof")
 
 end
 
