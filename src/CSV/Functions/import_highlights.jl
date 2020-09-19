@@ -1,7 +1,6 @@
 function import_highlights(
     csv::String,
-    target::String;
-    show::Bool = false
+    target::String
 )::Nothing
 
     try
@@ -130,22 +129,6 @@ function import_highlights(
             PDF: "$(basename(target))"
             Highlights (found / added): $(found) / $(added)
         """)
-
-    end
-
-    if show
-
-        println("    Found highlights:")
-        for (index, highlight) in enumerate(all_highlights)
-            println("    ", "[$(index)] ", highlight)
-        end
-
-        println("\n    Found comments:")
-        for (index, comment) in enumerate(all_comments)
-            println("    ", "[$(index)] ", comment)
-        end
-
-        println()
 
     end
 

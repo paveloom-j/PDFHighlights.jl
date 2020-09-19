@@ -119,27 +119,6 @@ end
 
     @test s1 == s2
 
-    s1 = @capture_out import_highlights(csv, pdf; show = true)
-    s2 = """
-
-        CSV: "$(basename(csv))"
-        PDF: "$(basename(pdf))"
-        Highlights (found / added): 3 / 0
-
-        Found highlights:
-        [1] Highlight 1
-        [2] Highlight 2 Highlight 3
-        [3] Highlight 4
-
-        Found comments:
-        [1] Comment 1
-        [2] Comment 2 Comment 3
-        [3] Comment 4
-
-    """
-
-    @test s1 == s2
-
     @test_throws(
         PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
         import_highlights("oof", pdf),
@@ -192,27 +171,6 @@ end
         CSV: "$(basename(csv))"
         Directory: "$(basename(dir))"
         Highlights (found / added): 3 / 0
-
-    """
-
-    @test s1 == s2
-
-    s1 = @capture_out import_highlights(csv, dir; show = true)
-    s2 = """
-
-        CSV: "$(basename(csv))"
-        Directory: "$(basename(dir))"
-        Highlights (found / added): 3 / 0
-
-        Found highlights:
-        [1] Highlight 1
-        [2] Highlight 2 Highlight 3
-        [3] Highlight 4
-
-        Found comments:
-        [1] Comment 1
-        [2] Comment 2 Comment 3
-        [3] Comment 4
 
     """
 
