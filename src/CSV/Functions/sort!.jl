@@ -2,6 +2,9 @@ using Base: sort!
 
 function Base.sort!(csv::String; column::Symbol = :title)::Nothing
 
+    keywords = (:highlight, :title, :author, :url, :note, :location)
+    !(column in keywords) && throw(SymbolIsNotSupported(column))
+
     try
         initialize(csv)
     catch
@@ -16,7 +19,7 @@ function Base.sort!(csv::String; column::Symbol = :title)::Nothing
     locations = get_locations(csv)
 
     columns = Dict{Symbol, Union{Array{String, 1}, Array{Int, 1}}}(
-        (:highlight, :title, :author, :url, :note, :location) .=>
+        keywords .=>
         (highlights, titles, authors, urls, notes, locations)
     )
 

@@ -13,10 +13,12 @@ export DirectoryDoesNotExist,
        NotCSV,
        NotCSVorPDF,
        NotPDF,
-       NotSixColumns
+       NotSixColumns,
+       SymbolIsNotSupported
 
 # Load the auxiliary macros
 include("Macros/exception_with_one_arg.jl")
+include("Macros/exception_with_symbol.jl")
 include("Macros/exception_with_two_args.jl")
 
 @exception_with_one_arg(
@@ -72,6 +74,13 @@ include("Macros/exception_with_two_args.jl")
     "NotPDF",
     "Exception thrown when the specified path does not end in `.pdf`.",
     "The specified path (\\\"\", e.file, \"\\\") does not end in `.pdf`.",
+)
+
+@exception_with_symbol(
+    "SymbolIsNotSupported",
+    "Exception thrown when the specified symbol is not supported.",
+    """The specified symbol (:\", e.symbol, \") is not supported. Supported symbols:
+    `:highlight`, `:title`, `:author`, `:url`, `:note`, `:location`.""",
 )
 
 @exception_with_two_args(

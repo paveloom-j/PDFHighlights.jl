@@ -568,6 +568,11 @@ end
     @test_column(:location)
 
     @test_throws(
+        PDFHighlights.Internal.Exceptions.SymbolIsNotSupported(:oof),
+        sort!("oof"; column = :oof)
+    )
+
+    @test_throws(
         PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
         sort!("oof")
     )
