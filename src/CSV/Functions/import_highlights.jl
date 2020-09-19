@@ -25,14 +25,14 @@ function import_highlights(
                 path = joinpath(root, file)
 
                 author, title = map(
-                    collection -> replace.(collection, "\"" => "\\\""),
+                    collection -> replace.(collection, "\"" => "\"\""),
                     get_author_title(path)
                 )
 
                 highlights, comments, pages = get_highlights_comments_pages(path)
 
-                replace!(highlight -> replace(highlight, "\"" => "\\\""), highlights)
-                replace!(comment -> replace(comment, "\"" => "\\\""), comments)
+                replace!(highlight -> replace(highlight, "\"" => "\"\""), highlights)
+                replace!(comment -> replace(comment, "\"" => "\"\""), comments)
 
                 all_highlights = vcat(all_highlights, highlights)
                 all_comments = vcat(all_comments, comments)
@@ -46,8 +46,8 @@ function import_highlights(
                         title,
                         "\",\"",
                         author,
-                        "\",",
-                        ",\"",
+                        "\",\"",
+                        "\",\"",
                         comments,
                         "\",",
                         pages
@@ -60,14 +60,14 @@ function import_highlights(
     else
 
         author, title = map(
-            collection -> replace.(collection, "\"" => "\\\""),
+            collection -> replace.(collection, "\"" => "\"\""),
             get_author_title(target)
         )
 
         highlights, comments, pages = get_highlights_comments_pages(target)
 
-        replace!(highlight -> replace(highlight, "\"" => "\\\""), highlights)
-        replace!(comment -> replace(comment, "\"" => "\\\""), comments)
+        replace!(highlight -> replace(highlight, "\"" => "\"\""), highlights)
+        replace!(comment -> replace(comment, "\"" => "\"\""), comments)
 
         all_highlights = highlights
         all_comments = comments
@@ -79,11 +79,11 @@ function import_highlights(
             title,
             "\",\"",
             author,
-            "\",",
-            ",\"",
+            "\",\"",
+            "\",\"",
             comments,
             "\",",
-            pages
+            pages,
         )
 
     end

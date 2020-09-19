@@ -27,14 +27,8 @@ function _check(csv::String)::Nothing
                     commas += 1
                 end
             else
-                if char_index == 1
-                    if char == '"'
-                        inside_quotes ? inside_quotes = false : inside_quotes = true
-                    end
-                else
-                    if char == '"' && line[prevind(line, char_index)] != '\\'
-                        inside_quotes ? inside_quotes = false : inside_quotes = true
-                    end
+                if char == '"'
+                    inside_quotes ? inside_quotes = false : inside_quotes = true
                 end
             end
         end

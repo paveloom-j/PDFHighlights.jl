@@ -6,8 +6,19 @@ function initialize(csv::String)
     # Check if the csv exists
     if isfile(csv)
 
-        # Check if the structure of the table is correct
-        _check(csv)
+        if length(readlines(csv)) == 0
+
+            # Write the header
+            open(csv, "w") do io
+                println(io, header)
+            end
+
+        else
+
+            # Check if the structure of the table is correct
+            _check(csv)
+
+        end
 
     else
 

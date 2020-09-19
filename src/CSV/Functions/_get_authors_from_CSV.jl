@@ -33,14 +33,8 @@ function _get_authors_from_CSV(csv::String)::Vector{String}
                         commas_counter == 3 && (third_comma_index = char_index; break)
                     end
                 else
-                    if char_index == 1
-                        if char == '"'
-                            inside_quotes ? inside_quotes = false : inside_quotes = true
-                        end
-                    else
-                        if char == '"' && line[prevind(line, char_index)] != '\\'
-                            inside_quotes ? inside_quotes = false : inside_quotes = true
-                        end
+                    if char == '"'
+                        inside_quotes ? inside_quotes = false : inside_quotes = true
                     end
                 end
             end
@@ -51,8 +45,9 @@ function _get_authors_from_CSV(csv::String)::Vector{String}
 
                 author = line[(second_comma_index + 1):(third_comma_index - 1)]
 
-                if startswith(author, "\"") && !startswith(author, "\"\"") &&
-                   !startswith(author, "\\\"")
+                if author == "\"\""
+                    authors[author_index] = ""
+                elseif startswith(author, "\"")
                     authors[author_index] = chop(author; head = 1, tail = 1)
                 else
                     authors[author_index] = author
@@ -62,8 +57,7 @@ function _get_authors_from_CSV(csv::String)::Vector{String}
 
         end
 
-        subs = Dict("\\\"" => "\"", "\"\"" => "\"")
-        replace.(authors, r"\\\\\"|\"\"" => s -> subs[s])
+        replace.(authors, "\"\"" => "\"")
 
     else
         return []

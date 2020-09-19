@@ -33,14 +33,8 @@ function get_urls(csv::String)::Vector{String}
                         commas_counter == 4 && (fourth_comma_index = char_index; break)
                     end
                 else
-                    if char_index == 1
-                        if char == '"'
-                            inside_quotes ? inside_quotes = false : inside_quotes = true
-                        end
-                    else
-                        if char == '"' && line[prevind(line, char_index)] != '\\'
-                            inside_quotes ? inside_quotes = false : inside_quotes = true
-                        end
+                    if char == '"'
+                        inside_quotes ? inside_quotes = false : inside_quotes = true
                     end
                 end
             end
@@ -54,8 +48,9 @@ function get_urls(csv::String)::Vector{String}
                 starts_with_quote = startswith(url, "\"")
                 ends_with_quote = endswith(url, "\"")
 
-                if startswith(url, "\"") && !startswith(url, "\"\"") &&
-                   !startswith(url, "\\\"")
+                if url == "\"\""
+                    urls[url_index] = ""
+                elseif startswith(url, "\"")
                     urls[url_index] = chop(url; head = 1, tail = 1)
                 else
                     urls[url_index] = url
@@ -65,8 +60,7 @@ function get_urls(csv::String)::Vector{String}
 
         end
 
-        subs = Dict("\\\"" => "\"", "\"\"" => "\"")
-        replace.(urls, r"\\\\\"|\"\"" => s -> subs[s])
+        replace.(urls, "\"\"" => "\"")
 
     else
         return []

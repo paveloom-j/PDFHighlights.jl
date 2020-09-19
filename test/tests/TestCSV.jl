@@ -27,6 +27,14 @@ end
 
     @test readlines(csv) == String[header,]
     @test_nowarn initialize(csv)
+
+    csv = mktemp((path, _) -> string(path, ".csv"))
+    touch(csv)
+    initialize(csv)
+
+    @test readlines(csv) == String[header,]
+    @test_nowarn initialize(csv)
+
     @test_throws PDFHighlights.Internal.Exceptions.NotCSV("oof") initialize("oof")
 
 end
@@ -37,7 +45,7 @@ end
 
     @test_nowarn PDFHighlights.Internal.CSV._check(csv)
 
-    line = "\"Highlight with \\\"quotes\\\"\",\"Title 1\",\"Author 1\",,\"Note 1\",1"
+    line = "\"Highlight with \"\"quotes\"\"\",\"Title 1\",\"Author 1\",,\"Note 1\",1"
 
     open(csv, "a") do io
         println(io, line)
@@ -251,7 +259,7 @@ end
 
     @test PDFHighlights.Internal.CSV._get_authors_from_CSV(csv) == String[]
 
-    line = "\"Highlight 1\",\"Title 1\",\"Author with \\\"quotes\\\"\",,\"Note 1\",1"
+    line = "\"Highlight 1\",\"Title 1\",\"Author with \"\"quotes\"\"\",,\"Note 1\",1"
 
     open(csv, "a") do io
         println(io, line)
@@ -268,6 +276,15 @@ end
 
     @test PDFHighlights.Internal.CSV._get_authors_from_CSV(csv) ==
     String["Author without quotes"]
+
+    line = "\"Highlight 1\",\"Title 1\",\"\",,\"Note 1\",1"
+
+    open(csv, "w") do io
+        println(io, header, '\n', line)
+    end
+
+    @test PDFHighlights.Internal.CSV._get_authors_from_CSV(csv) ==
+    String[""]
 
     line = "\"Highlight 1\",\"Title 1\",,,\"Note 1\",1"
 
@@ -291,7 +308,7 @@ end
 
     @test PDFHighlights.Internal.CSV._get_highlights_from_CSV(csv) == String[]
 
-    line = "\"Highlight with \\\"quotes\\\"\",\"Title 1\",\"Author 1\",,\"Note 1\",1"
+    line = "\"Highlight with \"\"quotes\"\"\",\"Title 1\",\"Author 1\",,\"Note 1\",1"
 
     open(csv, "a") do io
         println(io, line)
@@ -308,6 +325,15 @@ end
 
     @test PDFHighlights.Internal.CSV._get_highlights_from_CSV(csv) ==
     String["Highlight without quotes"]
+
+    line = "\"\",\"Title 1\",\"Author 1\",,\"Note 1\",1"
+
+    open(csv, "w") do io
+        println(io, header, '\n', line)
+    end
+
+    @test PDFHighlights.Internal.CSV._get_highlights_from_CSV(csv) ==
+    String[""]
 
     line = ",\"Title 1\",\"Author 1\",,\"Note 1\",1"
 
@@ -331,7 +357,7 @@ end
 
     @test PDFHighlights.Internal.CSV._get_titles_from_CSV(csv) == String[]
 
-    line = "\"Highlight 1\",\"Title with \\\"quotes\\\"\",\"Author 1\",,\"Note 1\",1"
+    line = "\"Highlight 1\",\"Title with \"\"quotes\"\"\",\"Author 1\",,\"Note 1\",1"
 
     open(csv, "a") do io
         println(io, line)
@@ -348,6 +374,15 @@ end
 
     @test PDFHighlights.Internal.CSV._get_titles_from_CSV(csv) ==
     String["Title without quotes"]
+
+    line = "\"Highlight 1\",\"\",\"Author 1\",,\"Note 1\",1"
+
+    open(csv, "w") do io
+        println(io, header, '\n', line)
+    end
+
+    @test PDFHighlights.Internal.CSV._get_titles_from_CSV(csv) ==
+    String[""]
 
     line = "\"Highlight 1\",,\"Author 1\",,\"Note 1\",1"
 
@@ -371,7 +406,7 @@ end
 
     @test get_urls(csv) == String[]
 
-    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",\"URL, \\\"quotes\\\"\",\"Note 1\",1"
+    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",\"URL, \"\"quotes\"\"\",\"Note 1\",1"
 
     open(csv, "a") do io
         println(io, line)
@@ -388,6 +423,15 @@ end
 
     @test get_urls(csv) ==
     String["URL without quotes"]
+
+    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",\"\",\"Note 1\",1"
+
+    open(csv, "w") do io
+        println(io, header, '\n', line)
+    end
+
+    @test get_urls(csv) ==
+    String[""]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"Note 1\",1"
 
@@ -411,7 +455,7 @@ end
 
     @test get_notes(csv) == String[]
 
-    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"Note with \\\"quotes\\\"\",1"
+    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"Note with \"\"quotes\"\"\",1"
 
     open(csv, "a") do io
         println(io, line)
@@ -428,6 +472,15 @@ end
 
     @test get_notes(csv) ==
     String["Note without quotes"]
+
+    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"\",1"
+
+    open(csv, "w") do io
+        println(io, header, '\n', line)
+    end
+
+    @test get_notes(csv) ==
+    String[""]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,,1"
 
@@ -472,6 +525,51 @@ end
     @test_throws(
         PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
         get_locations("oof"),
+    )
+
+end
+
+macro initialize_with_lines()
+    return esc(
+        quote
+            @initialize
+            open(csv, "a") do io
+                println(io, join(lines, '\n'))
+            end
+        end
+    )
+end
+
+macro test_column(column)
+    return esc(
+        quote
+            @initialize_with_lines
+            @test_nowarn sort!(csv; column = $column)
+            @test readlines(csv) == expected_lines
+        end
+    )
+end
+
+@testset "sort!" begin
+
+    lines = [
+        "\"C\",\"C\",\"C\",\"C\",\"C\",3",
+        "\"B\",\"B\",\"B\",\"B\",\"B\",2",
+        "\"A\",\"A\",\"A\",\"A\",\"A\",1",
+    ]
+
+    expected_lines = vcat(header, reverse(lines))
+
+    @test_column(:highlight)
+    @test_column(:title)
+    @test_column(:author)
+    @test_column(:url)
+    @test_column(:note)
+    @test_column(:location)
+
+    @test_throws(
+        PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
+        sort!("oof")
     )
 
 end

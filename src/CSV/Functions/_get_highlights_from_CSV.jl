@@ -29,14 +29,8 @@ function _get_highlights_from_CSV(csv::String)::Vector{String}
                         break
                     end
                 else
-                    if char_index == 1
-                        if char == '"'
-                            inside_quotes ? inside_quotes = false : inside_quotes = true
-                        end
-                    else
-                        if char == '"' && line[prevind(line, char_index)] != '\\'
-                            inside_quotes ? inside_quotes = false : inside_quotes = true
-                        end
+                    if char == '"'
+                        inside_quotes ? inside_quotes = false : inside_quotes = true
                     end
                 end
             end
@@ -47,8 +41,9 @@ function _get_highlights_from_CSV(csv::String)::Vector{String}
 
                 highlight = line[1:(comma_index - 1)]
 
-                if startswith(highlight, "\"") && !startswith(highlight, "\"\"") &&
-                   !startswith(highlight, "\\\"")
+                if highlight == "\"\""
+                    highlights[highlight_index] = ""
+                elseif startswith(highlight, "\"")
                     highlights[highlight_index] = chop(highlight; head = 1, tail = 1)
                 else
                     highlights[highlight_index] = highlight
@@ -58,8 +53,7 @@ function _get_highlights_from_CSV(csv::String)::Vector{String}
 
         end
 
-        subs = Dict("\\\"" => "\"", "\"\"" => "\"")
-        replace.(highlights, r"\\\\\"|\"\"" => s -> subs[s])
+        replace.(highlights, "\"\"" => "\"")
 
     else
         return []

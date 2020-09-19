@@ -33,14 +33,8 @@ function get_notes(csv::String)::Vector{String}
                         commas_counter == 5 && (fifth_comma_index = char_index; break)
                     end
                 else
-                    if char_index == 1
-                        if char == '"'
-                            inside_quotes ? inside_quotes = false : inside_quotes = true
-                        end
-                    else
-                        if char == '"' && line[prevind(line, char_index)] != '\\'
-                            inside_quotes ? inside_quotes = false : inside_quotes = true
-                        end
+                    if char == '"'
+                        inside_quotes ? inside_quotes = false : inside_quotes = true
                     end
                 end
             end
@@ -51,8 +45,9 @@ function get_notes(csv::String)::Vector{String}
 
                 note = line[(fourth_comma_index + 1):(fifth_comma_index - 1)]
 
-                if startswith(note, "\"") && !startswith(note, "\"\"") &&
-                   !startswith(note, "\\\"")
+                if note == "\"\""
+                    notes[note_index] = ""
+                elseif startswith(note, "\"")
                     notes[note_index] = chop(note; head = 1, tail = 1)
                 else
                     notes[note_index] = note
@@ -62,8 +57,7 @@ function get_notes(csv::String)::Vector{String}
 
         end
 
-        subs = Dict("\\\"" => "\"", "\"\"" => "\"")
-        replace.(notes, r"\\\\\"|\"\"" => s -> subs[s])
+        replace.(notes, "\"\"" => "\"")
 
     else
         return []

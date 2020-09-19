@@ -33,14 +33,8 @@ function _get_titles_from_CSV(csv::String)::Vector{String}
                         commas_counter == 2 && (second_comma_index = char_index; break)
                     end
                 else
-                    if char_index == 1
-                        if char == '"'
-                            inside_quotes ? inside_quotes = false : inside_quotes = true
-                        end
-                    else
-                        if char == '"' && line[prevind(line, char_index)] != '\\'
-                            inside_quotes ? inside_quotes = false : inside_quotes = true
-                        end
+                    if char == '"'
+                        inside_quotes ? inside_quotes = false : inside_quotes = true
                     end
                 end
             end
@@ -51,8 +45,9 @@ function _get_titles_from_CSV(csv::String)::Vector{String}
 
                 title = line[(first_comma_index + 1):(second_comma_index - 1)]
 
-                if startswith(title, "\"") && !startswith(title, "\"\"") &&
-                   !startswith(title, "\\\"")
+                if title == "\"\""
+                    titles[title_index] = ""
+                elseif startswith(title, "\"")
                     titles[title_index] = chop(title; head = 1, tail = 1)
                 else
                     titles[title_index] = title
@@ -62,8 +57,7 @@ function _get_titles_from_CSV(csv::String)::Vector{String}
 
         end
 
-        subs = Dict("\\\"" => "\"", "\"\"" => "\"")
-        replace.(titles, r"\\\\\"|\"\"" => s -> subs[s])
+        replace.(titles, "\"\"" => "\"")
 
     else
         return []
