@@ -51,12 +51,29 @@ end
 @testset "_get_highlights_from_PDF" begin
 
     # With concatenation
-    @test PDFHighlights.Internal.PDF._get_highlights_from_PDF(pdf) ==
-    String["Highlight 1", "Highlight 2 Highlight 3", "Highlight 4"]
+    @test PDFHighlights.Internal.PDF._get_highlights_from_PDF(pdf) == String[
+        "Highlight 1",
+        "Highlight 2 Highlight 3",
+        "Highlight 4",
+        "Highhighlight 5",
+        "6th Highhigh light-",
+        "High light 7",
+        "8th Highlight-",
+    ]
 
     # Without concatenation
     @test PDFHighlights.Internal.PDF._get_highlights_from_PDF(pdf; concatenate = false) ==
-    String["Highlight 1", "Highlight 2", "Highlight 3", "High-", "light 4"]
+    String[
+        "Highlight 1",
+        "Highlight 2",
+        "Highlight 3",
+        "High-",
+        "light 4",
+        "Highhighlight 5",
+        "6th Highhigh light-",
+        "High light 7",
+        "8th Highlight-",
+    ]
 
 end
 
@@ -101,8 +118,8 @@ end
     dir = joinpath(@__DIR__, "..")
 
     @test get_authors_titles(dir) == (
-        String["Pavel Sobolev"],
-        String["A dummy PDF for tests"]
+        String["Pavel Sobolev",],
+        String["A dummy PDF for tests",]
     )
 
     @test_throws(
@@ -117,17 +134,53 @@ end
     # With concatenation
     @test get_highlights_comments_pages(pdf) ==
     (
-        String["Highlight 1", "Highlight 2 Highlight 3", "Highlight 4"],
-        String["Comment 1", "Comment 2 Comment 3", "Comment 4"],
-        Int[1, 2, 4],
+        String[
+            "Highlight 1",
+            "Highlight 2 Highlight 3",
+            "Highlight 4",
+            "Highhighlight 5",
+            "6th Highhigh light-",
+            "High light 7",
+            "8th Highlight-",
+        ],
+        String[
+            "Comment 1",
+            "Comment 2 Comment 3",
+            "Comment 4",
+            "",
+            "",
+            "",
+            "",
+        ],
+        Int[1, 2, 4, 6, 7, 8, 9],
     )
 
     # Without concatenation
     @test get_highlights_comments_pages(pdf; concatenate = false) ==
     (
-        String["Highlight 1", "Highlight 2", "Highlight 3", "High-", "light 4"],
-        String["Comment 1", ".c1 Comment 2", ".c2 Comment 3", ".c1 Comment 4", ".c2"],
-        Int[1, 2, 3, 4, 5],
+        String[
+            "Highlight 1",
+            "Highlight 2",
+            "Highlight 3",
+            "High-",
+            "light 4",
+            "Highhighlight 5",
+            "6th Highhigh light-",
+            "High light 7",
+            "8th Highlight-",
+        ],
+        String[
+            "Comment 1",
+            ".c1 Comment 2",
+            ".c2 Comment 3",
+            ".c1 Comment 4",
+            ".c2",
+            "",
+            "",
+            "",
+            "",
+        ],
+        Int[1:9...],
     )
 
     @test_throws(
@@ -149,17 +202,53 @@ end
     # With concatenation
     @test get_highlights_comments_pages(dir) ==
     (
-        String["Highlight 1", "Highlight 2 Highlight 3", "Highlight 4"],
-        String["Comment 1", "Comment 2 Comment 3", "Comment 4"],
-        Int[1, 2, 4],
+        String[
+            "Highlight 1",
+            "Highlight 2 Highlight 3",
+            "Highlight 4",
+            "Highhighlight 5",
+            "6th Highhigh light-",
+            "High light 7",
+            "8th Highlight-",
+        ],
+        String[
+            "Comment 1",
+            "Comment 2 Comment 3",
+            "Comment 4",
+            "",
+            "",
+            "",
+            "",
+        ],
+        Int[1, 2, 4, 6, 7, 8, 9],
     )
 
     # Without concatenation
     @test get_highlights_comments_pages(dir; concatenate = false) ==
     (
-        String["Highlight 1", "Highlight 2", "Highlight 3", "High-", "light 4"],
-        String["Comment 1", ".c1 Comment 2", ".c2 Comment 3", ".c1 Comment 4", ".c2"],
-        Int[1, 2, 3, 4, 5],
+        String[
+            "Highlight 1",
+            "Highlight 2",
+            "Highlight 3",
+            "High-",
+            "light 4",
+            "Highhighlight 5",
+            "6th Highhigh light-",
+            "High light 7",
+            "8th Highlight-",
+        ],
+        String[
+            "Comment 1",
+            ".c1 Comment 2",
+            ".c2 Comment 3",
+            ".c1 Comment 4",
+            ".c2",
+            "",
+            "",
+            "",
+            "",
+        ],
+        Int[1:9...],
     )
 
 end
@@ -169,15 +258,25 @@ end
     # With concatenation
     @test get_comments_pages(pdf; concatenate = true) ==
     (
-        String["Comment 1", "Comment 2 Comment 3", "Comment 4"],
-        Int[1, 2, 4],
+        String["Comment 1", "Comment 2 Comment 3", "Comment 4", "", "", "", ""],
+        Int[1, 2, 4, 6, 7, 8, 9],
     )
 
     # Without concatenation
     @test get_comments_pages(pdf) ==
     (
-        String["Comment 1", ".c1 Comment 2", ".c2 Comment 3", ".c1 Comment 4", ".c2"],
-        Int[1, 2, 3, 4, 5],
+        String[
+            "Comment 1",
+            ".c1 Comment 2",
+            ".c2 Comment 3",
+            ".c1 Comment 4",
+            ".c2",
+            "",
+            "",
+            "",
+            "",
+        ],
+        Int[1:9...],
     )
 
 end
@@ -187,15 +286,51 @@ end
     # With concatenation
     @test get_highlights_comments(pdf) ==
     (
-        String["Highlight 1", "Highlight 2 Highlight 3", "Highlight 4"],
-        String["Comment 1", "Comment 2 Comment 3", "Comment 4"],
+        String[
+            "Highlight 1",
+            "Highlight 2 Highlight 3",
+            "Highlight 4",
+            "Highhighlight 5",
+            "6th Highhigh light-",
+            "High light 7",
+            "8th Highlight-",
+        ],
+        String[
+            "Comment 1",
+            "Comment 2 Comment 3",
+            "Comment 4",
+            "",
+            "",
+            "",
+            "",
+        ],
     )
 
     # Without concatenation
     @test get_highlights_comments(pdf; concatenate = false) ==
     (
-        String["Highlight 1", "Highlight 2", "Highlight 3", "High-", "light 4"],
-        String["Comment 1", ".c1 Comment 2", ".c2 Comment 3", ".c1 Comment 4", ".c2"],
+        String[
+            "Highlight 1",
+            "Highlight 2",
+            "Highlight 3",
+            "High-",
+            "light 4",
+            "Highhighlight 5",
+            "6th Highhigh light-",
+            "High light 7",
+            "8th Highlight-",
+        ],
+        String[
+            "Comment 1",
+            ".c1 Comment 2",
+            ".c2 Comment 3",
+            ".c1 Comment 4",
+            ".c2",
+            "",
+            "",
+            "",
+            "",
+        ],
     )
 
 end
@@ -205,15 +340,33 @@ end
     # With concatenation
     @test get_highlights_pages(pdf) ==
     (
-        String["Highlight 1", "Highlight 2 Highlight 3", "Highlight 4"],
-        Int[1, 2, 4],
+        String[
+            "Highlight 1",
+            "Highlight 2 Highlight 3",
+            "Highlight 4",
+            "Highhighlight 5",
+            "6th Highhigh light-",
+            "High light 7",
+            "8th Highlight-",
+        ],
+        Int[1, 2, 4, 6, 7, 8, 9],
     )
 
     # Without concatenation
     @test get_highlights_pages(pdf; concatenate = false) ==
     (
-        String["Highlight 1", "Highlight 2", "Highlight 3", "High-", "light 4"],
-        Int[1, 2, 3, 4, 5],
+        String[
+            "Highlight 1",
+            "Highlight 2",
+            "Highlight 3",
+            "High-",
+            "light 4",
+            "Highhighlight 5",
+            "6th Highhigh light-",
+            "High light 7",
+            "8th Highlight-",
+        ],
+        Int[1:9...],
     )
 
 end
@@ -221,12 +374,28 @@ end
 @testset "get_comments" begin
 
     # With concatenation
-    @test get_comments(pdf; concatenate = true) ==
-    String["Comment 1", "Comment 2 Comment 3", "Comment 4"]
+    @test get_comments(pdf; concatenate = true) == String[
+        "Comment 1",
+        "Comment 2 Comment 3",
+        "Comment 4",
+        "",
+        "",
+        "",
+        "",
+    ]
 
     # Without concatenation
-    @test get_comments(pdf) ==
-    String["Comment 1", ".c1 Comment 2", ".c2 Comment 3", ".c1 Comment 4", ".c2"]
+    @test get_comments(pdf) == String[
+        "Comment 1",
+        ".c1 Comment 2",
+        ".c2 Comment 3",
+        ".c1 Comment 4",
+        ".c2",
+        "",
+        "",
+        "",
+        "",
+    ]
 
 end
 
@@ -234,11 +403,11 @@ end
 
     # With concatenation
     @test get_pages(pdf; concatenate = true) ==
-    Int[1, 2, 4]
+    Int[1, 2, 4, 6, 7, 8, 9]
 
     # Without concatenation
     @test get_pages(pdf) ==
-    Int[1, 2, 3, 4, 5]
+    Int[1:9...]
 
 end
 

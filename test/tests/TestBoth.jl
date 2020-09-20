@@ -20,11 +20,7 @@ const pdf = joinpath(@__DIR__, "..", "pdf", "TestPDF.pdf")
     csv = "oof.csv"
     @suppress_out import_highlights(csv, pdf)
 
-    @test get_authors(csv) == String[
-        "Pavel Sobolev",
-        "Pavel Sobolev",
-        "Pavel Sobolev",
-    ]
+    @test get_authors(csv) == repeat(["Pavel Sobolev",], 7)
 
     isfile(csv) && rm(csv)
 
@@ -38,7 +34,11 @@ end
     @test get_highlights(pdf) == String[
         "Highlight 1",
         "Highlight 2 Highlight 3",
-        "Highlight 4"
+        "Highlight 4",
+        "Highhighlight 5",
+        "6th Highhigh light-",
+        "High light 7",
+        "8th Highlight-",
     ]
 
     # Without concatenation
@@ -47,7 +47,11 @@ end
         "Highlight 2",
         "Highlight 3",
         "High-",
-        "light 4"
+        "light 4",
+        "Highhighlight 5",
+        "6th Highhigh light-",
+        "High light 7",
+        "8th Highlight-",
     ]
 
     dir = joinpath(@__DIR__, "..")
@@ -56,7 +60,11 @@ end
     @test get_highlights(dir) == String[
         "Highlight 1",
         "Highlight 2 Highlight 3",
-        "Highlight 4"
+        "Highlight 4",
+        "Highhighlight 5",
+        "6th Highhigh light-",
+        "High light 7",
+        "8th Highlight-",
     ]
 
     # Without concatenation
@@ -65,7 +73,11 @@ end
         "Highlight 2",
         "Highlight 3",
         "High-",
-        "light 4"
+        "light 4",
+        "Highhighlight 5",
+        "6th Highhigh light-",
+        "High light 7",
+        "8th Highlight-",
     ]
 
     csv = "oof.csv"
@@ -74,7 +86,11 @@ end
     @test get_highlights(csv) == String[
         "Highlight 1",
         "Highlight 2 Highlight 3",
-        "Highlight 4"
+        "Highlight 4",
+        "Highhighlight 5",
+        "6th Highhigh light-",
+        "High light 7",
+        "8th Highlight-",
     ]
 
     isfile(csv) && rm(csv)
@@ -92,11 +108,7 @@ end
     csv = "oof.csv"
     @suppress_out import_highlights(csv, pdf)
 
-    @test get_titles(csv) == String[
-        "A dummy PDF for tests",
-        "A dummy PDF for tests",
-        "A dummy PDF for tests",
-    ]
+    @test get_titles(csv) == repeat(["A dummy PDF for tests",], 7)
 
     isfile(csv) && rm(csv)
 

@@ -102,7 +102,7 @@ end
 
         CSV: "$(basename(csv))"
         PDF: "$(basename(pdf))"
-        Highlights (found / added): 3 / 3
+        Highlights (found / added): 7 / 7
 
     """
 
@@ -113,7 +113,7 @@ end
 
         CSV: "$(basename(csv))"
         PDF: "$(basename(pdf))"
-        Highlights (found / added): 3 / 0
+        Highlights (found / added): 7 / 0
 
     """
 
@@ -133,7 +133,7 @@ end
 
         CSV: "$(basename(csv))"
         Directory: "$(basename(dirname(normpath(dir))))"
-        Highlights (found / added): 3 / 3
+        Highlights (found / added): 7 / 7
 
     """
 
@@ -144,7 +144,7 @@ end
 
         CSV: "$(basename(csv))"
         Directory: "$(basename(dirname(normpath(dir))))"
-        Highlights (found / added): 3 / 0
+        Highlights (found / added): 7 / 0
 
     """
 
@@ -159,7 +159,7 @@ end
 
         CSV: "$(basename(csv))"
         Directory: "$(basename(dir))"
-        Highlights (found / added): 3 / 3
+        Highlights (found / added): 7 / 7
 
     """
 
@@ -170,7 +170,7 @@ end
 
         CSV: "$(basename(csv))"
         Directory: "$(basename(dir))"
-        Highlights (found / added): 3 / 0
+        Highlights (found / added): 7 / 0
 
     """
 
@@ -198,7 +198,7 @@ end
     s2 = """
 
         Table path: "$(csv)"
-        Number of highlights: 3
+        Number of highlights: 7
 
     """
 

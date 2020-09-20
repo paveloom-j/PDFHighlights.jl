@@ -54,6 +54,9 @@ function get_highlights_comments_pages(
                     # Highlight lines
                     lines = String[]
 
+                    # Highlight string
+                    highlight = ""
+
                     # Get the quadrilaterals
                     quads = annotation.highlightQuads()
 
@@ -76,12 +79,50 @@ function get_highlights_comments_pages(
                         text = page.text(body)
 
                         # Save it
-                        push!(lines, string(text))
+                        push!(lines, strip(string(text)))
 
                     end
 
+                    hyphen_chopped = false
+                    number_of_lines = length(lines)
+
+                    # Remove word transfers
+                    for (index, line) in enumerate(lines)
+                        if endswith(line, "-")
+                            if hyphen_chopped
+                                if index == number_of_lines
+                                    highlight = string(highlight, line)
+                                else
+                                    highlight = string(highlight, chop(line))
+                                end
+                            else
+                                if number_of_lines == 1
+                                    highlight = string(highlight, line)
+                                elseif index == 1
+                                    highlight = string(highlight, chop(line))
+                                elseif index == number_of_lines
+                                    highlight = string(highlight, ' ', line)
+                                else
+                                    highlight = string(highlight, ' ', chop(line))
+                                end
+                            end
+                            hyphen_chopped = true
+                        else
+                            if hyphen_chopped
+                                highlight = string(highlight, line)
+                            else
+                                if index == 1
+                                    highlight = string(highlight, line)
+                                else
+                                    highlight = string(highlight, ' ', line)
+                                end
+                            end
+                            hyphen_chopped = false
+                        end
+                    end
+
                     # Combine all lines in a highlight and save it
-                    push!(highlights, strip(join(lines, ' ')))
+                    push!(highlights, highlight)
 
                     # Save the comment
                     push!(comments, strip(annotation.contents()))
