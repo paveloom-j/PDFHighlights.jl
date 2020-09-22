@@ -19,6 +19,9 @@ using PyCall: pyimport, pyisinstance
 
 # Load the functions
 
+# Sort the highlights and their lines by `x`
+include("Functions/_sort!.jl")
+
 # Export author(s) and title(s) from the PDF(s)
 include("Functions/_get_authors_from_PDF.jl")
 include("Functions/_get_titles_from_PDF.jl")

@@ -87,6 +87,100 @@ end
 
 end
 
+@testset "_sort! (lines)" begin
+
+    lines = ["High", "high", "light"]
+    quad_x_anchors = Float64[0.21, 0.15, 0.17]
+    quad_y_anchors =Tuple{Float64, Float64}[(0.10, 0.15), (0.10, 0.12), (0.10, 0.15)]
+
+    @test PDFHighlights.Internal.PDF._sort!(lines, quad_x_anchors, quad_y_anchors) ==
+    ["high", "light", "High"]
+
+    lines = ["High", "high", "light"]
+    quad_x_anchors = Float64[0.21, 0.15, 0.17]
+    quad_y_anchors =Tuple{Float64, Float64}[(0.10, 0.15), (0.10, 0.12), (0.17, 0.20)]
+
+    @test PDFHighlights.Internal.PDF._sort!(lines, quad_x_anchors, quad_y_anchors) ==
+    ["high", "High", "light"]
+
+    lines = ["High", "high", "highlight", "light"]
+    quad_x_anchors = Float64[0.21, 0.15, 0.17, 0.19]
+    quad_y_anchors =Tuple{Float64, Float64}[
+        (0.10, 0.15),
+        (0.10, 0.12),
+        (0.17, 0.20),
+        (0.17, 0.20),
+    ]
+
+    @test PDFHighlights.Internal.PDF._sort!(lines, quad_x_anchors, quad_y_anchors) ==
+    ["high", "High", "highlight", "light"]
+
+end
+
+@testset "_sort! (highlights)" begin
+
+    pages = [1, 1, 1]
+
+    highlights = ["High", "high", "light"]
+    comments = ["Com", "com", "ment"]
+    quad_x_anchors = Float64[0.21, 0.15, 0.17]
+    quad_y_anchors =Tuple{Float64, Float64}[(0.10, 0.15), (0.10, 0.12), (0.10, 0.15)]
+
+    @test PDFHighlights.Internal.PDF._sort!(
+        highlights,
+        comments,
+        pages,
+        quad_x_anchors,
+        quad_y_anchors,
+    ) ==
+    (
+        ["high", "light", "High"],
+        ["com", "ment", "Com"],
+    )
+
+    highlights = ["High", "high", "light"]
+    comments = ["Com", "com", "ment"]
+    quad_x_anchors = Float64[0.21, 0.15, 0.17]
+    quad_y_anchors =Tuple{Float64, Float64}[(0.10, 0.15), (0.10, 0.12), (0.17, 0.20)]
+
+    @test PDFHighlights.Internal.PDF._sort!(
+        highlights,
+        comments,
+        pages,
+        quad_x_anchors,
+        quad_y_anchors,
+    ) ==
+    (
+        ["high", "High", "light"],
+        ["com", "Com", "ment"],
+    )
+
+    pages = [1, 1, 1, 1]
+
+    highlights = ["High", "high", "highlight", "light"]
+    comments = ["Com", "com", "comment", "ment"]
+    quad_x_anchors = Float64[0.21, 0.15, 0.17, 0.19]
+    quad_y_anchors =Tuple{Float64, Float64}[
+        (0.10, 0.15),
+        (0.10, 0.12),
+        (0.17, 0.20),
+        (0.17, 0.20),
+    ]
+
+    @test PDFHighlights.Internal.PDF._sort!(
+        highlights,
+        comments,
+        pages,
+        quad_x_anchors,
+        quad_y_anchors
+    ) ==
+    (
+        ["high", "High", "highlight", "light"],
+        ["com", "Com", "comment", "ment"],
+    )
+
+end
+
 @testset "get_author_title" begin
 
     @test get_author_title(pdf) == ("Pavel Sobolev", "A dummy PDF for tests")
