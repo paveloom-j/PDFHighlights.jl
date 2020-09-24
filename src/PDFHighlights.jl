@@ -41,7 +41,6 @@ export #= PDF =#
        get_urls,
        import_highlights,
        initialize,
-       print_info,
        #= Both =#
        get_authors,
        get_highlights,

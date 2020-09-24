@@ -11,8 +11,7 @@ export _get_authors_from_CSV,
        get_titles,
        get_urls,
        import_highlights,
-       initialize,
-       print_info
+       initialize
 
 # Default header
 const header = "Highlight,Title,Author,URL,Note,Location"
@@ -24,9 +23,6 @@ include("Functions/initialize.jl")
 
 # Check if the structure of the table is correct
 include("Functions/_check.jl")
-
-# Print the info about the table
-include("Functions/print_info.jl")
 
 # Import the highlights from the PDF
 include("Functions/import_highlights.jl")

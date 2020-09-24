@@ -178,39 +178,6 @@ end
 
 end
 
-@testset "print_info" begin
-
-    @initialize
-
-    s1 = @capture_out print_info(csv)
-    s2 = """
-
-        Table path: "$(csv)"
-        Number of highlights: 0
-
-    """
-
-    @test s1 == s2
-
-    @suppress_out import_highlights(csv, pdf)
-
-    s1 = @capture_out print_info(csv)
-    s2 = """
-
-        Table path: "$(csv)"
-        Number of highlights: 7
-
-    """
-
-    @test s1 == s2
-
-    @test_throws(
-        PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
-        print_info("oof"),
-    )
-
-end
-
 @testset "_get_authors_from_CSV" begin
 
     @initialize
