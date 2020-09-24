@@ -50,7 +50,7 @@ function get_highlights_comments_pages(
         if length(annotations) > 0
 
             # Find the highlights
-            for annotation in reverse(annotations)
+            for annotation in annotations
                 if pyisinstance(annotation, poppler.Poppler.HighlightAnnotation)
 
                     # Extract the highlighted text
@@ -172,7 +172,8 @@ function get_highlights_comments_pages(
 
     end
 
-    # Sort the highlights by `x` if they cross each other by `y`
+    # Sort the highlights by `x` if they cross each
+    # other and by `y` and by `y` if they don't
     _sort!(
         highlights,
         comments,

@@ -124,7 +124,7 @@ end
     highlights = ["High", "high", "light"]
     comments = ["Com", "com", "ment"]
     quad_x_anchors = Float64[0.21, 0.15, 0.17]
-    quad_y_anchors =Tuple{Float64, Float64}[(0.10, 0.15), (0.10, 0.12), (0.10, 0.15)]
+    quad_y_anchors =Tuple{Float64, Float64}[(0.10, 0.12), (0.10, 0.15), (0.10, 0.15)]
 
     @test PDFHighlights.Internal.PDF._sort!(
         highlights,
@@ -141,7 +141,7 @@ end
     highlights = ["High", "high", "light"]
     comments = ["Com", "com", "ment"]
     quad_x_anchors = Float64[0.21, 0.15, 0.17]
-    quad_y_anchors =Tuple{Float64, Float64}[(0.10, 0.15), (0.10, 0.12), (0.17, 0.20)]
+    quad_y_anchors =Tuple{Float64, Float64}[(0.10, 0.12), (0.10, 0.15), (0.17, 0.20)]
 
     @test PDFHighlights.Internal.PDF._sort!(
         highlights,
@@ -161,8 +161,8 @@ end
     comments = ["Com", "com", "comment", "ment"]
     quad_x_anchors = Float64[0.21, 0.15, 0.17, 0.19]
     quad_y_anchors =Tuple{Float64, Float64}[
-        (0.10, 0.15),
         (0.10, 0.12),
+        (0.10, 0.15),
         (0.17, 0.20),
         (0.17, 0.20),
     ]
@@ -172,11 +172,34 @@ end
         comments,
         pages,
         quad_x_anchors,
-        quad_y_anchors
+        quad_y_anchors,
     ) ==
     (
         ["high", "High", "highlight", "light"],
         ["com", "Com", "comment", "ment"],
+    )
+
+    pages = [1, 1, 2, 2]
+
+    highlights = ["High", "highlight", "light", "high"]
+    comments = ["Com", "comment", "ment", "com"]
+    quad_y_anchors =Tuple{Float64, Float64}[
+        (0.08, 0.09),
+        (0.10, 0.15),
+        (0.17, 0.20),
+        (0.10, 0.12),
+    ]
+
+    @test PDFHighlights.Internal.PDF._sort!(
+        highlights,
+        comments,
+        pages,
+        quad_x_anchors,
+        quad_y_anchors,
+    ) ==
+    (
+        ["High", "highlight", "high", "light"],
+        ["Com", "comment", "com", "ment"],
     )
 
 end
