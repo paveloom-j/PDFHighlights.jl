@@ -10,5 +10,5 @@ reset="\e[0m"   # Reset colors
 echo -e "\n${cyan}Updating the lists of packages...${reset}\n"
 sudo apt-get update
 
-echo -e "\n${cyan}Installing \`python3-poppler-qt5\`...${reset}\n"
-sudo apt-get install -y --no-install-recommends python3-poppler-qt5
+echo -e "\n${cyan}Installing \`libpoppler-glib-dev\`...${reset}\n"
+sudo apt-get install -y --no-install-recommends libpoppler-glib-dev

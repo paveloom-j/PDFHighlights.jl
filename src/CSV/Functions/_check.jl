@@ -12,8 +12,12 @@ function _check(csv::String)::Nothing
         j = lastindex(line)
         i = findprev(',', line, j)
 
-        if i != j && !isa(Meta.parse(line[(i+1):end]), Int)
-            throw(LastElementIsNotAnInteger(csv, index + 1))
+        if i != j
+            try
+                parse(Int32, line[(i+1):end])
+            catch
+                throw(LastElementIsNotAnInteger(csv, index + 1))
+            end
         end
 
         # Check that each row represents values of 6 columns

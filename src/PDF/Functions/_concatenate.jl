@@ -1,8 +1,8 @@
 function _concatenate(
     highlights::Vector{String},
     comments::Vector{String},
-    pages::Vector{Int},
-)::Tuple{Vector{String}, Vector{String}, Vector{Int}}
+    pages::Vector{Int32},
+)::Tuple{Vector{String}, Vector{String}, Vector{Int32}}
 
     # Label for the comments which will be deleted
     comments_remove_label = "__REMOVE_AFTER_CONCATENATION__"

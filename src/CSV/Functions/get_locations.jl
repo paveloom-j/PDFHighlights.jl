@@ -1,4 +1,4 @@
-function get_locations(csv::String)::Vector{Int}
+function get_locations(csv::String)::Vector{Int32}
 
     try
         initialize(csv)
@@ -11,7 +11,7 @@ function get_locations(csv::String)::Vector{Int}
 
     if n > 0
 
-        locations = Vector{Int}(undef, n)
+        locations = Vector{Int32}(undef, n)
 
         comma_index = 0
 
@@ -24,7 +24,7 @@ function get_locations(csv::String)::Vector{Int}
             if comma_index == last_index
                 locations[location_index] = 0
             else
-                locations[location_index] = parse(Int, line[(comma_index + 1):end])
+                locations[location_index] = parse(Int32, line[(comma_index + 1):end])
             end
 
         end

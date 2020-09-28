@@ -15,7 +15,19 @@ export _get_authors_from_PDF,
        get_title
 
 using ..Exceptions
-using PyCall: pyimport, pyisinstance
+
+# Specify the paths to the shared C libraries
+const path_to_c_libraries = normpath(joinpath(@__DIR__, "..", "..", "deps", "C"))
+const path_to_get_lines_comments_pages_library = joinpath(
+    path_to_c_libraries,
+    "get_lines_comments_pages",
+    "get_lines_comments_pages",
+)
+const path_to_get_author_title_library = joinpath(
+    path_to_c_libraries,
+    "get_author_title",
+    "get_author_title",
+)
 
 # Load the functions
 

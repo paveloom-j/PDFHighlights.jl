@@ -1,13 +1,25 @@
+macro unsafe_wrap(array::Symbol, len::Symbol)
+    return esc(:(unsafe_wrap(Array, $array[], $len[]; own = true)))
+end
+
+macro unsafe_wrap(array::Expr, len::Union{Symbol, Expr})
+    return esc(:(unsafe_wrap(Array, $array, $len; own = true)))
+end
+
+macro unsafe_wrap_strings(array::Union{Symbol, Expr}, len::Union{Symbol, Expr})
+    return esc(:(unsafe_string.(@unsafe_wrap $array $len)))
+end
+
 function get_highlights_comments_pages(
     target::String;
     concatenate::Bool = true,
-)::Tuple{Vector{String}, Vector{String}, Vector{Int}}
-
-    highlights = String[]
-    comments = String[]
-    pages = Int[]
+)::Tuple{Vector{String}, Vector{String}, Vector{Int32}}
 
     if isdir(target)
+
+        highlights = String[]
+        comments = String[]
+        pages = Int32[]
 
         for (root, dirs, files) in walkdir(target), file in files
             if endswith(file, ".pdf")
@@ -25,161 +37,136 @@ function get_highlights_comments_pages(
     !isfile(target) && throw(DoesNotExist(target))
     !endswith(target, ".pdf") && throw(NotPDF(target))
 
-    # Coordinates of the lower left and upper left corners of the rectangles
-    highlights_quad_x_anchors = Float64[]
-    highlights_quad_y_anchors = Tuple{Float64,Float64}[]
+    # Prepare pointers
+    lines_arrays_ref = Ref{Ptr{Ptr{Cstring}}}()
+    lines_x_anchors_arrays_ref = Ref{Ptr{Ptr{Cdouble}}}()
+    lines_yl_anchors_arrays_ref = Ref{Ptr{Ptr{Cdouble}}}()
+    lines_yu_anchors_arrays_ref = Ref{Ptr{Ptr{Cdouble}}}()
+    lines_lens_ref = Ref{Ptr{Culong}}()
+    comments_ref = Ref{Ptr{Cstring}}()
+    pages_ref = Ref{Ptr{Cint}}()
+    num_ref = Ref{Culong}(0)
 
-    # Import Python packages
-    poppler = pyimport("popplerqt5")
-    PyQt5 = pyimport("PyQt5")
+    # Call
+    ccall(
+        # Function and library names
+        (
+            :get_lines_comments_pages,
+            path_to_get_lines_comments_pages_library,
+        ),
+        # Type of return value
+        Cvoid,
+        # Types of the arguments
+        (
+            Cstring,
+            Ref{Ptr{Ptr{Cstring}}},
+            Ref{Ptr{Ptr{Cdouble}}},
+            Ref{Ptr{Ptr{Cdouble}}},
+            Ref{Ptr{Ptr{Cdouble}}},
+            Ref{Ptr{Culong}},
+            Ref{Ptr{Cstring}},
+            Ref{Ptr{Cint}},
+            Ref{Culong},
+        ),
+        # Arguments
+        target,
+        lines_arrays_ref,
+        lines_x_anchors_arrays_ref,
+        lines_yl_anchors_arrays_ref,
+        lines_yu_anchors_arrays_ref,
+        lines_lens_ref,
+        comments_ref,
+        pages_ref,
+        num_ref,
+    )
 
-    # Load the document
-    document = poppler.Poppler.Document.load(target)
+    # Steal the upper-level arrays
+    lines_arrays = @unsafe_wrap lines_arrays_ref num_ref
+    lines_x_anchors_arrays = @unsafe_wrap lines_x_anchors_arrays_ref num_ref
+    lines_yl_anchors_arrays = @unsafe_wrap lines_yl_anchors_arrays_ref num_ref
+    lines_yu_anchors_arrays = @unsafe_wrap lines_yu_anchors_arrays_ref num_ref
+    lines_lens = @unsafe_wrap lines_lens_ref num_ref
+    comments = @unsafe_wrap_strings comments_ref num_ref
+    pages = @unsafe_wrap pages_ref num_ref
 
-    for page_number in 0:(document.numPages() - 1)
+    highlights = Vector{String}(undef, num_ref[])
 
-        # Load the page
-        page = document.page(page_number)
+    highlights_x_anchors = Vector{Float64}(undef, num_ref[])
+    highlights_yl_anchors = Vector{Float64}(undef, num_ref[])
+    highlights_yu_anchors = Vector{Float64}(undef, num_ref[])
 
-        # Get the annotations
-        annotations = page.annotations()
+    # Sort the lines
+    for index in 1:num_ref[]
 
-        # Get the width and the height of the page
-        (width, height) = (page.pageSize().width(), page.pageSize().height())
+        # Steal the lower-level array
+        len = lines_lens[index]
+        lines = @unsafe_wrap_strings lines_arrays[index] len
+        lines_x_anchors = @unsafe_wrap lines_x_anchors_arrays[index] len
+        lines_yl_anchors = @unsafe_wrap lines_yl_anchors_arrays[index] len
+        lines_yu_anchors = @unsafe_wrap lines_yu_anchors_arrays[index] len
 
-        if length(annotations) > 0
+        # Sort the lines by `x` if they cross each other by `y`
+        _sort!(lines, lines_x_anchors, lines_yl_anchors, lines_yu_anchors)
 
-            # Find the highlights
-            for annotation in annotations
-                if pyisinstance(annotation, poppler.Poppler.HighlightAnnotation)
+        # Save the highlights anchors
+        highlights_x_anchors[index] = lines_x_anchors[1]
+        highlights_yl_anchors[index] = lines_yl_anchors[end]
+        highlights_yu_anchors[index] = lines_yu_anchors[1]
 
-                    # Extract the highlighted text
+        # Highlight string
+        highlight = ""
 
-                    # Get the quadrilaterals
-                    quads = annotation.highlightQuads()
-                    quads_length = length(quads)
+        hyphen_chopped = false
 
-                    # Highlight lines
-                    lines = Vector{String}(undef, quads_length)
-
-                    # Highlight string
-                    highlight = ""
-
-                    # Coordinates of the lower left and
-                    # upper left corners of the rectangles
-                    lines_quad_x_anchors =
-                    Vector{Float64}(undef, quads_length)
-                    lines_quad_y_anchors =
-                    Vector{Tuple{Float64,Float64}}(undef, quads_length)
-
-                    # Extract text from each quadrilateral
-                    for (index, quad) in enumerate(quads)
-
-                        # Gather the coordinates of the quadrilateral
-                        rect = (
-                            quad.points[1].x() * width,
-                            quad.points[1].y() * height,
-                            quad.points[3].x() * width,
-                            quad.points[3].y() * height,
-                        )
-
-                        # Save the coordinates of the lower left
-                        # and upper left corners (lines)
-                        lines_quad_x_anchors[index] = quad.points[1].x()
-                        lines_quad_y_anchors[index] =
-                        (
-                            quad.points[1].y(),
-                            quad.points[4].y(),
-                        )
-
-                        # Create a quadrangle
-                        body = PyQt5.QtCore.QRectF()
-                        body.setCoords(rect...)
-
-                        # Extract the text that is in this quadrangle
-                        text = page.text(body)
-
-                        # Save it
-                        lines[index] = strip(string(text))
-
+        # Remove word transfers
+        for (index, line) in enumerate(lines)
+            if endswith(line, "-")
+                if hyphen_chopped
+                    if index == len
+                        highlight = string(highlight, line)
+                    else
+                        highlight = string(highlight, chop(line))
                     end
-
-                    # Sort the lines by `x` if they cross each other by `y`
-                    _sort!(lines, lines_quad_x_anchors, lines_quad_y_anchors)
-
-                    # Save the coordinates of the lower left
-                    # and upper left corners (highlights)
-                    push!(highlights_quad_x_anchors, lines_quad_x_anchors[1])
-                    push!(
-                        highlights_quad_y_anchors,
-                        (
-                            lines_quad_y_anchors[end][1],
-                            lines_quad_y_anchors[1][2],
-                        ),
-                    )
-
-                    hyphen_chopped = false
-                    number_of_lines = length(lines)
-
-                    # Remove word transfers
-                    for (index, line) in enumerate(lines)
-                        if endswith(line, "-")
-                            if hyphen_chopped
-                                if index == number_of_lines
-                                    highlight = string(highlight, line)
-                                else
-                                    highlight = string(highlight, chop(line))
-                                end
-                            else
-                                if number_of_lines == 1
-                                    highlight = string(highlight, line)
-                                elseif index == 1
-                                    highlight = string(highlight, chop(line))
-                                elseif index == number_of_lines
-                                    highlight = string(highlight, ' ', line)
-                                else
-                                    highlight = string(highlight, ' ', chop(line))
-                                end
-                            end
-                            hyphen_chopped = true
-                        else
-                            if hyphen_chopped
-                                highlight = string(highlight, line)
-                            else
-                                if index == 1
-                                    highlight = string(highlight, line)
-                                else
-                                    highlight = string(highlight, ' ', line)
-                                end
-                            end
-                            hyphen_chopped = false
-                        end
+                else
+                    if len == 1
+                        highlight = string(highlight, line)
+                    elseif index == 1
+                        highlight = string(highlight, chop(line))
+                    elseif index == len
+                        highlight = string(highlight, ' ', line)
+                    else
+                        highlight = string(highlight, ' ', chop(line))
                     end
-
-                    # Combine all lines in a highlight and save it
-                    push!(highlights, highlight)
-
-                    # Save the comment
-                    push!(comments, strip(annotation.contents()))
-
-                    # Save the page
-                    push!(pages, page_number + 1)
-
                 end
+                hyphen_chopped = true
+            else
+                if hyphen_chopped
+                    highlight = string(highlight, line)
+                else
+                    if index == 1
+                        highlight = string(highlight, line)
+                    else
+                        highlight = string(highlight, ' ', line)
+                    end
+                end
+                hyphen_chopped = false
             end
-
         end
+
+        # Combine all lines in a highlight and save it
+        highlights[index] = highlight
 
     end
 
-    # Sort the highlights by `x` if they cross each
-    # other and by `y` and by `y` if they don't
+    # Sort the highlights by `x` if they cross
+    # each other and by `y` if they don't
     _sort!(
         highlights,
         comments,
         pages,
-        highlights_quad_x_anchors,
-        highlights_quad_y_anchors
+        highlights_x_anchors,
+        highlights_yl_anchors,
+        highlights_yu_anchors,
     )
 
     if concatenate

@@ -1,10 +1,6 @@
 language: julia
 dist: focal
 
-env:
-  global:
-    - PATH=/opt/python/3.8.1/bin:$PATH
-
 notifications:
   email: false
 
@@ -27,7 +23,8 @@ jobs:
       os: linux
       arch: amd64
       script:
-        - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage;
+        - julia -e 'using Pkg; Pkg.build("PDFHighlights");
+                    Pkg.add("Coverage"); using Coverage;
                     Pkg.test(coverage=true); Codecov.submit(process_folder())'
     - stage: "Nightly"
       name: "Julia Nightly (Linux, x64)"

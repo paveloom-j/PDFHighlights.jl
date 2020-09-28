@@ -1,7 +1,8 @@
 function _sort!(
     lines::Vector{String},
-    quad_x_anchors::Vector{Float64},
-    quad_y_anchors::Vector{Tuple{Float64, Float64}}
+    lines_x_anchors::Vector{Float64},
+    lines_yl_anchors::Vector{Float64},
+    lines_yu_anchors::Vector{Float64},
 )::Vector{String}
 
     start_index = 0
@@ -14,8 +15,8 @@ function _sort!(
         previous_index = index - 1
 
         # Unpack the quad anchors
-        yl1, yu1 = quad_y_anchors[previous_index]
-        yl2, yu2 = quad_y_anchors[index]
+        yl1, yu1 = lines_yl_anchors[previous_index], lines_yu_anchors[previous_index]
+        yl2, yu2 = lines_yl_anchors[index], lines_yu_anchors[index]
 
         # Check if the lines are crossing
         if (yl1 > yl2 && yl1 < yu2) ||
@@ -27,24 +28,26 @@ function _sort!(
             # Sort the last chain of lines
             if index == last_index
 
-                perm = sortperm(quad_x_anchors[start_index:index])
+                perm = sortperm(lines_x_anchors[start_index:index])
                 permute!(@view(lines[start_index:index]), perm)
-                permute!(@view(quad_y_anchors[start_index:index]), perm)
+                permute!(@view(lines_yl_anchors[start_index:index]), perm)
+                permute!(@view(lines_yu_anchors[start_index:index]), perm)
 
                 if start_index == 1
-                    permute!(@view(quad_x_anchors[start_index:index]), perm)
+                    permute!(@view(lines_x_anchors[start_index:index]), perm)
                 end
 
             end
 
         elseif start_index != 0
 
-            perm = sortperm(quad_x_anchors[start_index:previous_index])
+            perm = sortperm(lines_x_anchors[start_index:previous_index])
             permute!(@view(lines[start_index:previous_index]), perm)
 
             if start_index == 1
-                permute!(@view(quad_x_anchors[start_index:previous_index]), perm)
-                permute!(@view(quad_y_anchors[start_index:previous_index]), perm)
+                permute!(@view(lines_x_anchors[start_index:previous_index]), perm)
+                permute!(@view(lines_yl_anchors[start_index:previous_index]), perm)
+                permute!(@view(lines_yu_anchors[start_index:previous_index]), perm)
             end
 
             start_index = 0
@@ -60,13 +63,11 @@ end
 function _sort!(
     highlights::Vector{String},
     comments::Vector{String},
-    pages::Vector{Int},
-    quad_x_anchors::Vector{Float64},
-    quad_y_anchors::Vector{Tuple{Float64, Float64}}
+    pages::Vector{Int32},
+    highlights_x_anchors::Vector{Float64},
+    highlights_yl_anchors::Vector{Float64},
+    highlights_yu_anchors::Vector{Float64},
 )::Tuple{Vector{String}, Vector{String}}
-
-    # Get the `y` coordinates of the upper left corners
-    quad_yu_anchors = [e[2] for e in quad_y_anchors]
 
     last_index = lastindex(highlights)
 
@@ -79,14 +80,14 @@ function _sort!(
         if page != current_page
             previous_index = index - 1
             if start_index != previous_index
-                perm = sortperm(quad_yu_anchors[start_index:previous_index])
+                perm = sortperm(highlights_yu_anchors[start_index:previous_index])
                 permute!(@view(highlights[start_index:previous_index]), perm)
                 permute!(@view(comments[start_index:previous_index]), perm)
             end
             start_index = index
             current_page = page
         elseif index == last_index && pages[start_index] == pages[index]
-            perm = sortperm(quad_yu_anchors[start_index:index])
+            perm = sortperm(highlights_yu_anchors[start_index:index])
             permute!(@view(highlights[start_index:index]), perm)
             permute!(@view(comments[start_index:index]), perm)
         end
@@ -101,8 +102,10 @@ function _sort!(
         if pages[index] == pages[previous_index]
 
             # Unpack the quad anchors
-            yl1, yu1 = quad_y_anchors[previous_index]
-            yl2, yu2 = quad_y_anchors[index]
+            yl1 = highlights_yl_anchors[previous_index]
+            yu1 = highlights_yu_anchors[previous_index]
+            yl2 = highlights_yl_anchors[index]
+            yu2 = highlights_yu_anchors[index]
 
             # Check if the highlights are crossing
             if (yl1 > yl2 && yl1 < yu2) ||
@@ -113,7 +116,7 @@ function _sort!(
 
                 # Sort the last chain of highlights
                 if index == last_index
-                    perm = sortperm(quad_x_anchors[start_index:index])
+                    perm = sortperm(highlights_x_anchors[start_index:index])
                     permute!(@view(highlights[start_index:index]), perm)
                     permute!(@view(comments[start_index:index]), perm)
                 end
@@ -121,7 +124,7 @@ function _sort!(
             # Sort the current chain of highlights
             elseif start_index != 0
 
-                perm = sortperm(quad_x_anchors[start_index:previous_index])
+                perm = sortperm(highlights_x_anchors[start_index:previous_index])
                 permute!(@view(highlights[start_index:previous_index]), perm)
                 permute!(@view(comments[start_index:previous_index]), perm)
 

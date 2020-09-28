@@ -16,24 +16,24 @@ const pdf = joinpath(@__DIR__, "..", "pdf", "TestPDF.pdf")
     @test PDFHighlights.Internal.PDF._concatenate(
         String["Highlight 1", "Highlight 2", "Highlight 3"],
         String["Comment 1", ".c1 Comment 2", ".c2 Comment 3"],
-        Int[1, 2, 3],
+        Int32[1, 2, 3],
     ) ==
     (
         String["Highlight 1", "Highlight 2 Highlight 3"],
         String["Comment 1", "Comment 2 Comment 3"],
-        Int[1, 2],
+        Int32[1, 2],
     )
 
     # With halves of words
     @test PDFHighlights.Internal.PDF._concatenate(
         String["Highlight 1", "High-", "light 2"],
         String["Comment 1", ".c1 Comment 2", ".c2"],
-        Int[1, 2, 3],
+        Int32[1, 2, 3],
     ) ==
     (
         String["Highlight 1", "Highlight 2"],
         String["Comment 1", "Comment 2"],
-        Int[1, 2],
+        Int32[1, 2],
     )
 
 end
@@ -91,47 +91,59 @@ end
 
     lines = ["High", "high", "light"]
     quad_x_anchors = Float64[0.21, 0.15, 0.17]
-    quad_y_anchors =Tuple{Float64, Float64}[(0.10, 0.15), (0.10, 0.12), (0.10, 0.15)]
+    quad_yl_anchors = Float64[0.10, 0.10, 0.10]
+    quad_yu_anchors = Float64[0.15, 0.12, 0.15]
 
-    @test PDFHighlights.Internal.PDF._sort!(lines, quad_x_anchors, quad_y_anchors) ==
-    ["high", "light", "High"]
+    @test PDFHighlights.Internal.PDF._sort!(
+        lines,
+        quad_x_anchors,
+        quad_yl_anchors,
+        quad_yu_anchors,
+    ) == ["high", "light", "High"]
 
     lines = ["High", "high", "light"]
     quad_x_anchors = Float64[0.21, 0.15, 0.17]
-    quad_y_anchors =Tuple{Float64, Float64}[(0.10, 0.15), (0.10, 0.12), (0.17, 0.20)]
+    quad_yl_anchors = Float64[0.10, 0.10, 0.17]
+    quad_yu_anchors = Float64[0.15, 0.12, 0.20]
 
-    @test PDFHighlights.Internal.PDF._sort!(lines, quad_x_anchors, quad_y_anchors) ==
-    ["high", "High", "light"]
+    @test PDFHighlights.Internal.PDF._sort!(
+        lines,
+        quad_x_anchors,
+        quad_yl_anchors,
+        quad_yu_anchors,
+    ) == ["high", "High", "light"]
 
     lines = ["High", "high", "highlight", "light"]
     quad_x_anchors = Float64[0.21, 0.15, 0.17, 0.19]
-    quad_y_anchors =Tuple{Float64, Float64}[
-        (0.10, 0.15),
-        (0.10, 0.12),
-        (0.17, 0.20),
-        (0.17, 0.20),
-    ]
+    quad_yl_anchors = Float64[0.10, 0.10, 0.17, 0.17]
+    quad_yu_anchors = Float64[0.15, 0.12, 0.20, 0.20]
 
-    @test PDFHighlights.Internal.PDF._sort!(lines, quad_x_anchors, quad_y_anchors) ==
-    ["high", "High", "highlight", "light"]
+    @test PDFHighlights.Internal.PDF._sort!(
+        lines,
+        quad_x_anchors,
+        quad_yl_anchors,
+        quad_yu_anchors,
+    ) == ["high", "High", "highlight", "light"]
 
 end
 
 @testset "_sort! (highlights)" begin
 
-    pages = [1, 1, 1]
+    pages = Int32[1, 1, 1]
 
     highlights = ["High", "high", "light"]
     comments = ["Com", "com", "ment"]
     quad_x_anchors = Float64[0.21, 0.15, 0.17]
-    quad_y_anchors =Tuple{Float64, Float64}[(0.10, 0.12), (0.10, 0.15), (0.10, 0.15)]
+    quad_yl_anchors = Float64[0.10, 0.10, 0.10]
+    quad_yu_anchors = Float64[0.12, 0.15, 0.15]
 
     @test PDFHighlights.Internal.PDF._sort!(
         highlights,
         comments,
         pages,
         quad_x_anchors,
-        quad_y_anchors,
+        quad_yl_anchors,
+        quad_yu_anchors,
     ) ==
     (
         ["high", "light", "High"],
@@ -141,61 +153,57 @@ end
     highlights = ["High", "high", "light"]
     comments = ["Com", "com", "ment"]
     quad_x_anchors = Float64[0.21, 0.15, 0.17]
-    quad_y_anchors =Tuple{Float64, Float64}[(0.10, 0.12), (0.10, 0.15), (0.17, 0.20)]
+    quad_yl_anchors = Float64[0.10, 0.10, 0.17]
+    quad_yu_anchors = Float64[0.12, 0.15, 0.20]
 
     @test PDFHighlights.Internal.PDF._sort!(
         highlights,
         comments,
         pages,
         quad_x_anchors,
-        quad_y_anchors,
+        quad_yl_anchors,
+        quad_yu_anchors,
     ) ==
     (
         ["high", "High", "light"],
         ["com", "Com", "ment"],
     )
 
-    pages = [1, 1, 1, 1]
+    pages = Int32[1, 1, 1, 1]
 
     highlights = ["High", "high", "highlight", "light"]
     comments = ["Com", "com", "comment", "ment"]
     quad_x_anchors = Float64[0.21, 0.15, 0.17, 0.19]
-    quad_y_anchors =Tuple{Float64, Float64}[
-        (0.10, 0.12),
-        (0.10, 0.15),
-        (0.17, 0.20),
-        (0.17, 0.20),
-    ]
+    quad_yl_anchors = Float64[0.10, 0.10, 0.17, 0.17]
+    quad_yu_anchors = Float64[0.12, 0.15, 0.20, 0.20]
 
     @test PDFHighlights.Internal.PDF._sort!(
         highlights,
         comments,
         pages,
         quad_x_anchors,
-        quad_y_anchors,
+        quad_yl_anchors,
+        quad_yu_anchors,
     ) ==
     (
         ["high", "High", "highlight", "light"],
         ["com", "Com", "comment", "ment"],
     )
 
-    pages = [1, 1, 2, 2]
+    pages = Int32[1, 1, 2, 2]
 
     highlights = ["High", "highlight", "light", "high"]
     comments = ["Com", "comment", "ment", "com"]
-    quad_y_anchors =Tuple{Float64, Float64}[
-        (0.08, 0.09),
-        (0.10, 0.15),
-        (0.17, 0.20),
-        (0.10, 0.12),
-    ]
+    quad_yl_anchors = Float64[0.08, 0.10, 0.17, 0.10]
+    quad_yu_anchors = Float64[0.09, 0.15, 0.20, 0.12]
 
     @test PDFHighlights.Internal.PDF._sort!(
         highlights,
         comments,
         pages,
         quad_x_anchors,
-        quad_y_anchors,
+        quad_yl_anchors,
+        quad_yu_anchors,
     ) ==
     (
         ["High", "highlight", "high", "light"],
@@ -269,7 +277,7 @@ end
             "",
             "",
         ],
-        Int[1, 2, 4, 6, 7, 8, 9],
+        Int32[1, 2, 4, 6, 7, 8, 9],
     )
 
     # Without concatenation
@@ -297,7 +305,7 @@ end
             "",
             "",
         ],
-        Int[1:9...],
+        Int32[1:9...],
     )
 
     @test_throws(
@@ -337,7 +345,7 @@ end
             "",
             "",
         ],
-        Int[1, 2, 4, 6, 7, 8, 9],
+        Int32[1, 2, 4, 6, 7, 8, 9],
     )
 
     # Without concatenation
@@ -365,7 +373,7 @@ end
             "",
             "",
         ],
-        Int[1:9...],
+        Int32[1:9...],
     )
 
 end
@@ -376,7 +384,7 @@ end
     @test get_comments_pages(pdf; concatenate = true) ==
     (
         String["Comment 1", "Comment 2 Comment 3", "Comment 4", "", "", "", ""],
-        Int[1, 2, 4, 6, 7, 8, 9],
+        Int32[1, 2, 4, 6, 7, 8, 9],
     )
 
     # Without concatenation
@@ -393,7 +401,7 @@ end
             "",
             "",
         ],
-        Int[1:9...],
+        Int32[1:9...],
     )
 
 end
@@ -466,7 +474,7 @@ end
             "High light 7",
             "8th Highlight-",
         ],
-        Int[1, 2, 4, 6, 7, 8, 9],
+        Int32[1, 2, 4, 6, 7, 8, 9],
     )
 
     # Without concatenation
@@ -483,7 +491,7 @@ end
             "High light 7",
             "8th Highlight-",
         ],
-        Int[1:9...],
+        Int32[1:9...],
     )
 
 end
@@ -520,11 +528,11 @@ end
 
     # With concatenation
     @test get_pages(pdf; concatenate = true) ==
-    Int[1, 2, 4, 6, 7, 8, 9]
+    Int32[1, 2, 4, 6, 7, 8, 9]
 
     # Without concatenation
     @test get_pages(pdf) ==
-    Int[1:9...]
+    Int32[1:9...]
 
 end
 

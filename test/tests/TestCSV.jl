@@ -427,7 +427,7 @@ end
 
     @initialize
 
-    @test get_locations(csv) == Int[]
+    @test get_locations(csv) == Int32[]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"Note 1\","
 
@@ -436,7 +436,7 @@ end
     end
 
     @test get_locations(csv) ==
-    Int[0]
+    Int32[0]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"Note 1\",1"
 
@@ -445,7 +445,7 @@ end
     end
 
     @test get_locations(csv) ==
-    Int[1]
+    Int32[1]
 
     @test_throws(
         PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),

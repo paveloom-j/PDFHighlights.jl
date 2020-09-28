@@ -18,7 +18,7 @@ function Base.sort!(csv::String; column::Symbol = :title)::Nothing
     notes = replace.(get_notes(csv), "\"" => "\"\"")
     locations = get_locations(csv)
 
-    columns = Dict{Symbol, Union{Array{String, 1}, Array{Int, 1}}}(
+    columns = Dict{Symbol, Union{Array{String, 1}, Array{Int32, 1}}}(
         keywords .=>
         (highlights, titles, authors, urls, notes, locations)
     )
