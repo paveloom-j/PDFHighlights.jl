@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# A script to install `poppler`, a PDF rendering library, on Unix systems
+# A script to install `poppler-glib` on Unix systems
 
 # Set auxiliary variables
 # for ANSI escape codes

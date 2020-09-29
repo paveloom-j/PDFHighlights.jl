@@ -187,32 +187,32 @@ void get_lines_comments_pages(
     poppler_rectangle_free(rectangle);
 
     // Steal the `_lines_lens` array
-    data_pointer = g_array_steal(_lines_lens, &data_len);
-    *lines_lens = (gsize *)data_pointer;
+    data_pointer = (gsize *)g_array_steal(_lines_lens, &data_len);
+    *lines_lens = data_pointer;
 
     // Steal the `_lines_arrays` array
-    data_pointer = g_array_steal(_lines_arrays, &data_len);
-    *lines_arrays = (char *)data_pointer;
+    data_pointer = (char *)g_array_steal(_lines_arrays, &data_len);
+    *lines_arrays = data_pointer;
 
     // Steal the `_lines_x_anchors_arrays` array
-    data_pointer = g_array_steal(_lines_x_anchors_arrays, &data_len);
-    *lines_x_anchors_arrays = (double *)data_pointer;
+    data_pointer = (double *)g_array_steal(_lines_x_anchors_arrays, &data_len);
+    *lines_x_anchors_arrays = data_pointer;
 
     // Steal the `_lines_yl_anchors_arrays` array
-    data_pointer = g_array_steal(_lines_yl_anchors_arrays, &data_len);
-    *lines_yl_anchors_arrays = (double *)data_pointer;
+    data_pointer = (double *)g_array_steal(_lines_yl_anchors_arrays, &data_len);
+    *lines_yl_anchors_arrays = data_pointer;
 
     // Steal the `_lines_yu_anchors_arrays` array
-    data_pointer = g_array_steal(_lines_yu_anchors_arrays, &data_len);
-    *lines_yu_anchors_arrays = (double *)data_pointer;
+    data_pointer = (double *)g_array_steal(_lines_yu_anchors_arrays, &data_len);
+    *lines_yu_anchors_arrays = data_pointer;
 
     // Steal the `_comments` array
-    data_pointer = g_array_steal(_comments, &data_len);
-    *comments = (char *)data_pointer;
+    data_pointer = (char *)g_array_steal(_comments, &data_len);
+    *comments = data_pointer;
 
     // Steal the `_pages` array
-    data_pointer = g_array_steal(_pages, &data_len);
-    *pages = (int *)data_pointer;
+    data_pointer = (int *)g_array_steal(_pages, &data_len);
+    *pages = data_pointer;
     *num = data_len;
 
     return;

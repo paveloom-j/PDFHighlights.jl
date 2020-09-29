@@ -6,11 +6,14 @@ notifications:
 
 stages:
   - name: Codecov
-  - name: Nightly
+  - name: Tests
     if: branch != master AND branch != develop AND NOT branch =~ /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 before_script:
-  - bash .github/scripts/install-poppler-unix.sh
+  - |
+    if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      bash .github/scripts/install-poppler-unix.sh
+    fi
 
 jobs:
   fast_finish: true
@@ -26,8 +29,18 @@ jobs:
         - julia -e 'using Pkg; Pkg.build("PDFHighlights");
                     Pkg.add("Coverage"); using Coverage;
                     Pkg.test(coverage=true); Codecov.submit(process_folder())'
-    - stage: "Nightly"
+    - stage: "Tests"
+      name: "Julia 1.5 (macOS, x64)"
+      julia: 1.5
+      os: osx
+      osx_image: xcode12
+    - stage: "Tests"
       name: "Julia Nightly (Linux, x64)"
       julia: nightly
       os: linux
       arch: amd64
+    - stage: "Tests"
+      name: "Julia Nightly (macOS, x64)"
+      julia: nightly
+      os: osx
+      osx_image: xcode12
