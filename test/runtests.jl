@@ -11,7 +11,7 @@ anyerrors = false
 
 # Specify tests
 tests_dir = joinpath(@__DIR__, "tests")
-tests = ["TestPDF.jl", "TestCSV.jl", "TestBoth.jl"]
+tests = ["TestExceptions.jl", "TestPDF.jl", "TestCSV.jl", "TestBoth.jl"]
 
 # Print info
 println("\e[1;32mRUNNING TESTS\e[0m for `PDFHighlights.jl`")
