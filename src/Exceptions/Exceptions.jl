@@ -19,9 +19,12 @@ export DirectoryDoesNotExist,
 # Load the auxiliary macros
 include("Macros/exception.jl")
 
-@exception exception_with_file Exceptions file::String
-@exception exception_with_line Exceptions file::String line::Int
-@exception exception_with_symbol Exceptions symbol::Symbol
+# Create auxiliary macros for exceptions
+@exception exception_with_file file::String
+@exception exception_with_line file::String line::Int
+@exception exception_with_symbol symbol::Symbol
+
+# Create exceptions
 
 @exception_with_file(
     DirectoryDoesNotExist,

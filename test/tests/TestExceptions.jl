@@ -8,7 +8,6 @@ println("\e[1;32mRUNNING\e[0m: TestExceptions.jl")
 
 PDFHighlights.Internal.Exceptions.@exception(
     exception_with_file,
-    TestExceptions,
     file::String,
 )
 
@@ -35,7 +34,6 @@ end
 
 PDFHighlights.Internal.Exceptions.@exception(
     exception_with_line,
-    TestExceptions,
     file::String,
     line::Int,
 )
@@ -63,7 +61,6 @@ end
 
 PDFHighlights.Internal.Exceptions.@exception(
     exception_with_symbol,
-    TestExceptions,
     symbol::Symbol,
 )
 

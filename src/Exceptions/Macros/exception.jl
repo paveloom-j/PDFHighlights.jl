@@ -1,40 +1,38 @@
 macro exception(
     macro_name::Symbol,
-    module_name::Symbol,
     args::Expr...,
 )
+    return esc(
+        quote
+            macro $(macro_name)(
+                exception_name::Symbol,
+                docstring::String,
+                error_message_bits::Union{Expr, String}...,
+            )
 
-    return esc(quote
-        macro $(macro_name)(
-            exception_name::Union{Symbol, QuoteNode},
-            docstring::String,
-            error_message_bits::Union{Expr, String}...,
-        )
+                module_name = @__MODULE__
+                args = $(args)
+                error_header = "$(module_name).$(exception_name):"
 
-            typeof(exception_name) == QuoteNode && (exception_name = exception_name.value)
+                return quote
+                    @doc $docstring
+                    mutable struct $(exception_name) <: Exception
+                        $(args...)
+                        $(exception_name)($(args...)) = new($(args...))
+                    end
 
-            module_name = $(module_name)
-            args = $(args)
-            error_header = "$(module_name).$(exception_name):"
-
-            return quote
-                @doc $docstring
-                mutable struct $(exception_name) <: Exception
-                    $(args...)
-                    $(exception_name)($(args...)) = new($(args...))
+                    Base.showerror(io::IO, e::$(module_name).$(exception_name)) =
+                    print(
+                        io, string(
+                            '\n', '\n',
+                            $error_header, '\n',
+                            $(error_message_bits...), '\n',
+                        )
+                    )
                 end
 
-                Base.showerror(io::IO, e::$(module_name).$(exception_name)) =
-                print(
-                    io, string(
-                        '\n', '\n',
-                        $error_header, '\n',
-                        $(error_message_bits...), '\n',
-                    )
-                )
             end
-
         end
-    end)
+    )
 
 end
