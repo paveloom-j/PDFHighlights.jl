@@ -325,38 +325,47 @@ end
 
 end
 
-@testset "get_urls" begin
+@testset "get_all" begin
 
     @initialize
 
-    @test get_urls(csv) == String[]
+    @test get_all(csv) == (String[], String[], String[], String[], String[], Int32[])
 
-    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",\"URL, \"\"quotes\"\"\",\"Note 1\",1"
+    line = "\"Highlight 1\",\"Title with \"\"quotes\"\"\",\"Author 1\",,\"Note 1\",1"
 
     open(csv, "a") do io
         println(io, line)
     end
 
-    @test get_urls(csv) ==
-    String["URL, \"quotes\""]
+    @test get_all(csv) == (
+        String["Highlight 1"],
+        String["Title with \"quotes\""],
+        String["Author 1"], String[""],
+        String["Note 1"],
+        Int32[1],
+    )
 
-    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",URL without quotes,\"Note 1\",1"
+    @test_throws(
+        PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
+        get_all("oof"),
+    )
 
-    open(csv, "w") do io
-        println(io, header, '\n', line)
+end
+
+@testset "get_locations" begin
+
+    @initialize
+
+    @test get_locations(csv) == Int32[]
+
+    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"Note 1\","
+
+    open(csv, "a") do io
+        println(io, line)
     end
 
-    @test get_urls(csv) ==
-    String["URL without quotes"]
-
-    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",\"\",\"Note 1\",1"
-
-    open(csv, "w") do io
-        println(io, header, '\n', line)
-    end
-
-    @test get_urls(csv) ==
-    String[""]
+    @test get_locations(csv) ==
+    Int32[0]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"Note 1\",1"
 
@@ -364,12 +373,12 @@ end
         println(io, header, '\n', line)
     end
 
-    @test get_urls(csv) ==
-    String[""]
+    @test get_locations(csv) ==
+    Int32[1]
 
     @test_throws(
         PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
-        get_urls("oof"),
+        get_locations("oof"),
     )
 
 end
@@ -423,20 +432,38 @@ end
 
 end
 
-@testset "get_locations" begin
+@testset "get_urls" begin
 
     @initialize
 
-    @test get_locations(csv) == Int32[]
+    @test get_urls(csv) == String[]
 
-    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"Note 1\","
+    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",\"URL, \"\"quotes\"\"\",\"Note 1\",1"
 
     open(csv, "a") do io
         println(io, line)
     end
 
-    @test get_locations(csv) ==
-    Int32[0]
+    @test get_urls(csv) ==
+    String["URL, \"quotes\""]
+
+    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",URL without quotes,\"Note 1\",1"
+
+    open(csv, "w") do io
+        println(io, header, '\n', line)
+    end
+
+    @test get_urls(csv) ==
+    String["URL without quotes"]
+
+    line = "\"Highlight 1\",\"Title 1\",\"Author 1\",\"\",\"Note 1\",1"
+
+    open(csv, "w") do io
+        println(io, header, '\n', line)
+    end
+
+    @test get_urls(csv) ==
+    String[""]
 
     line = "\"Highlight 1\",\"Title 1\",\"Author 1\",,\"Note 1\",1"
 
@@ -444,12 +471,12 @@ end
         println(io, header, '\n', line)
     end
 
-    @test get_locations(csv) ==
-    Int32[1]
+    @test get_urls(csv) ==
+    String[""]
 
     @test_throws(
         PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
-        get_locations("oof"),
+        get_urls("oof"),
     )
 
 end

@@ -4,5 +4,6 @@ authors = ["Pavel Sobolev <paveloom@mail.ru>"]
 version = "0.1.0"
 
 [deps]
+SHA = "ea8e919c-243c-51af-8825-aaa63cd721ce"
 Suppressor = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

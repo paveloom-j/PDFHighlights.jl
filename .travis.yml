@@ -5,7 +5,7 @@ notifications:
   email: false
 
 stages:
-  - name: Codecov
+  - name: "Code Coverage"
   - name: Tests
     if: branch != master AND branch != develop AND NOT branch =~ /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
@@ -20,8 +20,8 @@ jobs:
   allow_failures:
     julia: nightly
   include:
-    - stage: "Codecov"
-      name: "Code Coverage, Julia 1.5 (Linux, x64)"
+    - stage: "Code Coverage"
+      name: "Codecov, Julia 1.5 (Linux, x64)"
       julia: 1.5
       os: linux
       arch: amd64

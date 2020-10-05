@@ -15,6 +15,7 @@ export _get_authors_from_PDF,
        get_title
 
 using ..Exceptions
+using SHA
 
 # Specify the paths to the shared C libraries
 const path_to_c_libraries = normpath(joinpath(@__DIR__, "..", "..", "deps", "C"))
@@ -57,5 +58,16 @@ include("Functions/get_highlights_pages.jl")
 include("Functions/get_comments.jl")
 include("Functions/_get_highlights_from_PDF.jl")
 include("Functions/get_pages.jl")
+
+function __init__()
+
+    # Create dictionaries to save outputs
+    global get_author_title_outputs = Dict{String,Tuple{String, String}}()
+    global get_highlights_comments_pages_outputs = Dict{
+        Tuple{String, Bool},
+        Tuple{Vector{String}, Vector{String}, Vector{Int32}}
+    }()
+
+end
 
 end

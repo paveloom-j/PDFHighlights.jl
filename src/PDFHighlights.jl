@@ -36,6 +36,7 @@ export #= PDF =#
        get_pages,
        get_title,
        #= CSV =#
+       get_all,
        get_locations,
        get_notes,
        get_urls,
