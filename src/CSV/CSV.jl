@@ -37,7 +37,4 @@ include("Functions/get_urls.jl")
 include("Functions/get_notes.jl")
 include("Functions/get_locations.jl")
 
-# Sort the table by a column
-include("Functions/sort!.jl")
-
 end
