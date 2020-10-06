@@ -31,14 +31,15 @@ function _sort!(
                 perm = sortperm(lines_x_anchors[start_index:index])
                 permute!(@view(lines[start_index:index]), perm)
                 permute!(@view(lines_yl_anchors[start_index:index]), perm)
-                permute!(@view(lines_yu_anchors[start_index:index]), perm)
 
                 if start_index == 1
                     permute!(@view(lines_x_anchors[start_index:index]), perm)
+                    permute!(@view(lines_yu_anchors[start_index:index]), perm)
                 end
 
             end
 
+        # Sort the last chain of lines
         elseif start_index != 0
 
             perm = sortperm(lines_x_anchors[start_index:previous_index])
@@ -46,7 +47,6 @@ function _sort!(
 
             if start_index == 1
                 permute!(@view(lines_x_anchors[start_index:previous_index]), perm)
-                permute!(@view(lines_yl_anchors[start_index:previous_index]), perm)
                 permute!(@view(lines_yu_anchors[start_index:previous_index]), perm)
             end
 
