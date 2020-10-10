@@ -1,3 +1,4 @@
+"This module contains functions that can only be applied to PDF files."
 module PDF
 
 export _get_authors_from_PDF,
@@ -14,21 +15,9 @@ export _get_authors_from_PDF,
        get_pages,
        get_title
 
+using ..Constants
 using ..Exceptions
 using SHA
-
-# Specify the paths to the shared C libraries
-const path_to_c_libraries = normpath(joinpath(@__DIR__, "..", "..", "deps", "C"))
-const path_to_get_lines_comments_pages_library = joinpath(
-    path_to_c_libraries,
-    "get_lines_comments_pages",
-    "get_lines_comments_pages",
-)
-const path_to_get_author_title_library = joinpath(
-    path_to_c_libraries,
-    "get_author_title",
-    "get_author_title",
-)
 
 # Load the functions
 

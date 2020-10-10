@@ -1,5 +1,7 @@
+"This module contains functions that can only be applied to CSV files."
 module CSV
 
+using ..Constants
 using ..Exceptions
 using ..PDF
 
@@ -13,9 +15,6 @@ export _get_authors_from_CSV,
        get_urls,
        import_highlights,
        initialize
-
-# Default header
-const header = "Highlight,Title,Author,URL,Note,Location"
 
 # Load the functions
 

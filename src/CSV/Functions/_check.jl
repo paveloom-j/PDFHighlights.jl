@@ -1,9 +1,39 @@
+"""
+    _check(csv::String) -> Nothing
+
+Check the structural integrity of the CSV file (see the exceptions list).
+
+# Arguments
+- `csv::String`: $(CSV_ARGUMENT)
+
+# Throws
+- [`IncorrectHeader`](@ref): $(INCORRECT_HEADER_EXCEPTION)
+- [`LastElementIsNotAnInteger`](@ref): $(LAST_ELEMENT_IS_NOT_AN_INTEGER_EXCEPTION)
+- [`NotSixColumns`](@ref): $(NOT_SIX_COLUMNS_EXCEPTION)
+
+# Example
+```jldoctest; output = false
+using PDFHighlights
+
+_file, io = mktemp()
+println(io, \"$(HEADER)\")
+flush(io)
+file = _file * ".csv"
+mv(_file, file)
+
+PDFHighlights.Internal.CSV._check(file)
+
+# output
+
+
+```
+"""
 function _check(csv::String)::Nothing
 
     lines = filter(!isempty, readlines(csv))
 
     # Check if the header is correct
-    rstrip(lines[1]) != header && throw(IncorrectHeader(csv))
+    rstrip(lines[1]) != HEADER && throw(IncorrectHeader(csv))
 
     for (index, line) in enumerate(lines[2:end])
 

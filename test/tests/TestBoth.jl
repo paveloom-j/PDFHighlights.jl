@@ -24,7 +24,7 @@ const pdf = joinpath(@__DIR__, "..", "pdf", "TestPDF.pdf")
 
     isfile(csv) && rm(csv)
 
-    @test_throws PDFHighlights.Internal.Exceptions.NotCSVorPDF("oof") get_authors("oof")
+    @test_throws PDFHighlights.Internal.Exceptions.NotCSVorDir("oof") get_authors("oof")
 
 end
 
@@ -95,7 +95,10 @@ end
 
     isfile(csv) && rm(csv)
 
-    @test_throws PDFHighlights.Internal.Exceptions.NotCSVorPDF("oof") get_highlights("oof")
+    @test_throws(
+        PDFHighlights.Internal.Exceptions.NotCSVorPDForDir("oof"),
+        get_highlights("oof")
+    )
 
 end
 
@@ -112,7 +115,7 @@ end
 
     isfile(csv) && rm(csv)
 
-    @test_throws PDFHighlights.Internal.Exceptions.NotCSVorPDF("oof") get_titles("oof")
+    @test_throws PDFHighlights.Internal.Exceptions.NotCSVorDir("oof") get_titles("oof")
 
 end
 

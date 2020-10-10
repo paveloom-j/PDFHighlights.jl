@@ -1,9 +1,11 @@
+"This module contains functions that can be applied to both PDF and CSV files."
 module Both
 
 export get_authors,
        get_highlights,
        get_titles
 
+using ..Constants
 using ..Exceptions
 using ..CSV
 using ..PDF

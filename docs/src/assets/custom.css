@@ -1,0 +1,8 @@
+@font-face {
+   font-family: JuliaMono-Medium;
+   src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Medium.woff2");
+}
+
+code {
+   font-family: JuliaMono-Medium, monospace;
+}

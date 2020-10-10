@@ -6,12 +6,14 @@ module Internal
 
 # Include source code
 include("Exceptions/Exceptions.jl")
+include("Constants.jl")
 include("PDF/PDF.jl")
 include("CSV/CSV.jl")
 include("Both/Both.jl")
 
 # Export contents of the modules into `Internal`
 using .Exceptions
+using .Constants
 using .PDF
 using .CSV
 using .Both

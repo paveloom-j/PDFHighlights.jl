@@ -1,3 +1,40 @@
+"""
+    _concatenate(
+        highlights::Vector{String},
+        comments::Vector{String},
+        pages::Vector{Int32},
+    ) -> Tuple{Vector{String}, Vector{String}, Vector{Int32}}
+
+Concatenate highlights based on comments; merge pages.
+
+# Arguments
+- `highlights::Vector{String}`: $(HIGHLIGHTS_ARGUMENT)
+- `comments::Vector{String}`: $(COMMENTS_ARGUMENT)
+- `pages::Vector{Int32}`: $(PAGES_ARGUMENT)
+
+# Returns
+- `Tuple{Vector{String}, Vector{String}, Vector{Int32}}`: the concatenated arguments
+
+# Example
+```jldoctest; output = false
+using PDFHighlights
+
+PDFHighlights.Internal.PDF._concatenate(
+    String["Highlight 1", "High-", "light 2"],
+    String["Comment 1", ".c1 Comment 2", ".c2"],
+    Int32[1, 2, 3],
+) ==
+(
+    String["Highlight 1", "Highlight 2"],
+    String["Comment 1", "Comment 2"],
+    Int32[1, 2],
+)
+
+# output
+
+true
+```
+"""
 function _concatenate(
     highlights::Vector{String},
     comments::Vector{String},

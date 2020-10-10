@@ -21,3 +21,6 @@ deps/*.log
 # Side files when compiling the wrapper
 *.o
 *.so
+
+# Side file when generating documentation
+docs/build

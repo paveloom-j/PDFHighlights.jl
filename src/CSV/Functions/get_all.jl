@@ -1,3 +1,72 @@
+"""
+    @extract(array::Symbol) -> Expr
+
+Get a piece of line (a highlight, an author, a title, etc.).
+
+# Arguments
+- `array::Symbol`: the name of the array to which this piece refers
+
+# Returns
+- `Expr`: the code extracting the piece and putting it into the corresponding array
+
+# Example
+```jldoctest; output = false
+using PDFHighlights
+using SyntaxTree
+
+(@macroexpand(PDFHighlights.Internal.CSV.@extract(highlights)) |> linefilter! ==
+quote
+    if current_comma_index == 1
+        highlights[line_index] = ""
+    else
+        piece = line[1:(current_comma_index - 1)]
+        if piece == "\\"\\""
+            highlights[line_index] = ""
+        elseif startswith(piece, "\\"")
+            highlights[line_index] = chop(piece; head = 1, tail = 1)
+        else
+            highlights[line_index] = piece
+        end
+    end
+end |> linefilter!) |> println
+
+(@macroexpand(PDFHighlights.Internal.CSV.@extract(locations)) |> linefilter! ==
+quote
+    if current_comma_index == lastindex(line)
+        locations[line_index] = 0
+    else
+        locations[line_index] = parse(
+            Int32,
+            line[(current_comma_index + 1):end],
+        )
+    end
+end |> linefilter!) |> println
+
+array = :titles
+
+@macroexpand(PDFHighlights.Internal.CSV.@extract(titles)) |> linefilter! ==
+quote
+    if current_comma_index == previous_comma_index + 1
+        \$(array)[line_index] = ""
+    else
+        piece = line[(previous_comma_index + 1):(current_comma_index - 1)]
+        if piece == "\\"\\""
+            \$(array)[line_index] = ""
+        elseif startswith(piece, "\\"")
+            \$(array)[line_index] = chop(piece; head = 1, tail = 1)
+        else
+            \$(array)[line_index] = piece
+        end
+    end
+end |> linefilter!
+
+# output
+
+true
+true
+true
+```
+"""
 macro extract(array::Symbol)
     if array == :highlights
         return esc(
@@ -49,13 +118,70 @@ macro extract(array::Symbol)
     end
 end
 
+"""
+    get_all(csv::String) -> Tuple{
+        Vector{String},
+        Vector{String},
+        Vector{String},
+        Vector{String},
+        Vector{String},
+        Vector{Int32},
+    }
+
+Extract the values of all columns from the CSV file.
+
+# Arguments
+- `csv::String`: $(CSV_ARGUMENT)
+
+# Returns
+- `Tuple{...}`: the highlights, titles, authors, URLs, notes, and locations
+
+# Throws
+- [`IntegrityCheckFailed`](@ref): $(INTEGRITY_CHECK_FAILED_EXCEPTION)
+- Exceptions from: [`initialize`](@ref)
+
+# Example
+```jldoctest; output = false
+using PDFHighlights
+
+_file, io = mktemp()
+println(
+    io,
+    "Highlight,Title,Author,URL,Note,Location\\n",
+    string(
+        "The world didn't stop spinning,",
+        "\\"Girl, Interrupted\\",",
+        "Susanna Kaysen,",
+        "https://www.imdb.com/title/tt0172493,",
+        "Journal,",
+        "5722",
+    ),
+)
+flush(io)
+file = _file * ".csv"
+mv(_file, file)
+
+get_all(file) == (
+    ["The world didn't stop spinning"],
+    ["Girl, Interrupted"],
+    ["Susanna Kaysen"],
+    ["https://www.imdb.com/title/tt0172493"],
+    ["Journal"],
+    [5722],
+)
+
+# output
+
+true
+```
+"""
 function get_all(csv::String)::Tuple{
     Vector{String},
     Vector{String},
     Vector{String},
     Vector{String},
     Vector{String},
-    Vector{Int32}
+    Vector{Int32},
 }
 
     try

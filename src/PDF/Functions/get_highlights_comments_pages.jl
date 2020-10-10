@@ -1,18 +1,164 @@
+"""
+    @unsafe_wrap(array::Symbol, len::Symbol) -> Expr
+
+Wrap a Julia `Array` object around the data at the address given by `array[]` pointer with
+length equal to `len[]`.
+
+# Arguments
+- `array::Symbol`: name of the variable which holds the pointer to the array data
+- `len::Symbol`: name of the variable which holds the pointer to the length of this array
+
+# Returns
+- `Expr`: a wrapping expression
+
+# Example
+```jldoctest; output = false
+using PDFHighlights
+
+_array = :array
+_len = :len
+
+@macroexpand(PDFHighlights.Internal.PDF.@unsafe_wrap(array, len)) ==
+:(unsafe_wrap(Array, \$(_array)[], \$(_len)[]; own = true))
+
+# output
+
+true
+```
+
+See also: [`@unsafe_wrap_strings`](@ref)
+"""
 macro unsafe_wrap(array::Symbol, len::Symbol)
-    return esc(:(unsafe_wrap(Array, $array[], $len[]; own = true)))
+    return esc(:(unsafe_wrap(Array, $(array)[], $(len)[]; own = true)))
 end
 
+"""
+    @unsafe_wrap(array::Expr, len::Union{Symbol, Expr}) -> Expr
+
+Wrap a Julia `Array` object around the data at the address given by `array` pointer with
+length equal to `len`.
+
+# Arguments
+- `array::Expr`: expression that will yield a pointer to the array data
+- `len::Union{Symbol, Expr}`: name of the variable which holds the length of this array,
+  or an expression that will yield it
+
+# Returns
+- `Expr`: a wrapping expression
+
+# Example
+```jldoctest; output = false
+using PDFHighlights
+
+_array = :(array[index])
+_len = :len
+
+@macroexpand(PDFHighlights.Internal.PDF.@unsafe_wrap(array[index], len)) ==
+:(unsafe_wrap(Array, \$(_array), \$(_len); own = true))
+
+# output
+
+true
+```
+
+See also: [`@unsafe_wrap_strings`](@ref)
+"""
 macro unsafe_wrap(array::Expr, len::Union{Symbol, Expr})
-    return esc(:(unsafe_wrap(Array, $array, $len; own = true)))
+    return esc(:(unsafe_wrap(Array, $(array), $(len); own = true)))
 end
 
+"""
+    @unsafe_wrap_strings(array::Union{Symbol, Expr}, len::Union{Symbol, Expr}) -> Expr
+
+Wrap a Julia `Array` object around the array of C-style strings at the address given by
+`array` (or `array[]`) pointer with length equal to `len` (or `len[]`); convert each
+string to a Julia string encoded as UTF-8.
+
+# Arguments
+- `array::Union{Symbol, Expr}`: name of the variable which holds the pointer to the array
+  data, or expression that will yield it
+- `len::Union{Symbol, Expr}`: name of the variable which holds the length of this array
+  (or a pointer to it), or expression that will yield it
+
+# Returns
+- `Expr`: a wrapping expression
+
+# Example
+```jldoctest; output = false
+using PDFHighlights
+using PDFHighlights: Internal.PDF.@unsafe_wrap
+
+_array = :array
+_len = :len
+
+@macroexpand(PDFHighlights.Internal.PDF.@unsafe_wrap_strings(array, len)) ==
+:(unsafe_string.(unsafe_wrap(Array, \$(_array)[], \$(_len)[]; own = true)))
+
+# output
+
+true
+```
+
+See also: [`@unsafe_wrap`](@ref)
+"""
 macro unsafe_wrap_strings(array::Union{Symbol, Expr}, len::Union{Symbol, Expr})
-    return esc(:(unsafe_string.(@unsafe_wrap $array $len)))
+    return esc(:(unsafe_string.(@unsafe_wrap $(array) $(len))))
 end
 
+"""
+    get_highlights_comments_pages(
+        target::String;
+        concatenate::Bool=true
+    ) -> Tuple{Vector{String}, Vector{String}, Vector{Int32}}
+
+Extract the highlights, comments, and pages from a passed PDF or all PDFs found recursively
+in the passed directory.
+
+# Arguments
+- `target::String`: $(TARGET_PDF_ARGUMENT)
+
+# Keywords
+- `concatenate::Bool=true`: $(CONCATENATE_KEYWORD)
+
+# Returns
+- `Tuple{Vector{String}, Vector{String}, Vector{Int32}}`: the highlights, comments,
+  and pages
+
+# Throws
+- [`DoesNotExist`](@ref): $(DOES_NOT_EXIST_EXCEPTION)
+- [`NotPDF`](@ref): $(NOT_PDF_EXCEPTION)
+
+# Example
+```jldoctest; output = false
+using PDFHighlights
+
+path_to_pdf_dir = joinpath(pathof(PDFHighlights) |> dirname |> dirname, "test", "pdf")
+path_to_pdf = joinpath(path_to_pdf_dir, "TestPDF.pdf")
+
+get_highlights_comments_pages(path_to_pdf_dir) ==
+get_highlights_comments_pages(path_to_pdf) ==
+(
+    [
+        "Highlight 1",
+        "Highlight 2 Highlight 3",
+        "Highlight 4",
+        "Highhighlight 5",
+        "6th Highhigh light-",
+        "High light 7",
+        "8th Highlight-",
+    ],
+    ["Comment 1", "Comment 2 Comment 3", "Comment 4", "", "", "", ""],
+    Int32[1, 2, 4, 6, 7, 8, 9],
+)
+
+# output
+
+true
+```
+"""
 function get_highlights_comments_pages(
     target::String;
-    concatenate::Bool = true,
+    concatenate::Bool=true,
 )::Tuple{Vector{String}, Vector{String}, Vector{Int32}}
 
     if isdir(target)
@@ -63,7 +209,7 @@ function get_highlights_comments_pages(
             # Function and library names
             (
                 :get_lines_comments_pages,
-                path_to_get_lines_comments_pages_library,
+                PATH_TO_GET_LINES_COMMENTS_PAGES_LIBRARY,
             ),
             # Type of return value
             Cvoid,

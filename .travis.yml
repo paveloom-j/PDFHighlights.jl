@@ -5,7 +5,7 @@ notifications:
   email: false
 
 stages:
-  - name: "Code Coverage"
+  - name: "Docs & Code Coverage"
   - name: Tests
     if: branch != master AND branch != develop AND NOT branch =~ /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
@@ -20,7 +20,7 @@ jobs:
   allow_failures:
     julia: nightly
   include:
-    - stage: "Code Coverage"
+    - stage: "Docs & Code Coverage"
       name: "Codecov, Julia 1.5 (Linux, x64)"
       julia: 1.5
       os: linux
@@ -29,6 +29,15 @@ jobs:
         - julia -e 'using Pkg; Pkg.build("PDFHighlights");
                     Pkg.add("Coverage"); using Coverage;
                     Pkg.test(coverage=true); Codecov.submit(process_folder())'
+    - stage: "Docs & Code Coverage"
+      name: "Documentation Build, Julia 1.5 (Linux, x64)"
+      julia: 1.5
+      os: linux
+      arch: amd64
+      script:
+        - julia --project=docs/ -e 'using Pkg; Pkg.develop(path=pwd());
+                                    Pkg.build("PDFHighlights"), Pkg.instantiate()'
+        - julia --project=docs/ docs/make.jl
     - stage: "Tests"
       name: "Julia 1.5 (macOS, x64)"
       julia: 1.5

@@ -1,7 +1,53 @@
-function import_highlights(
-    csv::String,
-    target::String
-)::Nothing
+"""
+    import_highlights(csv::String, target::String) -> Nothing
+
+Extract the values of the `URL` column from the CSV file.
+
+# Arguments
+- `csv::String`: $(CSV_ARGUMENT)
+- `target::String`: $(TARGET_PDF_ARGUMENT)
+
+# Throws
+- [`IntegrityCheckFailed`](@ref): $(INTEGRITY_CHECK_FAILED_EXCEPTION)
+- Exceptions from: [`initialize`](@ref)
+
+# Example
+```jldoctest; output = false
+using PDFHighlights
+using Suppressor
+
+path_to_pdf_dir = joinpath(pathof(PDFHighlights) |> dirname |> dirname, "test", "pdf")
+path_to_pdf = joinpath(path_to_pdf_dir, "TestPDF.pdf")
+
+_file, io = mktemp()
+file = _file * ".csv"
+mv(_file, file)
+
+(@capture_out(import_highlights(file, path_to_pdf)) ==
+\"\"\"
+
+    CSV: "\$(basename(file))"
+    PDF: "TestPDF.pdf"
+    Highlights (found / added): 7 / 7
+
+\"\"\") |> println
+
+@capture_out(import_highlights(file, path_to_pdf_dir)) ==
+\"\"\"
+
+    CSV: "\$(basename(file))"
+    Directory: "pdf"
+    Highlights (found / added): 7 / 0
+
+\"\"\"
+
+# output
+
+true
+true
+```
+"""
+function import_highlights(csv::String, target::String)::Nothing
 
     try
         initialize(csv)

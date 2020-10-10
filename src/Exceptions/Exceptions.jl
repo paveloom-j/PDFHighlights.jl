@@ -1,5 +1,5 @@
 """
-This module contains all the exceptions used in the package, as well as the macro
+This module contains all the exceptions used in the package, as well as the macro(s)
 that they were created by.
 """
 module Exceptions
@@ -11,18 +11,23 @@ export DirectoryDoesNotExist,
        IntegrityCheckFailed,
        LastElementIsNotAnInteger,
        NotCSV,
-       NotCSVorPDF,
+       NotCSVorDir,
+       NotCSVorPDForDir,
        NotPDF,
        NotSixColumns,
        SymbolIsNotSupported
 
-# Load the auxiliary macros
+# Load the auxiliary macros to create other macros
+include("Macros/docstring.jl")
 include("Macros/exception.jl")
+include("Macros/fields.jl")
 
-# Create auxiliary macros for exceptions
-@exception exception_with_file file::String
-@exception exception_with_line file::String line::Int
-@exception exception_with_symbol symbol::Symbol
+# Load the auxiliary macros to create exceptions
+
+include("Macros/exception_without_fields.jl")
+include("Macros/exception_with_file.jl")
+include("Macros/exception_with_line.jl")
+include("Macros/exception_with_symbol.jl")
 
 # Create exceptions
 
@@ -68,9 +73,22 @@ include("Macros/exception.jl")
 )
 
 @exception_with_file(
-    NotCSVorPDF,
-    "An exception thrown when the specified path does not end in `.csv` or `.pdf`.",
-    "The specified path (\"", e.file, "\") does not end in `.csv` or `.pdf`.",
+    NotCSVorDir,
+    """
+    An exception thrown when the specified path does not end in `.csv` ans is not
+    a directory.
+    """,
+    "The specified path (\"", e.file, "\") does not end in `.csv` and is not a directory.",
+)
+
+@exception_with_file(
+    NotCSVorPDForDir,
+    """
+    An exception thrown when the specified path does not end in `.csv` or `.pdf`
+    and is not a directory.
+    """,
+    "The specified path (\"", e.file, "\") does not end in `.csv` or `.pdf` ",
+    "and is not a directory.",
 )
 
 @exception_with_file(
