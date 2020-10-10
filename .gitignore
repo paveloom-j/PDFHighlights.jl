@@ -1,0 +1,26 @@
+# User's Makefile
+/Makefile
+
+# Manifest files
+Manifest.toml
+
+# Any PDF in the root directory
+/*.pdf
+
+# Any .csv
+*.csv
+
+# Side files when assembling PDF
+*.aux
+*.log
+*.gz
+
+# Logs from the build stage
+deps/*.log
+
+# Side files when compiling the wrapper
+*.o
+*.so
+
+# Side file when generating documentation
+docs/build
