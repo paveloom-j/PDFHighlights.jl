@@ -1,6 +1,6 @@
-# [Public API](@id PublicAPI)
+# [Public Interface](@id PublicInterface)
 
-## Extracting data
+## [Extracting data](@id ExtractingData)
 
 List of functions to extract data from either PDF or CSV files:
 - [`get_all`](@ref) _(CSV)_

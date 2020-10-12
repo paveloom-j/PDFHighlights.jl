@@ -14,15 +14,16 @@ makedocs(
 
     # Specify the pages on the left side
     pages = [
-        # Home page
         "Home" => "index.md",
 
-        # Library page
-        "Library" => Any[
-            # Public
-            "Public" => "lib/public.md",
+        "Manual" => [
+            "Guide" => "manual/guide.md",
+            "Format" => "manual/format.md",
+            "manual/concatenation.md"
+        ],
 
-            # Internals
+        "Library" => [
+            "Public" => "lib/public.md",
             "Internals" => map(
                 s -> "lib/internals/$(s)",
                 [
