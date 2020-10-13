@@ -23,6 +23,7 @@ makedocs(
         ],
 
         "Library" => [
+            "Index" => "lib/index.md",
             "Public" => "lib/public.md",
             "Internals" => map(
                 s -> "lib/internals/$(s)",

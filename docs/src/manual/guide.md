@@ -38,7 +38,7 @@ pkg> add PDFHighlights
     have a `gcc` compiler available. The build process can be restarted using
     `build PDFHighlights` in the Pkg REPL.
 
-## Importing highlights
+## [Importing highlights](@id Importing)
 
 You can now import highlights from a PDF file or a directory containing PDF files using
 the [`import_highlights`](@ref) function:
@@ -80,7 +80,7 @@ function:
 initialize("highlights.csv")
 ```
 
-## Retrieving pieces
+## [Retrieving pieces](@id Retrieving)
 
 For more crafty workflows, you can use the remaining functions from the
 [public interface](@ref PublicInterface). They allow you to retrieve pieces of data related to

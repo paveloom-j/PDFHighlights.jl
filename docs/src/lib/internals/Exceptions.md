@@ -1,4 +1,4 @@
-# [Exceptions](@id Exceptions)
+# [Exceptions](@id ExceptionsPage)
 
 ## Module
 

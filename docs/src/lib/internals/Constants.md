@@ -1,4 +1,4 @@
-# [Constants](@id Constants)
+# [Constants](@id ConstantsPage)
 
 ## Module
 

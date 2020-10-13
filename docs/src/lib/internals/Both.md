@@ -1,4 +1,4 @@
-# [Both](@id Both)
+# [Both](@id BothPage)
 
 ## Module
 
