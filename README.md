@@ -1,8 +1,8 @@
 # PDFHighlights.jl
 
-*Export highlights from PDF files to a CSV file using one command.*
+_Export highlights from PDF files to a CSV file with one call._
 
-| **Documentation**                                                         | **Code Coverage**               | **Repository & License**                                      |
+| __Documentation__                                                         | __Code Coverage__               | __Repository & License__                                      |
 |:-------------------------------------------------------------------------:|:-------------------------------:|:-------------------------------------------------------------:|
 | [![][docs-stable-img]][docs-stable-url] [![][docs-dev-img]][docs-dev-url] | [![][codecov-img]][codecov-url] | [![][github-img]][github-url] [![][license-img]][license-url] |
 

@@ -1,6 +1,6 @@
 # PDFHighlights.jl
 
-_Export highlights from PDF files to a CSV file using one command._
+_Export highlights from PDF files to a CSV file with one call._
 
 ```@raw html
 
