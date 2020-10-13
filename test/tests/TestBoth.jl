@@ -3,7 +3,6 @@
 module TestBoth
 
 using PDFHighlights
-using Suppressor
 using Test
 
 # Print the header
@@ -18,7 +17,7 @@ const pdf = joinpath(@__DIR__, "..", "pdf", "TestPDF.pdf")
     @test get_authors(dir) == String["Pavel Sobolev",]
 
     csv = "oof.csv"
-    @suppress_out import_highlights(csv, pdf)
+    import_highlights(csv, pdf; quiet=true)
 
     @test get_authors(csv) == repeat(["Pavel Sobolev",], 7)
 
@@ -42,7 +41,7 @@ end
     ]
 
     # Without concatenation
-    @test get_highlights(pdf; concatenate = false) == String[
+    @test get_highlights(pdf; concatenate=false) == String[
         "Highlight 1",
         "Highlight 2",
         "Highlight 3",
@@ -68,7 +67,7 @@ end
     ]
 
     # Without concatenation
-    @test get_highlights(dir; concatenate = false) == String[
+    @test get_highlights(dir; concatenate=false) == String[
         "Highlight 1",
         "Highlight 2",
         "Highlight 3",
@@ -81,7 +80,7 @@ end
     ]
 
     csv = "oof.csv"
-    @suppress_out import_highlights(csv, pdf)
+    import_highlights(csv, pdf; quiet=true)
 
     @test get_highlights(csv) == String[
         "Highlight 1",
@@ -109,7 +108,7 @@ end
     @test get_titles(dir) == String["A dummy PDF for tests",]
 
     csv = "oof.csv"
-    @suppress_out import_highlights(csv, pdf)
+    import_highlights(csv, pdf; quiet=true)
 
     @test get_titles(csv) == repeat(["A dummy PDF for tests",], 7)
 

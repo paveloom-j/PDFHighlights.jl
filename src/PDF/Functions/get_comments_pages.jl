@@ -26,8 +26,8 @@ using PDFHighlights
 path_to_pdf_dir = joinpath(pathof(PDFHighlights) |> dirname |> dirname, "test", "pdf")
 path_to_pdf = joinpath(path_to_pdf_dir, "TestPDF.pdf")
 
-get_comments_pages(path_to_pdf_dir; concatenate = true) ==
-get_comments_pages(path_to_pdf; concatenate = true) ==
+get_comments_pages(path_to_pdf_dir; concatenate=true) ==
+get_comments_pages(path_to_pdf; concatenate=true) ==
 (
     String["Comment 1", "Comment 2 Comment 3", "Comment 4", "", "", "", ""],
     Int32[1, 2, 4, 6, 7, 8, 9],

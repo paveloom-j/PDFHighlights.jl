@@ -1,11 +1,14 @@
 """
-    import_highlights(csv::String, target::String) -> Nothing
+    import_highlights(csv::String, target::String; quiet::Bool=false) -> Nothing
 
 Extract the values of the `URL` column from the CSV file.
 
 # Arguments
 - `csv::String`: $(CSV_ARGUMENT)
 - `target::String`: $(TARGET_PDF_ARGUMENT)
+
+# Keywords
+- `quiet::Bool=false`: if `true`, don't print to standard output
 
 # Throws
 - [`IntegrityCheckFailed`](@ref): $(INTEGRITY_CHECK_FAILED_EXCEPTION)
@@ -32,6 +35,8 @@ mv(_file, file)
 
 \"\"\") |> println
 
+(@capture_out(import_highlights(file, path_to_pdf; quiet=true)) == "") |> println
+
 @capture_out(import_highlights(file, path_to_pdf_dir)) ==
 \"\"\"
 
@@ -45,9 +50,10 @@ mv(_file, file)
 
 true
 true
+true
 ```
 """
-function import_highlights(csv::String, target::String)::Nothing
+function import_highlights(csv::String, target::String; quiet::Bool=false)::Nothing
 
     try
         initialize(csv)
@@ -149,33 +155,35 @@ function import_highlights(csv::String, target::String)::Nothing
         end
     end
 
-    if isdir(target)
+    if !quiet
+        if isdir(target)
 
-        dir = normpath(target)
-        basename_dir = basename(dir)
+            dir = normpath(target)
+            basename_dir = basename(dir)
 
-        if basename_dir == ""
-            dir = basename(dirname(dir))
+            if basename_dir == ""
+                dir = basename(dirname(dir))
+            else
+                dir = basename_dir
+            end
+
+            println("""
+
+                CSV: "$(basename(csv))"
+                Directory: "$(basename(dir))"
+                Highlights (found / added): $(found) / $(added)
+            """)
+
         else
-            dir = basename_dir
+
+            println("""
+
+                CSV: "$(basename(csv))"
+                PDF: "$(basename(target))"
+                Highlights (found / added): $(found) / $(added)
+            """)
+
         end
-
-        println("""
-
-            CSV: "$(basename(csv))"
-            Directory: "$(basename(dir))"
-            Highlights (found / added): $(found) / $(added)
-        """)
-
-    else
-
-        println("""
-
-            CSV: "$(basename(csv))"
-            PDF: "$(basename(target))"
-            Highlights (found / added): $(found) / $(added)
-        """)
-
     end
 
     return nothing

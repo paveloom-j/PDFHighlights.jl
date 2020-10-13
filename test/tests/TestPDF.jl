@@ -62,7 +62,7 @@ end
     ]
 
     # Without concatenation
-    @test PDFHighlights.Internal.PDF._get_highlights_from_PDF(pdf; concatenate = false) ==
+    @test PDFHighlights.Internal.PDF._get_highlights_from_PDF(pdf; concatenate=false) ==
     String[
         "Highlight 1",
         "Highlight 2",
@@ -281,7 +281,7 @@ end
     )
 
     # Without concatenation
-    @test get_highlights_comments_pages(pdf; concatenate = false) ==
+    @test get_highlights_comments_pages(pdf; concatenate=false) ==
     (
         String[
             "Highlight 1",
@@ -349,7 +349,7 @@ end
     )
 
     # Without concatenation
-    @test get_highlights_comments_pages(dir; concatenate = false) ==
+    @test get_highlights_comments_pages(dir; concatenate=false) ==
     (
         String[
             "Highlight 1",
@@ -381,7 +381,7 @@ end
 @testset "get_comments_pages" begin
 
     # With concatenation
-    @test get_comments_pages(pdf; concatenate = true) ==
+    @test get_comments_pages(pdf; concatenate=true) ==
     (
         String["Comment 1", "Comment 2 Comment 3", "Comment 4", "", "", "", ""],
         Int32[1, 2, 4, 6, 7, 8, 9],
@@ -432,7 +432,7 @@ end
     )
 
     # Without concatenation
-    @test get_highlights_comments(pdf; concatenate = false) ==
+    @test get_highlights_comments(pdf; concatenate=false) ==
     (
         String[
             "Highlight 1",
@@ -478,7 +478,7 @@ end
     )
 
     # Without concatenation
-    @test get_highlights_pages(pdf; concatenate = false) ==
+    @test get_highlights_pages(pdf; concatenate=false) ==
     (
         String[
             "Highlight 1",
@@ -499,7 +499,7 @@ end
 @testset "get_comments" begin
 
     # With concatenation
-    @test get_comments(pdf; concatenate = true) == String[
+    @test get_comments(pdf; concatenate=true) == String[
         "Comment 1",
         "Comment 2 Comment 3",
         "Comment 4",
@@ -527,7 +527,7 @@ end
 @testset "get_pages" begin
 
     # With concatenation
-    @test get_pages(pdf; concatenate = true) ==
+    @test get_pages(pdf; concatenate=true) ==
     Int32[1, 2, 4, 6, 7, 8, 9]
 
     # Without concatenation

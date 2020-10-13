@@ -98,6 +98,11 @@ end
 
     @initialize
 
+    @suppress_out @test_nowarn import_highlights(csv, pdf; quiet=true)
+    @suppress_out @test_nowarn import_highlights(csv, pdf; quiet=true)
+
+    @initialize
+
     s1 = @capture_out import_highlights(csv, pdf)
     s2 = """
 
@@ -119,6 +124,8 @@ end
     """
 
     @test s1 == s2
+
+    @test @capture_out(import_highlights(csv, pdf; quiet=true)) == ""
 
     @test_throws(
         PDFHighlights.Internal.Exceptions.IntegrityCheckFailed("oof"),
