@@ -42,7 +42,7 @@ function get_author_title(pdf::String)::Tuple{String, String}
         checksum = bytes2hex(sha1(io))
     end
 
-    get!(get_author_title_outputs, checksum) do
+    get!(GET_AUTHOR_TITLE_OUTPUTS, checksum) do
 
         author_ref = Ref{Cstring}()
         title_ref = Ref{Cstring}()

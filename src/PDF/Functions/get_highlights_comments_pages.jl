@@ -192,7 +192,7 @@ function get_highlights_comments_pages(
         checksum = bytes2hex(sha1(io))
     end
 
-    get!(get_highlights_comments_pages_outputs, (checksum, concatenate)) do
+    get!(GET_HIGHLIGHTS_COMMENTS_PAGES_OUTPUTS, (checksum, concatenate)) do
 
         # Prepare pointers
         lines_arrays_ref = Ref{Ptr{Ptr{Cstring}}}()

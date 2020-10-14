@@ -7,6 +7,13 @@ Modules = [PDFHighlights.Internal.PDF]
 Order = [:module]
 ```
 
+## Constants
+
+```@autodocs
+Modules = [PDFHighlights.Internal.PDF]
+Order = [:constant]
+```
+
 ## Functions
 
 ```@autodocs

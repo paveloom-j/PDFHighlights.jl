@@ -51,8 +51,17 @@ include("Functions/get_pages.jl")
 function __init__()
 
     # Create dictionaries to save outputs
-    global get_author_title_outputs = Dict{String,Tuple{String, String}}()
-    global get_highlights_comments_pages_outputs = Dict{
+    @doc """
+    A dictionary that is created at runtime to store the results of the
+    [`get_author_title`](@ref) function.
+    """
+    global GET_AUTHOR_TITLE_OUTPUTS = Dict{String,Tuple{String, String}}()
+
+    @doc """
+    A dictionary that is created at runtime to store the results of the
+    [`get_highlights_comments_pages`](@ref) function.
+    """
+    global GET_HIGHLIGHTS_COMMENTS_PAGES_OUTPUTS = Dict{
         Tuple{String, Bool},
         Tuple{Vector{String}, Vector{String}, Vector{Int32}}
     }()
