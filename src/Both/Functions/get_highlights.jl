@@ -21,6 +21,7 @@ PDFs found recursively if a directory is passed.
 # Example
 ```jldoctest; output = false
 using PDFHighlights
+HEADER = PDFHighlights.Internal.Constants.HEADER
 
 path_to_pdf_dir = joinpath(pathof(PDFHighlights) |> dirname |> dirname, "test", "pdf")
 path_to_pdf = joinpath(path_to_pdf_dir, "TestPDF.pdf")
@@ -36,11 +37,7 @@ path_to_pdf = joinpath(path_to_pdf_dir, "TestPDF.pdf")
 ]) |> println
 
 _file, io = mktemp()
-println(
-    io,
-    "Highlight,Title,Author,URL,Note,Location\\n",
-    "The world didn't stop spinning,,,,,1",
-)
+println(io, HEADER, '\\n', "The world didn't stop spinning,,,,1")
 flush(io)
 file = _file * ".csv"
 mv(_file, file)

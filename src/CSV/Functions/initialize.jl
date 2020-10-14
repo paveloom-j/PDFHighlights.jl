@@ -15,6 +15,7 @@ correctness.
 # Example
 ```jldoctest; output = false
 using PDFHighlights
+HEADER = PDFHighlights.Internal.Constants.HEADER
 
 _file, _ = mktemp()
 file = _file * ".csv"
@@ -23,7 +24,7 @@ mv(_file, file)
 initialize(file)
 
 open(file, "r") do io
-    readlines(io) == [\"$(HEADER)\"]
+    readlines(io) == [HEADER]
 end
 
 # output

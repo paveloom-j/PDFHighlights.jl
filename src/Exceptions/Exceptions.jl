@@ -14,8 +14,7 @@ export DirectoryDoesNotExist,
        NotCSVorDir,
        NotCSVorPDForDir,
        NotPDF,
-       NotSixColumns,
-       SymbolIsNotSupported
+       NotFiveColumns
 
 # Load the auxiliary macros to create other macros
 include("Macros/docstring.jl")
@@ -53,7 +52,7 @@ include("Macros/exception_with_symbol.jl")
     IncorrectHeader,
     "Exception thrown when the specified file has an incorrect header.",
     "The specified file (\"", e.file, """\") has an incorrect header.
-    Check that the header is `Highlight,Title,Author,URL,Note,Location`.""",
+    Check that the header is `Highlight,Title,Author,Note,Location`.""",
 )
 
 @exception_with_file(
@@ -104,17 +103,10 @@ include("Macros/exception_with_symbol.jl")
 )
 
 @exception_with_line(
-    NotSixColumns,
-    "Exception thrown when the row does not represent elements for 6 columns.",
+    NotFiveColumns,
+    "Exception thrown when the row does not represent elements for 5 columns.",
     "The row #", e.line, " in the \"", e.file, "\" file does not represent elements for ",
-    "6 columns.",
-)
-
-@exception_with_symbol(
-    SymbolIsNotSupported,
-    "Exception thrown when the specified symbol is not supported.",
-    "The specified symbol (:", e.symbol, """) is not supported. Supported symbols:
-    `:highlight`, `:title`, `:author`, `:url`, `:note`, `:location`.""",
+    "5 columns.",
 )
 
 end

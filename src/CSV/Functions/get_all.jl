@@ -124,7 +124,6 @@ end
         Vector{String},
         Vector{String},
         Vector{String},
-        Vector{String},
         Vector{Int32},
     }
 
@@ -134,7 +133,8 @@ Extract the values of all columns from the CSV file.
 - `csv::String`: $(CSV_ARGUMENT)
 
 # Returns
-- `Tuple{...}`: the highlights, titles, authors, URLs, notes, and locations
+- `Tuple{Vector{String}, Vector{String}, Vector{String}, Vector{String}, Vector{Int32}}`:
+  the highlights, titles, authors, notes, and locations
 
 # Throws
 - [`IntegrityCheckFailed`](@ref): $(INTEGRITY_CHECK_FAILED_EXCEPTION)
@@ -143,20 +143,17 @@ Extract the values of all columns from the CSV file.
 # Example
 ```jldoctest; output = false
 using PDFHighlights
+HEADER = PDFHighlights.Internal.Constants.HEADER
 
 _file, io = mktemp()
-println(
-    io,
-    "Highlight,Title,Author,URL,Note,Location\\n",
-    string(
-        "The world didn't stop spinning,",
-        "\\"Girl, Interrupted\\",",
-        "Susanna Kaysen,",
-        "https://www.imdb.com/title/tt0172493,",
-        "Journal,",
-        "5722",
-    ),
+row = string(
+    "The world didn't stop spinning,",
+    "\\"Girl, Interrupted\\",",
+    "Susanna Kaysen,",
+    "Journal,",
+    "5722",
 )
+println(io, HEADER, '\\n', row)
 flush(io)
 file = _file * ".csv"
 mv(_file, file)
@@ -165,7 +162,6 @@ get_all(file) == (
     ["The world didn't stop spinning"],
     ["Girl, Interrupted"],
     ["Susanna Kaysen"],
-    ["https://www.imdb.com/title/tt0172493"],
     ["Journal"],
     [5722],
 )
@@ -176,7 +172,6 @@ true
 ```
 """
 function get_all(csv::String)::Tuple{
-    Vector{String},
     Vector{String},
     Vector{String},
     Vector{String},
@@ -201,7 +196,6 @@ function get_all(csv::String)::Tuple{
         highlights = Vector{String}(undef, n)
         titles = Vector{String}(undef, n)
         authors = Vector{String}(undef, n)
-        urls = Vector{String}(undef, n)
         notes = Vector{String}(undef, n)
         locations = Vector{Int32}(undef, n)
 
@@ -224,8 +218,6 @@ function get_all(csv::String)::Tuple{
                         elseif comma_number == 3
                             @extract authors
                         elseif comma_number == 4
-                            @extract urls
-                        elseif comma_number == 5
                             @extract notes
                             @extract locations
                         end
@@ -241,12 +233,11 @@ function get_all(csv::String)::Tuple{
         return replace.(highlights, "\"\"" => "\""),
                replace.(titles, "\"\"" => "\""),
                replace.(authors, "\"\"" => "\""),
-               replace.(urls, "\"\"" => "\""),
                replace.(notes, "\"\"" => "\""),
                locations
 
     else
-        return String[], String[], String[], String[], String[], Int32[]
+        return String[], String[], String[], String[], Int32[]
     end
 
 end

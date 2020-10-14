@@ -17,13 +17,14 @@ or get the authors of all PDFs found recursively if a directory is passed.
 # Example
 ```jldoctest; output = false
 using PDFHighlights
+HEADER = PDFHighlights.Internal.Constants.HEADER
 
 path_to_pdf_dir = joinpath(pathof(PDFHighlights) |> dirname |> dirname, "test", "pdf")
 
 (get_authors(path_to_pdf_dir) == ["Pavel Sobolev"]) |> println
 
 _file, io = mktemp()
-println(io, "Highlight,Title,Author,URL,Note,Location", '\\n', ",,Susanna Kaysen,,,1")
+println(io, HEADER, '\\n', ",,Susanna Kaysen,,1")
 flush(io)
 file = _file * ".csv"
 mv(_file, file)

@@ -93,7 +93,7 @@ end
 @constant(
     HEADER,
     "Default (expected) header for CSV files.",
-    "Highlight,Title,Author,URL,Note,Location",
+    "Highlight,Title,Author,Note,Location",
 )
 
 # For PDF
@@ -138,9 +138,9 @@ end
     "the last element in the line is not an integer",
 )
 @constant(
-    NOT_SIX_COLUMNS_EXCEPTION,
-    "NotSixColumns",
-    "the row does not represent elements for 6 columns",
+    NOT_FIVE_COLUMNS_EXCEPTION,
+    "NotFiveColumns",
+    "the row does not represent elements for 5 columns",
 )
 @constant(
     INTEGRITY_CHECK_FAILED_EXCEPTION,

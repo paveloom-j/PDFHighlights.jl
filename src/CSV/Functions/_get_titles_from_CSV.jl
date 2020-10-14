@@ -15,9 +15,10 @@ Extract the values of the `Title` column from the CSV file.
 # Example
 ```jldoctest; output = false
 using PDFHighlights
+HEADER = PDFHighlights.Internal.Constants.HEADER
 
 _file, io = mktemp()
-println(io, "Highlight,Title,Author,URL,Note,Location\\n", ",\\"Girl, Interrupted\\",,,,1")
+println(io, HEADER, '\\n', ",\\"Girl, Interrupted\\",,,1")
 flush(io)
 file = _file * ".csv"
 mv(_file, file)
@@ -30,6 +31,6 @@ true
 ```
 """
 function _get_titles_from_CSV(csv::String)::Vector{String}
-    _, titles, _, _, _, _ = get_all(csv)
+    _, titles, _, _, _ = get_all(csv)
     return titles
 end

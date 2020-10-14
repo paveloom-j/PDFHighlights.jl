@@ -19,7 +19,6 @@ List of functions to extract data from either PDF or CSV files:
 - [`get_pages`](@ref) _(PDF, DIR)_
 - [`get_title`](@ref) _(PDF)_
 - [`get_titles`](@ref) _(CSV, DIR)_
-- [`get_urls`](@ref) _(CSV)_
 
 ## Initializing and importing
 

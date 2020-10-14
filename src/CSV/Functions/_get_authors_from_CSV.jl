@@ -15,9 +15,10 @@ Extract the values of the `Author` column from the CSV file.
 # Example
 ```jldoctest; output = false
 using PDFHighlights
+HEADER = PDFHighlights.Internal.Constants.HEADER
 
 _file, io = mktemp()
-println(io, "Highlight,Title,Author,URL,Note,Location", '\\n', ",,Susanna Kaysen,,,1")
+println(io, HEADER, '\\n', ",,Susanna Kaysen,,1")
 flush(io)
 file = _file * ".csv"
 mv(_file, file)
@@ -30,6 +31,6 @@ true
 ```
 """
 function _get_authors_from_CSV(csv::String)::Vector{String}
-    _, _, authors, _, _, _ = get_all(csv)
+    _, _, authors, _, _ = get_all(csv)
     return authors
 end

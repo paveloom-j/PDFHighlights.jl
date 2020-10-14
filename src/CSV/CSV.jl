@@ -12,7 +12,6 @@ export _get_authors_from_CSV,
        get_locations,
        get_notes,
        get_titles,
-       get_urls,
        import_highlights,
        initialize
 
@@ -32,7 +31,6 @@ include("Functions/_get_authors_from_CSV.jl")
 include("Functions/_get_highlights_from_CSV.jl")
 include("Functions/_get_titles_from_CSV.jl")
 include("Functions/get_all.jl")
-include("Functions/get_urls.jl")
 include("Functions/get_notes.jl")
 include("Functions/get_locations.jl")
 

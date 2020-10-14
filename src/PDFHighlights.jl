@@ -41,7 +41,6 @@ export #= PDF =#
        get_all,
        get_locations,
        get_notes,
-       get_urls,
        import_highlights,
        initialize,
        #= Both =#

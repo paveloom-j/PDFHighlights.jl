@@ -1,7 +1,8 @@
 """
     import_highlights(csv::String, target::String; quiet::Bool=false) -> Nothing
 
-Extract the values of the `URL` column from the CSV file.
+Import the highlights (and related data) into a CSV file from a PDF file or directory with
+PDF files.
 
 # Arguments
 - `csv::String`: $(CSV_ARGUMENT)
@@ -35,16 +36,16 @@ mv(_file, file)
 
 \"\"\") |> println
 
-(@capture_out(import_highlights(file, path_to_pdf; quiet=true)) == "") |> println
-
-@capture_out(import_highlights(file, path_to_pdf_dir)) ==
+(@capture_out(import_highlights(file, path_to_pdf_dir)) ==
 \"\"\"
 
     CSV: "\$(basename(file))"
     Directory: "pdf"
     Highlights (found / added): 7 / 0
 
-\"\"\"
+\"\"\") |> println
+
+@capture_out(import_highlights(file, path_to_pdf; quiet=true)) == ""
 
 # output
 
@@ -98,7 +99,6 @@ function import_highlights(csv::String, target::String; quiet::Bool=false)::Noth
                         "\",\"",
                         author,
                         "\",\"",
-                        "\",\"",
                         comments,
                         "\",",
                         pages
@@ -130,7 +130,6 @@ function import_highlights(csv::String, target::String; quiet::Bool=false)::Noth
             title,
             "\",\"",
             author,
-            "\",\"",
             "\",\"",
             comments,
             "\",",

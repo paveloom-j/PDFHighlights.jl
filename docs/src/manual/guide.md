@@ -109,10 +109,6 @@ field names. Here is a table showing what can you can extract from each file typ
       </td>
 
       <td style="text-align: center; border: 1px solid lightgray; padding: 6px 12px;">
-        URLs
-      </td>
-
-      <td style="text-align: center; border: 1px solid lightgray; padding: 6px 12px;">
         Notes
       </td>
 
@@ -135,10 +131,6 @@ field names. Here is a table showing what can you can extract from each file typ
 
       <td style="text-align: center; border: 1px solid lightgray; padding: 6px 12px;">
         Authors
-      </td>
-
-      <td style="text-align: center; border: 1px solid lightgray; padding: 6px 12px;">
-        —
       </td>
 
       <td style="text-align: center; border: 1px solid lightgray; padding: 6px 12px;">

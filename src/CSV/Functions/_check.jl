@@ -9,14 +9,15 @@ Check the structural integrity of the CSV file (see the exceptions list).
 # Throws
 - [`IncorrectHeader`](@ref): $(INCORRECT_HEADER_EXCEPTION)
 - [`LastElementIsNotAnInteger`](@ref): $(LAST_ELEMENT_IS_NOT_AN_INTEGER_EXCEPTION)
-- [`NotSixColumns`](@ref): $(NOT_SIX_COLUMNS_EXCEPTION)
+- [`NotFiveColumns`](@ref): $(NOT_FIVE_COLUMNS_EXCEPTION)
 
 # Example
 ```jldoctest; output = false
 using PDFHighlights
+HEADER = PDFHighlights.Internal.Constants.HEADER
 
 _file, io = mktemp()
-println(io, \"$(HEADER)\")
+println(io, HEADER)
 flush(io)
 file = _file * ".csv"
 mv(_file, file)
@@ -50,7 +51,7 @@ function _check(csv::String)::Nothing
             end
         end
 
-        # Check that each row represents values of 6 columns
+        # Check that each row represents values of 5 columns
 
         inside_quotes = false
         commas = 0
@@ -67,7 +68,7 @@ function _check(csv::String)::Nothing
             end
         end
 
-        commas != 5 && throw(NotSixColumns(csv, index + 1))
+        commas != 4 && throw(NotFiveColumns(csv, index + 1))
 
     end
 

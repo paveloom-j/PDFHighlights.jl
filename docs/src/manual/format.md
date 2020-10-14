@@ -12,7 +12,7 @@ The following are the requirements for a CSV file set by the service:
 - Quotes escaping: `""`, not `\"`.
 
 The following are the requirements for the CSV file set by this package:
-- Six mandatory columns: `Highlight`, `Title`, `Author`, `URL`, `Note`, `Location`
+- Five mandatory columns: `Highlight`, `Title`, `Author`, `Note`, `Location`
 - Quotes escaping: `""`, not `\"`.
 
 It means that the [`import_highlights`](@ref) function is programmed to retrieve all data

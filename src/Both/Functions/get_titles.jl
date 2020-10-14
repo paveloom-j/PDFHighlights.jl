@@ -17,13 +17,14 @@ or get the titles of all PDFs found recursively if a directory is passed.
 # Example
 ```jldoctest; output = false
 using PDFHighlights
+HEADER = PDFHighlights.Internal.Constants.HEADER
 
 path_to_pdf_dir = joinpath(pathof(PDFHighlights) |> dirname |> dirname, "test", "pdf")
 
 (get_titles(path_to_pdf_dir) == ["A dummy PDF for tests"]) |> println
 
 _file, io = mktemp()
-println(io, "Highlight,Title,Author,URL,Note,Location\\n", ",\\"Girl, Interrupted\\",,,,1")
+println(io, HEADER, '\\n', ",\\"Girl, Interrupted\\",,,1")
 flush(io)
 file = _file * ".csv"
 mv(_file, file)

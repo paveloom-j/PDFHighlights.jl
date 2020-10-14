@@ -15,9 +15,10 @@ Extract the values of the `Location` column from the CSV file.
 # Example
 ```jldoctest; output = false
 using PDFHighlights
+HEADER = PDFHighlights.Internal.Constants.HEADER
 
 _file, io = mktemp()
-println(io, "Highlight,Title,Author,URL,Note,Location\\n", ",,,,,5722")
+println(io, HEADER, '\\n', ",,,,5722")
 flush(io)
 file = _file * ".csv"
 mv(_file, file)
@@ -30,6 +31,6 @@ true
 ```
 """
 function get_locations(csv::String)::Vector{Int32}
-    _, _, _, _, _, locations = get_all(csv)
+    _, _, _, _, locations = get_all(csv)
     return locations
 end
