@@ -1,5 +1,11 @@
 # Package Index
 
+## PDFHighlights
+
+```@index
+Pages = ["internals/PDFHighlights.md"]
+```
+
 ## PDF
 
 ```@index

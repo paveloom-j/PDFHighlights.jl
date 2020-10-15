@@ -28,6 +28,7 @@ makedocs(
             "Internals" => map(
                 s -> "lib/internals/$(s)",
                 [
+                    "PDFHighlights.md",
                     "PDF.md",
                     "CSV.md",
                     "Both.md",

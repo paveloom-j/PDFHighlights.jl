@@ -64,6 +64,7 @@ Pages = [
 ```
 
 - Internals
+  - [PDFHighlights](@ref PDFHighlightsPage)
   - [PDF](@ref PDFPage)
   - [CSV](@ref CSVPage)
   - [Both](@ref BothPage)

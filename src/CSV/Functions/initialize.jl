@@ -2,7 +2,7 @@
     initialize(csv::String) -> Nothing
 
 If the file along the `csv` path does not exist, then create it and write the header;
-if it exists but empty, do the same; if it exists and is not empty, check structural
+if it exists but is empty, do the same; if it exists and is not empty, check structural
 correctness.
 
 # Arguments
