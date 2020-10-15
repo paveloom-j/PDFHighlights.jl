@@ -1,0 +1,20 @@
+/* Change the code font */
+
+@font-face {
+   font-family: JuliaMono-Medium;
+   src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Medium.woff2");
+}
+
+code {
+   font-family: JuliaMono-Medium, monospace;
+}
+
+/* Give some space to the logo */
+
+div#documenter .docs-sidebar .docs-logo > img {
+    max-height: 10em;
+}
+
+div#documenter .docs-sidebar .docs-package-name {
+    padding-top: 1rem;
+}
