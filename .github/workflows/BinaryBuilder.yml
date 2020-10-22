@@ -1,0 +1,23 @@
+name: BinaryBuilder
+
+on:
+  push:
+    branches:
+      - binaries
+
+jobs:
+  BinaryBuilder:
+    name: Build Binaries
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the branch
+        uses: actions/checkout@v2
+      - name: Install Julia
+        uses: julia-actions/setup-julia@latest
+        with:
+          version: 1.5
+          arch: x64
+      - name: Install BinaryBuilder
+        run: julia -e 'using Pkg; Pkg.add("BinaryBuilder")'
+      - name: Build Binaries
+        run: julia --color=yes build_tarballs.jl --debug --verbose --deploy=local
