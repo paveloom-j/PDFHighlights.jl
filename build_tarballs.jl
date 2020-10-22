@@ -14,9 +14,10 @@ sources = [
 # Bash recipe for building across all platforms
 script = raw"""
 echo "TESTTEST"
-cd $WORKSPACE
-ls
-ls PDFHighlights.jl
+echo $WORKSPACE
+pwd
+ls -a
+ls -a PDFHighlights.jl
 
 cd $WORKSPACE/srcdir/poppler-*/
 
