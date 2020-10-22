@@ -8,7 +8,7 @@ version = v"0.87.0"
 # Collection of sources required to complete build
 sources = [
     ArchiveSource("https://poppler.freedesktop.org/poppler-0.87.0.tar.xz", "6f602b9c24c2d05780be93e7306201012e41459f289b8279a27a79431ad4150e"),
-	GitSource("https://github.com/paveloom-j/PDFHighlights.jl", "43e9592a3384cd90ca6db095e53f19b84fa46ae8"),
+	GitSource("https://github.com/paveloom-j/PDFHighlights.jl.git", "43e9592a3384cd90ca6db095e53f19b84fa46ae8"),
 ]
 
 # Bash recipe for building across all platforms
@@ -45,9 +45,6 @@ cmake -DCMAKE_INSTALL_PREFIX=$prefix \
     ..
 make -j${nproc}
 make install
-
-echo "TESTHERE"
-pkg-config --cflags poppler-glib
 
 cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/C/
 
