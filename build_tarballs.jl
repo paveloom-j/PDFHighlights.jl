@@ -43,10 +43,8 @@ make install
 cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/C/
 
 gcc -std=c99 -g -O3 -fPIC -c get_author_title/get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
-gcc -shared -o $libdir/get_author_title.so get_author_title.o `pkg-config --libs poppler-glib`
-
 gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages/get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
-gcc -shared -o $libdir/get_lines_comments_pages.so get_lines_comments_pages.o `pkg-config --libs poppler-glib`
+gcc -shared -o $libdir/PDFHighlights.so get_author_title.o get_lines_comments_pages.o `pkg-config --libs poppler-glib`
 """
 
 # These are the platforms we will build for by default, unless further
@@ -55,8 +53,7 @@ platforms = expand_cxxstring_abis(Platform[Linux(:i686, libc=:glibc)])
 
 # The products that we will ensure are always built
 products = [
-    LibraryProduct("get_author_title", :get_author_title),
-	LibraryProduct("get_lines_comments_pages", :get_lines_comments_pages),
+    LibraryProduct("PDFHighlights", :PDFHighlights),
 ]
 
 # Dependencies that must be installed before this package can be built
