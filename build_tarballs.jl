@@ -13,12 +13,6 @@ sources = [
 
 # Bash recipe for building across all platforms
 script = raw"""
-echo "TESTTEST"
-echo $WORKSPACE
-pwd
-ls -a
-ls -a PDFHighlights.jl
-
 cd $WORKSPACE/srcdir/poppler-*/
 
 # Create link ${bindir} before starting.  `OpenJPEGTargets.cmake` will try to
@@ -57,7 +51,7 @@ gcc -shared -o $libdir/get_lines_comments_pages.so get_lines_comments_pages.o `p
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
-platforms = Platform[Linux(:i686, libc=:glibc)]
+platforms = expand_cxxstring_abis(Platform[Linux(:i686, libc=:glibc)])
 
 # The products that we will ensure are always built
 products = [
