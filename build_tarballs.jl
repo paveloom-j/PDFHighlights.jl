@@ -7,13 +7,13 @@ version = v"0.87.0"
 
 # Collection of sources required to complete build
 sources = [
-    ArchiveSource("https://poppler.freedesktop.org/poppler-0.87.0.tar.xz", "6f602b9c24c2d05780be93e7306201012e41459f289b8279a27a79431ad4150e"),
-	GitSource("https://github.com/paveloom-j/PDFHighlights.jl", "43e9592a3384cd90ca6db095e53f19b84fa46ae8"),
+    ArchiveSource("https://poppler.freedesktop.org/poppler-0.87.0.tar.xz", "6f602b9c24c2d05780be93e7306201012e41459f289b8279a27a79431ad4150e", "poppler"),
+	GitSource("https://github.com/paveloom-j/PDFHighlights.jl", "43e9592a3384cd90ca6db095e53f19b84fa46ae8", "package"),
 ]
 
 # Bash recipe for building across all platforms
 script = raw"""
-cd $WORKSPACE/srcdir/poppler-*/
+cd $WORKSPACE/srcdir/poppler/poppler-*/
 
 # Create link ${bindir} before starting.  `OpenJPEGTargets.cmake` will try to
 # look for some executables in `sys-root/usr/local/bin`
@@ -43,7 +43,7 @@ make install
 echo "TESTHERE"
 pkg-config --cflags poppler-glib
 
-cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/C/
+cd $WORKSPACE/srcdir/package/PDFHighlights.jl/deps/C/
 
 gcc -std=c99 -g -O3 -fPIC -c get_author_title/get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
 gcc -shared -o $libdir/get_author_title.so get_author_title.o `pkg-config --libs poppler-glib`
