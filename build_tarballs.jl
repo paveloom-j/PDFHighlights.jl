@@ -13,6 +13,11 @@ sources = [
 
 # Bash recipe for building across all platforms
 script = raw"""
+echo "TESTTEST"
+cd $WORKSPACE
+ls
+ls PDFHighlights.jl
+
 cd $WORKSPACE/srcdir/poppler-*/
 
 # Create link ${bindir} before starting.  `OpenJPEGTargets.cmake` will try to
