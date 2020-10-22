@@ -20,4 +20,12 @@ jobs:
       - name: Install BinaryBuilder
         run: julia -e 'using Pkg; Pkg.add("BinaryBuilder")'
       - name: Build Binaries
-        run: julia --color=yes build_tarballs.jl --debug --verbose --deploy=local
+        run: |
+	  julia --color=yes build_tarballs.jl --debug --verbose --deploy=local
+	  ls
+	  ls products
+      - name: Upload the artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: binaries-archive
+          path: products/*.tar.gz
