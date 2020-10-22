@@ -2,8 +2,8 @@
 # `julia build_tarballs.jl --help` to see a usage message.
 using BinaryBuilder, Pkg
 
-name = "Poppler"
-version = v"0.87.0"
+name = "PDFHighlights"
+version = v"0.1.0"
 
 # Collection of sources required to complete build
 sources = [
@@ -40,6 +40,9 @@ cmake -DCMAKE_INSTALL_PREFIX=$prefix \
 make -j${nproc}
 make install
 
+echo "PKG-CONFIG-OUTPUT"
+pkg-config --cflags poppler-glib
+
 cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/C/
 
 gcc -std=c99 -g -O3 -fPIC -c get_author_title/get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
@@ -49,7 +52,7 @@ gcc -shared -o $libdir/PDFHighlights.so get_author_title.o get_lines_comments_pa
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
-platforms = expand_cxxstring_abis(Platform[Linux(:i686, libc=:glibc)])
+platforms = expand_cxxstring_abis(Platform[Linux(:x86_64, libc=:glibc)])
 
 # The products that we will ensure are always built
 products = [

@@ -24,8 +24,10 @@ jobs:
           julia --color=yes build_tarballs.jl --debug --verbose --deploy=local
           ls
           ls products
-      - name: Upload the artifact
+      - name: Upload the artifacts
         uses: actions/upload-artifact@v2
         with:
           name: binaries
-          path: products/*.tar.gz
+          path: |
+            products/*.tar.gz
+            ~/.julia/dev/PDFHighlights_jll
