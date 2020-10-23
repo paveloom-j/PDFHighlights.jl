@@ -8,7 +8,7 @@ version = v"0.1.0"
 # Collection of sources required to complete build
 sources = [
     ArchiveSource("https://poppler.freedesktop.org/poppler-0.87.0.tar.xz", "6f602b9c24c2d05780be93e7306201012e41459f289b8279a27a79431ad4150e"),
-	GitSource("https://github.com/paveloom-j/PDFHighlights.jl.git", "43e9592a3384cd90ca6db095e53f19b84fa46ae8"),
+	GitSource("https://github.com/paveloom-j/PDFHighlights.jl.git", "b5e7f7740feb91351dea93d9c31596355c7308df"),
 ]
 
 # Bash recipe for building across all platforms
@@ -43,11 +43,11 @@ make install
 echo "PKG-CONFIG-OUTPUT"
 pkg-config --cflags poppler-glib
 
-cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/C/
+cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/
 
-gcc -std=c99 -g -O3 -fPIC -c get_author_title/get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
-gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages/get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
-gcc -shared -o $libdir/PDFHighlights.so get_author_title.o get_lines_comments_pages.o `pkg-config --libs poppler-glib`
+gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
+gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
+gcc -shared -o $libdir/PDFHighlightsWrapper.so get_author_title.o get_lines_comments_pages.o `pkg-config --libs poppler-glib`
 """
 
 # These are the platforms we will build for by default, unless further
@@ -56,7 +56,7 @@ platforms = expand_cxxstring_abis(Platform[Linux(:x86_64, libc=:glibc)])
 
 # The products that we will ensure are always built
 products = [
-    LibraryProduct("PDFHighlights", :PDFHighlights),
+    LibraryProduct("PDFHighlightsWrapper", :PDFHighlightsWrapper),
 ]
 
 # Dependencies that must be installed before this package can be built
