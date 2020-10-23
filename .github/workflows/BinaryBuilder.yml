@@ -21,11 +21,6 @@ jobs:
         run: julia -e 'using Pkg; Pkg.add("BinaryBuilder")'
       - name: Build Binaries
         run: julia --color=yes build_tarballs.jl --verbose --deploy=local
-      - name: Test the package
-        run: |
-          cp -r test ~/.julia/dev/PDFHighlights_jll
-          julia -e 'using Pkg; Pkg.develop(path="/home/runner/.julia/dev/PDFHighlights_jll")
-                    Pkg.test("PDFHighlights_jll")'
       - name: Upload the artifacts
         uses: actions/upload-artifact@v2
         with:
