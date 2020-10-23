@@ -11,8 +11,22 @@ env:
 
 jobs:
   BinaryBuilder:
-    name: Build Binaries
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [
+          i686-linux-gnu,
+          x86_64-linux-gnu,
+          aarch64-linux-gnu,
+          armv7l-linux-gnueabihf,
+          powerpc64le-linux-gnu,
+          i686-linux-musl,
+          x86_64-linux-musl,
+          aarch64-linux-musl,
+          armv7l-linux-musleabihf
+        ]
+    name: ${{ matrix.arch }}
     steps:
       - name: Checkout the branch
         uses: actions/checkout@v2
@@ -24,8 +38,9 @@ jobs:
       - name: Install BinaryBuilder
         run: julia -e 'using Pkg; Pkg.add("BinaryBuilder")'
       - name: Build Binaries
-        run: julia --color=yes build_tarballs.jl --verbose --deploy=local
+        run: julia --color=yes build_tarballs.jl --verbose --deploy=local ${{ matrix.arch }}
       - name: Test the package
+        if: ${{ matrix.arch }} == 'x86_64-linux-gnu'
         run: |
           cp -r test ${{ env.path_to_package }}
           julia --project="${{ env.path_to_package }}" -e 'using Pkg;
