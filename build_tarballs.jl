@@ -17,7 +17,7 @@ script = raw"""
 cd $WORKSPACE/srcdir/glib-*/
 
 # Get a local gettext for msgfmt cross-building
-apk add gettext
+apk update && apk add gettext
 
 # Provide answers to a few configure questions automatically
 cat > glib.cache <<END
