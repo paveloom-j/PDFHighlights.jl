@@ -26,7 +26,8 @@ jobs:
           aarch64-linux-musl,
           armv7l-linux-musleabihf
         ]
-    name: ${{ matrix.arch }}
+        cxx: [cxx03, cxx11]
+    name: ${{ matrix.arch }}-${{ matrix.cxx }}
     steps:
       - name: Checkout the branch
         uses: actions/checkout@v2
@@ -38,7 +39,7 @@ jobs:
       - name: Install BinaryBuilder
         run: julia -e 'using Pkg; Pkg.add("BinaryBuilder")'
       - name: Build Binaries
-        run: julia --color=yes build_tarballs.jl --verbose --deploy=local ${{ matrix.arch }}
+        run: julia --color=yes build_tarballs.jl --verbose --deploy=local ${{ matrix.arch }}-${{ matrix.cxx }}
       - name: Test the package
         if: ${{ matrix.arch == 'x86_64-linux-gnu' }}
         run: |

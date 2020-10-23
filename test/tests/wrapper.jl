@@ -10,7 +10,7 @@ const pdf = joinpath(@__DIR__, "TestPDF.pdf")
     title_ref = Ref{Cstring}()
 
     ccall(
-        (:get_author_title, PDFHighlights),
+        (:get_author_title, PDFHighlightsWrapper),
         Cvoid,
         (Cstring, Ref{Cstring}, Ref{Cstring}),
         pdf, author_ref, title_ref,
@@ -50,7 +50,7 @@ end
         # Function and library names
         (
             :get_lines_comments_pages,
-            PDFHighlights,
+            PDFHighlightsWrapper,
         ),
         # Type of return value
         Cvoid,
