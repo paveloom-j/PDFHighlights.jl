@@ -8,7 +8,7 @@ version = v"0.1.0"
 # Collection of sources required to complete build
 sources = [
     ArchiveSource("https://poppler.freedesktop.org/poppler-0.87.0.tar.xz", "6f602b9c24c2d05780be93e7306201012e41459f289b8279a27a79431ad4150e"),
-	GitSource("https://github.com/paveloom-j/PDFHighlights.jl.git", "b5e7f7740feb91351dea93d9c31596355c7308df"),
+	GitSource("https://github.com/paveloom-j/PDFHighlights.jl.git", "9f76c59d91c29e6f8d083737d9e708889c4401cc"),
 ]
 
 # Bash recipe for building across all platforms
