@@ -1,6 +1,6 @@
 using Test
 
-const lib = "/workspace/destdir/lib/PDFHighlightsWrapper.so"
+const lib = joinpath(ENV["libdir"], "PDFHighlightsWrapper.so")
 const pdf = joinpath(@__DIR__, "TestPDF.pdf")
 
 @testset "get_author_title" begin
