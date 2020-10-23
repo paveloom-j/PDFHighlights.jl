@@ -8,44 +8,11 @@ version = v"0.1.0"
 # Collection of sources required to complete build
 sources = [
     ArchiveSource("https://poppler.freedesktop.org/poppler-0.87.0.tar.xz", "6f602b9c24c2d05780be93e7306201012e41459f289b8279a27a79431ad4150e"),
-	ArchiveSource("https://ftp.gnome.org/pub/gnome/sources/glib/2.66/glib-2.66.2.tar.xz", "ec390bed4e8dd0f89e918f385e8d4cfd7470b1ef7c1ce93ec5c4fc6e3c6a17c4"),
-    GitSource("https://github.com/paveloom-j/PDFHighlights.jl.git", "b5e7f7740feb91351dea93d9c31596355c7308df"),
+	GitSource("https://github.com/paveloom-j/PDFHighlights.jl.git", "b5e7f7740feb91351dea93d9c31596355c7308df"),
 ]
 
 # Bash recipe for building across all platforms
 script = raw"""
-cd $WORKSPACE/srcdir/glib-*/
-
-# Get a local gettext for msgfmt cross-building
-apk update && apk add gettext
-
-# Provide answers to a few configure questions automatically
-cat > glib.cache <<END
-glib_cv_stack_grows=no
-glib_cv_uscore=no
-END
-
-export NOCONFIGURE=true
-export LDFLAGS="${LDFLAGS} -L${libdir}"
-export CPPFLAGS="-I${prefix}/include"
-
-./autogen.sh
-
-if [[ "${target}" == i686-linux-musl ]]; then
-    # Small hack: swear that we're cross-compiling.  Our `i686-linux-musl` is
-    # bugged and it can run only a few programs, with the result that the
-    # configure test to check whether we're cross-compiling returns that we're
-    # doing a native build, but then it fails to run a bunch of programs during
-    # other tests.
-    sed -i 's/cross_compiling=no/cross_compiling=yes/' configure
-fi
-
-./configure --cache-file=glib.cache --with-libiconv=gnu --prefix=${prefix} --host=${target}
-find -name Makefile -exec sed -i 's?/workspace/destdir/bin/msgfmt?/usr/bin/msgfmt?g' '{}' \;
-
-make -j${nproc}
-make install
-
 cd $WORKSPACE/srcdir/poppler-*/
 
 # Create link ${bindir} before starting.  `OpenJPEGTargets.cmake` will try to
@@ -97,7 +64,7 @@ products = [
 # Dependencies that must be installed before this package can be built
 dependencies = [
     BuildDependency("Xorg_xorgproto_jll"),
-	# Dependency("Glib_jll"),
+	Dependency("Glib_jll"),
     Dependency("JpegTurbo_jll"),
     Dependency("Cairo_jll"),
     #Dependency("gdk_pixbuf_jll"),
