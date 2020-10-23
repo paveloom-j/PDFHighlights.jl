@@ -56,8 +56,8 @@ cd $WORKSPACE/srcdir/
 wget https://julialang-s3.julialang.org/bin/linux/x64/1.5/julia-1.5.2-linux-x86_64.tar.gz -P ./julia
 tar -xf ./julia/julia*.tar.gz -C ./julia --strip-components 1
 
+./julia/bin/julia -e 'pwd(); readdir("."); println("oof"); readdir(ENV["libdir"])'
 ls -a $libdir/PDFHighlightsWrapper.so
-
 ./julia/bin/julia PDFHighlights.jl/test/tests/wrapper_build.jl
 """
 
