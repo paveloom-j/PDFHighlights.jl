@@ -13,8 +13,6 @@ sources = [
 
 # Bash recipe for building across all platforms
 script = raw"""
-apk add -X http://dl-cdn.alpinelinux.org/alpine/latest-stable/main -U --allow-untrusted --root $prefix --initdb glib
-
 cd $WORKSPACE/srcdir/poppler-*/
 
 # Create link ${bindir} before starting.  `OpenJPEGTargets.cmake` will try to
@@ -45,7 +43,6 @@ make install
 echo "PKG-CONFIG-OUTPUT"
 pkg-config --cflags poppler-glib
 pkg-config --libs poppler-glib
-grep -Ri g_array_steal -A4 -B4 /workspace/destdir/include/glib-2.0
 
 cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/
 
@@ -66,7 +63,7 @@ products = [
 # Dependencies that must be installed before this package can be built
 dependencies = [
     BuildDependency("Xorg_xorgproto_jll"),
-	# Dependency("Glib_jll"),
+	Dependency("Glib_jll"),
     Dependency("JpegTurbo_jll"),
     Dependency("Cairo_jll"),
     #Dependency("gdk_pixbuf_jll"),

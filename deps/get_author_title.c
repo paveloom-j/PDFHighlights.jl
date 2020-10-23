@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "glib.h"
 #include "poppler.h"
 
 void get_author_title(

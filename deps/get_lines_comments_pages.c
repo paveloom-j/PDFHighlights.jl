@@ -1,6 +1,38 @@
 #include <stdio.h>
-#include "glib.h"
 #include "poppler.h"
+
+typedef struct _GRealArray GRealArray;
+
+struct _GRealArray
+{
+    guint8 *data;
+    guint len;
+    guint alloc;
+    guint elt_size;
+    guint zero_terminated : 1;
+    guint clear : 1;
+    gatomicrefcount ref_count;
+    GDestroyNotify clear_func;
+};
+
+gpointer g_array_steal(GArray *array, gsize *len)
+{
+    GRealArray *rarray;
+    gpointer segment;
+
+    g_return_val_if_fail(array != NULL, NULL);
+
+    rarray = (GRealArray *)array;
+    segment = (gpointer)rarray->data;
+
+    if (len != NULL)
+        *len = rarray->len;
+
+    rarray->data = NULL;
+    rarray->len = 0;
+    rarray->alloc = 0;
+    return segment;
+}
 
 void get_lines_comments_pages(
     const char *file,
