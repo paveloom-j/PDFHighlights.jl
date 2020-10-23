@@ -76,6 +76,7 @@ products = [
 dependencies = [
     BuildDependency("Xorg_xorgproto_jll"),
 	Dependency("Glib_jll"),
+    Dependency("Glibc_jll"),
     Dependency("JpegTurbo_jll"),
     Dependency("Cairo_jll"),
     #Dependency("gdk_pixbuf_jll"),
