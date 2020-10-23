@@ -52,11 +52,11 @@ gcc -shared -o $libdir/PDFHighlightsWrapper.so get_author_title.o get_lines_comm
 echo $libdir/PDFHighlightsWrapper.so
 ls -a $libdir/PDFHighlightsWrapper.so
 
-cd $WORKSPACE/srcdir/
-wget https://julialang-s3.julialang.org/bin/linux/x64/1.5/julia-1.5.2-linux-x86_64.tar.gz -P ./julia
-tar -xf ./julia/julia*.tar.gz -C ./julia --strip-components 1
+# cd $WORKSPACE/srcdir/
+# wget https://julialang-s3.julialang.org/bin/linux/x64/1.5/julia-1.5.2-linux-x86_64.tar.gz -P ./julia
+# tar -xf ./julia/julia*.tar.gz -C ./julia --strip-components 1
 
-./julia/bin/julia PDFHighlights.jl/test/tests/wrapper_build.jl
+julia PDFHighlights.jl/test/tests/wrapper_build.jl
 """
 
 # These are the platforms we will build for by default, unless further
@@ -71,6 +71,7 @@ products = [
 # Dependencies that must be installed before this package can be built
 dependencies = [
     BuildDependency("Xorg_xorgproto_jll"),
+    BuildDependency("Julia_jll"),
 	Dependency("Glib_jll"),
     Dependency("JpegTurbo_jll"),
     Dependency("Cairo_jll"),
