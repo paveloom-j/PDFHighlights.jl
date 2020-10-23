@@ -41,12 +41,12 @@ jobs:
       - name: Build Binaries
         run: julia --color=yes build_tarballs.jl --verbose --deploy=local ${{ matrix.arch }}-${{ matrix.cxx }}
       - name: Test the package
-        if: ${{ matrix.arch == 'x86_64-linux-gnu' && matrix.cxx = 'cxx11' }}
+        if: ${{ matrix.arch == 'x86_64-linux-gnu' && matrix.cxx == 'cxx11' }}
         run: |
           cp -r test ${{ env.path_to_package }}
           julia --project="${{ env.path_to_package }}" -e 'using Pkg; Pkg.add("Test"); Pkg.test()'
       - name: Upload the package
-        if: ${{ matrix.arch == 'x86_64-linux-gnu' && matrix.cxx = 'cxx11' }}
+        if: ${{ matrix.arch == 'x86_64-linux-gnu' && matrix.cxx == 'cxx11' }}
         uses: actions/upload-artifact@v2
         with:
           name: package
