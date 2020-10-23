@@ -42,6 +42,8 @@ make install
 
 echo "PKG-CONFIG-OUTPUT"
 pkg-config --cflags poppler-glib
+pkg-config --libs poppler-glib
+grep -Ri g_array_steal -A4 -B4 /workspace/destdir/include/glib-2.0
 
 cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/
 
