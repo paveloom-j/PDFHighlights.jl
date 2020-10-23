@@ -49,6 +49,8 @@ cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/
 gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
 gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
 gcc -shared -o $libdir/PDFHighlightsWrapper.so get_author_title.o get_lines_comments_pages.o `pkg-config --libs poppler-glib`
+echo $libdir/PDFHighlightsWrapper.so
+ls -a $libdir/PDFHighlightsWrapper.so
 
 cd $WORKSPACE/srcdir/
 wget https://julialang-s3.julialang.org/bin/linux/x64/1.5/julia-1.5.2-linux-x86_64.tar.gz -P ./julia
