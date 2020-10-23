@@ -51,16 +51,6 @@ gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pa
 gcc -shared -o $libdir/PDFHighlightsWrapper.so get_author_title.o get_lines_comments_pages.o `pkg-config --libs poppler-glib`
 echo $libdir/PDFHighlightsWrapper.so
 ls -a $libdir/PDFHighlightsWrapper.so
-
-cd $WORKSPACE/srcdir/
-wget https://julialang-s3.julialang.org/bin/linux/x64/1.5/julia-1.5.2-linux-x86_64.tar.gz -P ./julia
-tar -xf ./julia/julia*.tar.gz -C ./julia --strip-components 1
-
-./julia/bin/julia -e 'println(pwd()); println(readdir("."));
-                      println("oof"); println(ENV["libdir"]); println(readdir(ENV["libdir"]));
-                      using Libdl; Libdl.dlopen("/workspace/destdir/lib/PDFHighlightsWrapper.so")'
-ls -a $libdir/PDFHighlightsWrapper.so
-./julia/bin/julia PDFHighlights.jl/test/tests/wrapper_build.jl
 """
 
 # These are the platforms we will build for by default, unless further
@@ -76,7 +66,6 @@ products = [
 dependencies = [
     BuildDependency("Xorg_xorgproto_jll"),
 	Dependency("Glib_jll"),
-    Dependency("Glibc_jll"),
     Dependency("JpegTurbo_jll"),
     Dependency("Cairo_jll"),
     #Dependency("gdk_pixbuf_jll"),
