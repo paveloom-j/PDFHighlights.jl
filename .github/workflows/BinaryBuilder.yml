@@ -5,6 +5,10 @@ on:
     branches:
       - binaries
 
+env:
+  package_name: PDFHighlights_jll
+  path_to_package: /home/runner/.julia/dev/${{ env.package_name }}
+
 jobs:
   BinaryBuilder:
     name: Build Binaries
@@ -20,11 +24,17 @@ jobs:
       - name: Install BinaryBuilder
         run: julia -e 'using Pkg; Pkg.add("BinaryBuilder")'
       - name: Build Binaries
-        run: julia --color=yes build_tarballs.jl --verbose --deploy="paveloom-j/PDFHighlights_jll.jl"
+        run: julia --color=yes build_tarballs.jl --verbose --deploy=local
+      - name: Test the package
+        run: |
+          cp -r test ${{ env.path_to_package }}
+          julia --project="${{ env.path_to_package }}" -e 'using Pkg;
+                    Pkg.develop(path="${{ env.path_to_package }}")
+                    Pkg.add("Test"); Pkg.test("${{ env.package_name }}")'
       - name: Upload the artifacts
         uses: actions/upload-artifact@v2
         with:
           name: binaries
           path: |
             products/*.tar.gz
-            ~/.julia/dev/PDFHighlights_jll
+            ${{ env.path_to_package }}
