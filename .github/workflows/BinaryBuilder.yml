@@ -20,7 +20,7 @@ jobs:
       - name: Install BinaryBuilder
         run: julia -e 'using Pkg; Pkg.add("BinaryBuilder")'
       - name: Build Binaries
-        run: julia --color=yes build_tarballs.jl --verbose --deploy=local
+        run: julia --color=yes build_tarballs.jl --verbose --deploy="paveloom-j/PDFHighlights_jll.jl"
       - name: Upload the artifacts
         uses: actions/upload-artifact@v2
         with:
