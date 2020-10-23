@@ -45,10 +45,16 @@ jobs:
         run: |
           cp -r test ${{ env.path_to_package }}
           julia --project="${{ env.path_to_package }}" -e 'using Pkg; Pkg.add("Test"); Pkg.test()'
-      - name: Upload the artifacts
+      - name: Upload the package
+        if: ${{ matrix.arch == 'x86_64-linux-gnu' }}
         uses: actions/upload-artifact@v2
         with:
-          name: binaries
+          name: package
+          path: |
+            ${{ env.path_to_package }}
+      - name: Upload the binaries
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.arch }}-${{ matrix.cxx }}
           path: |
             products/*.tar.gz
-            ${{ env.path_to_package }}
