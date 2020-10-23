@@ -53,7 +53,7 @@ gcc -shared -o $libdir/PDFHighlightsWrapper.so get_author_title.o get_lines_comm
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
-platforms = expand_cxxstring_abis(Platform[Linux(:x86_64, libc=:glibc)])
+platforms = expand_cxxstring_abis(supported_platforms()[1:9])
 
 # The products that we will ensure are always built
 products = [
