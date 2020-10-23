@@ -7,7 +7,7 @@ on:
 
 env:
   package_name: PDFHighlights_jll
-  path_to_package: /home/runner/.julia/dev/${{ package_name }}
+  path_to_package: /home/runner/.julia/dev/PDFHighlights_jll
 
 jobs:
   BinaryBuilder:
