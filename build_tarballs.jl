@@ -52,7 +52,7 @@ if [[ "${target}" == *-darwin* ]]; then
 elif [[ "${target}" == *-mingw* ]]; then
     gcc -std=c99 -g -O3 -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
     gcc -std=c99 -g -O3 -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
-    gcc -shared get_author_title.o get_lines_comments_pages.o -o $libdir/PDFHighlightsWrapper.dll -Wl,--out-implib,$libdir/PDFHighlightsWrapper.a `pkg-config --libs poppler-glib`
+    gcc -shared -undefined dynamic_lookup get_author_title.o get_lines_comments_pages.o -o $libdir/PDFHighlightsWrapper.dll -Wl,--out-implib,$libdir/PDFHighlightsWrapper.a `pkg-config --libs poppler-glib`
 else
     gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
     gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
