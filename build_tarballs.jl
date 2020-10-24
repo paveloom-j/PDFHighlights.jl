@@ -45,7 +45,7 @@ cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/
 if [[ "${target}" == *-darwin* ]]; then
     gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
     gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
-    gcc -dynamiclib -undefined dynamic_lookup -o $libdir/PDFHighlightsWrapper.dylib get_author_title.o get_lines_comments_pages.o `pkg-config --libs poppler-glib`
+    gcc -dynamiclib -o $libdir/PDFHighlightsWrapper.dylib get_author_title.o get_lines_comments_pages.o -lgio-2.0 `pkg-config --libs poppler-glib`
 elif [[ "${target}" == *-mingw* ]]; then
     gcc -std=c99 -g -O3 -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
     gcc -std=c99 -g -O3 -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
