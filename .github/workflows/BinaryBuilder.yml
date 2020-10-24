@@ -8,6 +8,7 @@ on:
 env:
   package_name: PDFHighlights_jll
   path_to_package: /home/runner/.julia/dev/PDFHighlights_jll
+  BINARYBUILDER_AUTOMATIC_APPLE: true
 
 jobs:
   BinaryBuilder:
