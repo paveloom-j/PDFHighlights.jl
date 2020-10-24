@@ -42,10 +42,6 @@ make install
 
 cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/
 
-pkg-config --cflags poppler-glib
-pkg-config --libs poppler-glib
-find $libdir -name "*glib*.dll"
-
 if [[ "${target}" == *-darwin* ]]; then
     gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
     gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
@@ -53,7 +49,7 @@ if [[ "${target}" == *-darwin* ]]; then
 elif [[ "${target}" == *-mingw* ]]; then
     gcc -std=c99 -g -O3 -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
     gcc -std=c99 -g -O3 -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
-    gcc -shared -o $libdir/PDFHighlightsWrapper.dll get_author_title.o get_lines_comments_pages.o -L/workspace/destdir/bin -lgio-2.0 -lglib-2.0-0 -lglib-2.0-0 `pkg-config --libs poppler-glib` -Wl,--out-implib,$libdir/PDFHighlightsWrapper.a
+    gcc -shared -o $libdir/PDFHighlightsWrapper.dll get_author_title.o get_lines_comments_pages.o -L/workspace/destdir/bin -lglib-2.0-0 `pkg-config --libs poppler-glib` -Wl,--out-implib,$libdir/PDFHighlightsWrapper.a
 else
     gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
     gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
