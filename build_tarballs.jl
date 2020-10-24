@@ -55,23 +55,37 @@ LINK_FLAGS="-lgio-2.0 `pkg-config --libs poppler-glib`"
 
 if [[ "${target}" == *-darwin* ]]; then
     OBJECT_FLAGS="-std=c99 -O3 -fPIC"
-    LIBRARY_EXT=".dylib"
+    LIBRARY_EXT="dylib"
     LIBRARY_FLAGS="-dynamiclib"
 elif [[ "${target}" == *-mingw* ]]; then
     OBJECT_FLAGS="-std=c99 -O3"
-    LIBRARY_EXT=".dll"
+    LIBRARY_EXT="dll"
     LIBRARY_FLAGS="-shared"
 else
     OBJECT_FLAGS="-std=c99 -O3 -fPIC"
-    LIBRARY_EXT=".so"
+    LIBRARY_EXT="so"
     LIBRARY_FLAGS="-shared -Wl,--no-undefined"
 fi
 
 for file in ${OBJECTS[@]}; do
-    ${CC} ${OBJECT_FLAGS} ${file}.c -o ${file}.o ${INCLUDE_FLAGS}
+    ${CC} ${OBJECT_FLAGS} -c ${file}.c -o ${file}.o ${INCLUDE_FLAGS}
 done
 
 ${CC} ${LIBRARY_FLAGS} -o ${libdir}/PDFHighlightsWrapper.${LIBRARY_EXT} ${OBJECTS_O[@]} ${LINK_FLAGS}
+
+# if [[ "${target}" == *-darwin* ]]; then
+#     gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
+#     gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
+#     gcc -dynamiclib -o $libdir/PDFHighlightsWrapper.dylib get_author_title.o get_lines_comments_pages.o -lgio-2.0 `pkg-config --libs poppler-glib`
+# elif [[ "${target}" == *-mingw* ]]; then
+#     gcc -std=c99 -g -O3 -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
+#     gcc -std=c99 -g -O3 -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
+#     gcc -shared -o $libdir/PDFHighlightsWrapper.dll get_author_title.o get_lines_comments_pages.o -L/workspace/destdir/bin -lgio-2.0 `pkg-config --libs poppler-glib` -Wl,--out-implib,$libdir/PDFHighlightsWrapper.a
+# else
+#     gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
+#     gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
+#     gcc -shared -Wl,--no-undefined -o $libdir/PDFHighlightsWrapper.so get_author_title.o get_lines_comments_pages.o `pkg-config --libs poppler-glib`
+# fi
 """
 
 # These are the platforms we will build for by default, unless further
