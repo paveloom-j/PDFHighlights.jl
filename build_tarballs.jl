@@ -40,17 +40,20 @@ cmake -DCMAKE_INSTALL_PREFIX=$prefix \
 make -j${nproc}
 make install
 
-echo "PKG-CONFIG-OUTPUT"
-pkg-config --cflags poppler-glib
-pkg-config --libs poppler-glib
-
 cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/
 
-gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
-gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
-gcc -shared -o $libdir/PDFHighlightsWrapper.so get_author_title.o get_lines_comments_pages.o `pkg-config --libs poppler-glib`
-echo $libdir/PDFHighlightsWrapper.so
-ls -a $libdir/PDFHighlightsWrapper.so
+echo $target
+
+if [[ "${target}" == "x86_64-apple-darwin14" ]]; then
+    gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
+    gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
+    gcc -dynamiclib -undefined dynamic_lookup -o $libdir/PDFHighlightsWrapper.dylib get_author_title.o get_lines_comments_pages.o `pkg-config --libs poppler-glib`
+else
+    gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
+    gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
+    gcc -shared -o $libdir/PDFHighlightsWrapper.so get_author_title.o get_lines_comments_pages.o `pkg-config --libs poppler-glib`
+fi
+
 """
 
 # These are the platforms we will build for by default, unless further
