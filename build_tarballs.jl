@@ -42,12 +42,17 @@ make install
 
 cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/
 
-echo $target
+pkg-config --cflags poppler-glib
+pkg-config --libs poppler-glib
 
-if [[ "${target}" == "x86_64-apple-darwin14" ]]; then
+if [[ "${target}" == *-darwin* ]]; then
     gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
     gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
     gcc -dynamiclib -undefined dynamic_lookup -o $libdir/PDFHighlightsWrapper.dylib get_author_title.o get_lines_comments_pages.o `pkg-config --libs poppler-glib`
+elif [[ "${target}" == *-mingw* ]]; then
+    gcc -std=c99 -g -O3 -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
+    gcc -std=c99 -g -O3 -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`
+    gcc -shared get_author_title.o get_lines_comments_pages.o -o $libdir/PDFHighlightsWrapper.dll -Wl,--out-implib,$libdir/PDFHighlightsWrapper.a `pkg-config --libs poppler-glib`
 else
     gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
     gcc -std=c99 -g -O3 -fPIC -c get_lines_comments_pages.c -o get_lines_comments_pages.o `pkg-config --cflags poppler-glib`

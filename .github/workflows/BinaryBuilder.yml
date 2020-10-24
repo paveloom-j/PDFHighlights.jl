@@ -26,7 +26,7 @@ jobs:
           # aarch64-linux-musl,
           # armv7l-linux-musleabihf,
           # x86_64-apple-darwin14,
-          x86_64-unknown-freebsd11.1,
+          # x86_64-unknown-freebsd11.1,
           i686-w64-mingw32,
           x86_64-w64-mingw32
         ]
