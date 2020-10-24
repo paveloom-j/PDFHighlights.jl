@@ -11,23 +11,24 @@ env:
 
 jobs:
   BinaryBuilder:
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         arch: [
-          i686-linux-gnu,
-          x86_64-linux-gnu,
-          aarch64-linux-gnu,
-          armv7l-linux-gnueabihf,
-          powerpc64le-linux-gnu,
-          i686-linux-musl,
-          x86_64-linux-musl,
-          aarch64-linux-musl,
-          armv7l-linux-musleabihf
+          # i686-linux-gnu,
+          # x86_64-linux-gnu,
+          # aarch64-linux-gnu,
+          # armv7l-linux-gnueabihf,
+          # powerpc64le-linux-gnu,
+          # i686-linux-musl,
+          # x86_64-linux-musl,
+          # aarch64-linux-musl,
+          # armv7l-linux-musleabihf
+          x86_64-apple-darwin14
         ]
         cxx: [cxx03, cxx11]
     name: ${{ matrix.arch }}-${{ matrix.cxx }}
+    runs-on: ${{ ( matrix.arch == 'x86_64-apple-darwin14' && 'macOS-latest' ) || 'ubuntu-latest' }}
     steps:
       - name: Checkout the branch
         uses: actions/checkout@v2
@@ -41,7 +42,8 @@ jobs:
       - name: Build Binaries
         run: julia --color=yes build_tarballs.jl --verbose --deploy=local ${{ matrix.arch }}-${{ matrix.cxx }}
       - name: Test the package
-        if: ${{ matrix.arch == 'x86_64-linux-gnu' && matrix.cxx == 'cxx11' }}
+        if: ${{ matrix.arch == 'x86_64-linux-gnu' && matrix.cxx == 'cxx11' }} ||
+            ${{ matrix.arch == 'x86_64-apple-darwin14' }}
         run: |
           cp -r test ${{ env.path_to_package }}
           julia --project="${{ env.path_to_package }}" -e 'using Pkg; Pkg.add("Test"); Pkg.test()'
