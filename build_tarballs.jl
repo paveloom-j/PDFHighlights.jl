@@ -43,6 +43,7 @@ make install
 cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/
 
 CC="gcc"
+LIB_NAME="PDFHighlightsWrapper"
 OBJECTS=(get_author_title get_lines_comments_pages)
 
 OBJECTS_O=()
@@ -54,24 +55,25 @@ INCLUDE_FLAGS="`pkg-config --cflags poppler-glib`"
 LINK_FLAGS="-lgio-2.0 `pkg-config --libs poppler-glib`"
 
 if [[ "${target}" == *-darwin* ]]; then
-    OBJECT_FLAGS="-std=c99 -O3 -fPIC"
-    LIBRARY_EXT="dylib"
-    LIBRARY_FLAGS="-dynamiclib"
+    OBJ_FLAGS="-std=c99 -O3 -fPIC"
+    LIB_EXT="dylib"
+    LIB_FLAGS="-dynamiclib"
 elif [[ "${target}" == *-mingw* ]]; then
-    OBJECT_FLAGS="-std=c99 -O3"
-    LIBRARY_EXT="dll"
-    LIBRARY_FLAGS="-shared"
+    OBJ_FLAGS="-std=c99 -O3"
+    LIB_EXT="dll"
+    LIB_FLAGS="-shared"
+    LINK_FLAGS="${LINK_FLAGS} -Wl,--out-implib,${prefix}/lib/${LIB_NAME}.dll.a"
 else
-    OBJECT_FLAGS="-std=c99 -O3 -fPIC"
-    LIBRARY_EXT="so"
-    LIBRARY_FLAGS="-shared -Wl,--no-undefined"
+    OBJ_FLAGS="-std=c99 -O3 -fPIC"
+    LIB_EXT="so"
+    LIB_FLAGS="-shared -Wl,--no-undefined"
 fi
 
 for file in ${OBJECTS[@]}; do
-    ${CC} ${OBJECT_FLAGS} -c ${file}.c -o ${file}.o ${INCLUDE_FLAGS}
+    ${CC} ${OBJ_FLAGS} -c ${file}.c -o ${file}.o ${INCLUDE_FLAGS}
 done
 
-${CC} ${LIBRARY_FLAGS} -o ${libdir}/PDFHighlightsWrapper.${LIBRARY_EXT} ${OBJECTS_O[@]} ${LINK_FLAGS}
+${CC} ${LIB_FLAGS} -o ${libdir}/${LIB_NAME}.${LIB_EXT} ${OBJECTS_O[@]} ${LINK_FLAGS}
 
 # if [[ "${target}" == *-darwin* ]]; then
 #     gcc -std=c99 -g -O3 -fPIC -c get_author_title.c -o get_author_title.o `pkg-config --cflags poppler-glib`
