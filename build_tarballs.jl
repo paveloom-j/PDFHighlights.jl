@@ -59,8 +59,17 @@ products = [
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
+    BuildDependency("Xorg_xorgproto_jll"),
     Dependency("Poppler_jll"),
+    Dependency("Cairo_jll"),
+    Dependency("Fontconfig_jll"),
+    # Dependency("GTK3_jll"),
     Dependency("Glib_jll"),
+    Dependency("JpegTurbo_jll"),
+    Dependency("Libtiff_jll"),
+    Dependency("OpenJpeg_jll"),
+    # Dependency("gdk_pixbuf_jll"),
+    Dependency("libpng_jll"),
 ]
 
 # Build the tarballs, and possibly a `build.jl` as well.
