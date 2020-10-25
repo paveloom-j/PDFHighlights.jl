@@ -18,7 +18,7 @@ _Export highlights from PDF files to a CSV file with one call._
     <tr>
       <td style="text-align: center; border: 1px solid lightgray; padding: 6px 12px;">
         <a href="https://codecov.io/gh/paveloom-j/PDFHighlights.jl" style="position: relative; bottom: -2px;">
-          <img src="https://codecov.io/gh/paveloom-j/PDFHighlights.jl/branch/develop/graph/badge.svg" />
+          <img src="https://codecov.io/gh/paveloom-j/PDFHighlights.jl/branch/master/graph/badge.svg" />
         </a>
       </td>
 
@@ -41,7 +41,7 @@ a CSV.
 
 ## Package Features
 
-- [Import](@ref Importing) the highlights into a new or already created CSV file with one command
+- [Import](@ref Importing) the highlights into a new or already created CSV file with one call
 - [Concatenate](@ref Concatenation) the highlights utilizing comments
 - [Extract](@ref Retrieving) any piece of the highlight from a PDF or CSV file
 
@@ -70,3 +70,5 @@ Pages = [
   - [Both](@ref BothPage)
   - [Exceptions](@ref ExceptionsPage)
   - [Constants](@ref ConstantsPage)
+
+Logo from [icons8.com](https://icons8.com).
