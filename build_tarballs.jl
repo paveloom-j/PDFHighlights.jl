@@ -7,7 +7,7 @@ version = v"0.1.1"
 
 # Collection of sources required to complete build
 sources = [
-    ArchiveSource("https://poppler.freedesktop.org/poppler-0.88.0.tar.xz", "b4453804e9a5a519e6ceee0ac8f5efc229e3b0bf70419263c239124474d256c7"),
+    ArchiveSource("https://poppler.freedesktop.org/poppler-20.10.0.tar.xz", "434ecbbb539c1a75955030a1c9b24c7b58200b7f68d2e4269e29acf2f8f13336"),
 	GitSource("https://github.com/paveloom-j/PDFHighlights.jl.git", "42fc05c2b21d7359d13a38daf252045a79ab55c5"),
 ]
 
