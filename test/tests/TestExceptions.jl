@@ -98,30 +98,4 @@ PDFHighlights.Internal.Exceptions.@exception(
 
 end
 
-PDFHighlights.Internal.Exceptions.@exception(
-    exception_with_symbol,
-    symbol::Symbol,
-)
-
-@testset "@exception_with_symbol" begin
-
-    @exception_with_symbol(
-        KyloRenTraits,
-        "The exception thrown when Kylo Ren gets another «cool» trait.",
-        "Your ", e.symbol, " is not a symbol of courage, Kylo Ren.",
-    )
-
-    try
-        throw(KyloRenTraits(:scar))
-    catch e
-        @test sprint(showerror, e) == """
-
-
-        Main.TestExceptions.KyloRenTraits:
-        Your scar is not a symbol of courage, Kylo Ren.
-        """
-    end
-
-end
-
 end

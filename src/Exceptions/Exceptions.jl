@@ -26,7 +26,6 @@ include("Macros/fields.jl")
 include("Macros/exception_without_fields.jl")
 include("Macros/exception_with_file.jl")
 include("Macros/exception_with_line.jl")
-include("Macros/exception_with_symbol.jl")
 
 # Create exceptions
 
