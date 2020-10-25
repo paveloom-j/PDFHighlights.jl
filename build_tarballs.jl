@@ -7,11 +7,39 @@ version = v"0.1.1"
 
 # Collection of sources required to complete build
 sources = [
+    ArchiveSource("https://poppler.freedesktop.org/poppler-0.88.0.tar.xz", "b4453804e9a5a519e6ceee0ac8f5efc229e3b0bf70419263c239124474d256c7"),
 	GitSource("https://github.com/paveloom-j/PDFHighlights.jl.git", "42fc05c2b21d7359d13a38daf252045a79ab55c5"),
 ]
 
 # Bash recipe for building across all platforms
 script = raw"""
+cd $WORKSPACE/srcdir/poppler-*/
+
+# Create link ${bindir} before starting.  `OpenJPEGTargets.cmake` will try to
+# look for some executables in `sys-root/usr/local/bin`
+ln -s ${bindir} /opt/${target}/${target}/sys-root/usr/local/bin
+export CXXFLAGS="-I${prefix}/include/openjpeg-2.3"
+
+if [[ "${target}" == "${MACHTYPE}" ]]; then
+    # When building for the host platform, the system libexpat is picked up
+    rm /usr/lib/libexpat.so*
+fi
+
+mkdir build && cd build
+cmake -DCMAKE_INSTALL_PREFIX=$prefix \
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_GTK_TESTS=OFF \
+    -DENABLE_CMS=lcms2 \
+    -DENABLE_GLIB=ON \
+    -DENABLE_QT5=OFF \
+    -DENABLE_UNSTABLE_API_ABI_HEADERS=ON \
+    -DWITH_GObjectIntrospection=OFF \
+    ..
+
+make -j${nproc}
+make install
+
 cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/
 
 CC="gcc"
@@ -60,7 +88,7 @@ products = [
 # Dependencies that must be installed before this package can be built
 dependencies = [
     BuildDependency("Xorg_xorgproto_jll"),
-    Dependency("Poppler_jll"),
+    # Dependency("Poppler_jll"),
     Dependency("Cairo_jll"),
     Dependency("Fontconfig_jll"),
     # Dependency("GTK3_jll"),
