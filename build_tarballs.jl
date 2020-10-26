@@ -28,18 +28,21 @@ LINK_FLAGS="-lgio-2.0 `pkg-config --libs poppler-glib`"
 
 if [[ "${target}" == *-darwin* ]]; then
     OBJ_FLAGS="-std=c99 -O3 -fPIC"
+    LIB_FLAGS="-shared"
 elif [[ "${target}" == *-mingw* ]]; then
     OBJ_FLAGS="-std=c99 -O3"
+    LIB_FLAGS="-shared"
     LINK_FLAGS="${LINK_FLAGS} -Wl,--out-implib,${prefix}/lib/${LIB_NAME}.dll.a"
 else
     OBJ_FLAGS="-std=c99 -O3 -fPIC"
+    LIB_FLAGS="-shared -Wl,--no-undefined"
 fi
 
 for file in ${OBJECTS[@]}; do
     ${CC} ${OBJ_FLAGS} -c ${file}.c -o ${file}.o ${INCLUDE_FLAGS}
 done
 
-${CC} -shared -Wl,--no-undefined -o ${libdir}/${LIB_NAME}.${dlext} ${OBJECTS_O[@]} ${LINK_FLAGS}
+${CC} ${LIB_FLAGS} -o ${libdir}/${LIB_NAME}.${dlext} ${OBJECTS_O[@]} ${LINK_FLAGS}
 """
 
 # These are the platforms we will build for by default, unless further
