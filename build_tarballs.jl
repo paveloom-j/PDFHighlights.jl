@@ -7,7 +7,7 @@ version = v"0.1.1"
 
 # Collection of sources required to complete build
 sources = [
-	GitSource("https://github.com/paveloom-j/PDFHighlights.jl.git", "42fc05c2b21d7359d13a38daf252045a79ab55c5"),
+	GitSource("https://github.com/paveloom-j/PDFHighlights.jl.git", "327d2f73aafbda615101dc3e7b6a296de491dee8"),
 ]
 
 # Bash recipe for building across all platforms
@@ -61,15 +61,6 @@ products = [
 dependencies = [
     BuildDependency("Xorg_xorgproto_jll"),
     Dependency("Poppler_jll"),
-    # Dependency("Cairo_jll"),
-    # Dependency("Fontconfig_jll"),
-    # Dependency("GTK3_jll"),
-    # Dependency("Glib_jll"),
-    # Dependency("JpegTurbo_jll"),
-    # Dependency("Libtiff_jll"),
-    # Dependency("OpenJpeg_jll"),
-    # Dependency("gdk_pixbuf_jll"),
-    # Dependency("libpng_jll"),
 ]
 
 # Build the tarballs, and possibly a `build.jl` as well.
