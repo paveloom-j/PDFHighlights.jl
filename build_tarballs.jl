@@ -17,7 +17,7 @@ cd $WORKSPACE/srcdir/poppler-*/
 
 # Create link ${bindir} before starting.  `OpenJPEGTargets.cmake` will try to
 # look for some executables in `sys-root/usr/local/bin`
-ln -s ${bindir} /opt/${target}/${target}/sys-root/usr/local/bin
+# ln -s ${bindir} /opt/${target}/${target}/sys-root/usr/local/bin
 export CXXFLAGS="-I${prefix}/include/openjpeg-2.3"
 
 if [[ "${target}" == "${MACHTYPE}" ]]; then
@@ -38,7 +38,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$prefix \
     ..
 
 make -j${nproc}
-make install/strip
+make install
 
 cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/
 
