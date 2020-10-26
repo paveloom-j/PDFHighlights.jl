@@ -30,8 +30,9 @@ jobs:
           i686-w64-mingw32,
           x86_64-w64-mingw32
         ]
-        cxx: [cxx03, cxx11]
-    name: ${{ matrix.arch }}-${{ matrix.cxx }}
+        # cxx: [cxx03, cxx11]
+    # name: ${{ matrix.arch }}-${{ matrix.cxx }}
+    name: ${{ matrix.arch }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the branch
@@ -44,14 +45,17 @@ jobs:
       - name: Install BinaryBuilder
         run: julia -e 'using Pkg; Pkg.add("BinaryBuilder")'
       - name: Build Binaries
-        run: julia --color=yes build_tarballs.jl --verbose --deploy=local ${{ matrix.arch }}-${{ matrix.cxx }}
+        # run: julia --color=yes build_tarballs.jl --verbose --deploy=local ${{ matrix.arch }}-${{ matrix.cxx }}
+        run: julia --color=yes build_tarballs.jl --verbose --deploy=local ${{ matrix.arch }}
       - name: Test the package
-        if: ${{ matrix.arch == 'x86_64-linux-gnu' && matrix.cxx == 'cxx11' }}
+        # if: ${{ matrix.arch == 'x86_64-linux-gnu' && matrix.cxx == 'cxx11' }}
+        if: ${{ matrix.arch == 'x86_64-linux-gnu' }}
         run: |
           cp -r test ${{ env.path_to_package }}
           julia --project="${{ env.path_to_package }}" -e 'using Pkg; Pkg.add("Test"); Pkg.test()'
       - name: Upload the package
-        if: ${{ matrix.arch == 'x86_64-linux-gnu' && matrix.cxx == 'cxx11' }}
+        # if: ${{ matrix.arch == 'x86_64-linux-gnu' && matrix.cxx == 'cxx11' }}
+        if: ${{ matrix.arch == 'x86_64-linux-gnu' }}
         uses: actions/upload-artifact@v2
         with:
           name: package
@@ -60,6 +64,7 @@ jobs:
       - name: Upload the binaries
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.arch }}-${{ matrix.cxx }}
+          # name: ${{ matrix.arch }}-${{ matrix.cxx }}
+          name: ${{ matrix.arch }}
           path: |
             products/*.tar.gz
