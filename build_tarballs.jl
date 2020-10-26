@@ -38,7 +38,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$prefix \
     ..
 
 make -j${nproc}
-make install/local
+make install/strip
 
 cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/
 
