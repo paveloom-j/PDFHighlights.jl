@@ -59,7 +59,7 @@ products = [
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
-    # BuildDependency("Xorg_xorgproto_jll"),
+    BuildDependency("Xorg_xorgproto_jll"),
     Dependency("Poppler_jll"),
     # Dependency("Cairo_jll"),
     # Dependency("Fontconfig_jll"),
