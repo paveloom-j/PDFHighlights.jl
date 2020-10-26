@@ -35,11 +35,10 @@ cmake -DCMAKE_INSTALL_PREFIX=$prefix \
     -DENABLE_QT5=OFF \
     -DENABLE_UNSTABLE_API_ABI_HEADERS=ON \
     -DWITH_GObjectIntrospection=OFF \
-    -DENABLE_RELOCATABLE=OFF \
     ..
 
 make -j${nproc}
-make install
+make install/local
 
 cd $WORKSPACE/srcdir/PDFHighlights.jl/deps/
 
