@@ -41,9 +41,9 @@ a CSV.
 
 ## Package Features
 
-- [Import](@ref Importing) the highlights into a new or already created CSV file with one call
-- [Concatenate](@ref Concatenation) the highlights utilizing comments
-- [Extract](@ref Retrieving) any piece of the highlight from a PDF or CSV file
+- [Import](@ref Importing) highlights into a new or already created CSV file with one call
+- [Concatenate](@ref Concatenation) highlights utilizing comments
+- [Extract](@ref Retrieving) any piece of a highlight from a PDF or CSV file
 
 ## Manual Outline
 

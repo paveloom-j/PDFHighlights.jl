@@ -48,7 +48,7 @@ function get_author_title(pdf::String)::Tuple{String, String}
         title_ref = Ref{Cstring}()
 
         ccall(
-            (:get_author_title, PATH_TO_GET_AUTHOR_TITLE_LIBRARY),
+            (:get_author_title, PDFHighlightsWrapper),
             Cvoid,
             (Cstring, Ref{Cstring}, Ref{Cstring}),
             pdf, author_ref, title_ref,
