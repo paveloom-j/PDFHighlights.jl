@@ -15,9 +15,6 @@ Create an exception with two fields: a path to the file and a line number.
 
 # Returns
 - `Expr`: an exception definition (struct + `showerror` overload)
-
-See also: [`@exception`](@ref)
-
 """
 @exception exception_with_line file::String line::Int context = begin
     @fields(

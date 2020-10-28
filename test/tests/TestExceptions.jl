@@ -6,45 +6,6 @@ using Test
 # Print the header
 println("\e[1;32mRUNNING\e[0m: TestExceptions.jl")
 
-@testset "@exception" begin
-
-    @test_throws(
-        LoadError,
-        try
-            eval(
-                quote
-                    PDFHighlights.Internal.Exceptions.@exception(
-                        name,
-                        arg::String,
-                        context = :(one),
-                        context = :(two),
-                    )
-                end
-            )
-        catch e
-            rethrow(e)
-        end
-    )
-
-    @test_throws(
-        LoadError,
-        try
-            eval(
-                quote
-                    PDFHighlights.Internal.Exceptions.@exception(
-                        name,
-                        arg::String,
-                        hello = "is it me you are looking for",
-                    )
-                end
-            )
-        catch e
-            rethrow(e)
-        end
-    )
-
-end
-
 PDFHighlights.Internal.Exceptions.@exception(
     exception_with_file,
     file::String,

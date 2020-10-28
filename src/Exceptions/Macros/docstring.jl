@@ -36,9 +36,6 @@ end |> linefilter!
 
 true
 ```
-
-See also: [`@exception`](@ref)
-
 """
 macro docstring(macro_name::Symbol)
     macro_name = QuoteNode(macro_name)
