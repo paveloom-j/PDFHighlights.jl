@@ -24,3 +24,6 @@ deps/*.log
 
 # Side file when generating documentation
 docs/build
+
+# Jupyter checkpoints
+.ipynb_checkpoints
