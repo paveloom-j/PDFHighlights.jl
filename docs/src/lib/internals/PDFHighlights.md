@@ -1,4 +1,4 @@
-# PDFHighlightsPage
+# [PDFHighlights](@id PDFHighlightsPage)
 
 ```@docs
 PDFHighlights

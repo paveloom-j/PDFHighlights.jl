@@ -7,7 +7,6 @@ void get_author_title(
     char **title
 )
 {
-
     // load the document
     PopplerDocument *document = poppler_document_new_from_gfile(
         g_file_new_for_path(file), NULL, NULL, NULL

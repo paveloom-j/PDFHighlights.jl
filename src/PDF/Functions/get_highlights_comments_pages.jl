@@ -199,17 +199,17 @@ function get_highlights_comments_pages(
         lines_x_anchors_arrays_ref = Ref{Ptr{Ptr{Cdouble}}}()
         lines_yl_anchors_arrays_ref = Ref{Ptr{Ptr{Cdouble}}}()
         lines_yu_anchors_arrays_ref = Ref{Ptr{Ptr{Cdouble}}}()
-        lines_lens_ref = Ref{Ptr{Culong}}()
+        lines_lens_ref = Ref{Ptr{UInt}}()
         comments_ref = Ref{Ptr{Cstring}}()
         pages_ref = Ref{Ptr{Cint}}()
-        num_ref = Ref{Culong}(0)
+        num_ref = Ref{UInt}(0)
 
         # Call
         ccall(
             # Function and library names
             (
                 :get_lines_comments_pages,
-                PATH_TO_GET_LINES_COMMENTS_PAGES_LIBRARY,
+                PDFHighlightsWrapper,
             ),
             # Type of return value
             Cvoid,
@@ -220,10 +220,10 @@ function get_highlights_comments_pages(
                 Ref{Ptr{Ptr{Cdouble}}},
                 Ref{Ptr{Ptr{Cdouble}}},
                 Ref{Ptr{Ptr{Cdouble}}},
-                Ref{Ptr{Culong}},
+                Ref{Ptr{UInt}},
                 Ref{Ptr{Cstring}},
                 Ref{Ptr{Cint}},
-                Ref{Culong},
+                Ref{UInt},
             ),
             # Arguments
             target,

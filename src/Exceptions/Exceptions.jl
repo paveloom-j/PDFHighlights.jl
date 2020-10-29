@@ -16,9 +16,10 @@ export DirectoryDoesNotExist,
        NotPDF,
        NotFiveColumns
 
+using Exceptions
+
 # Load the auxiliary macros to create other macros
 include("Macros/docstring.jl")
-include("Macros/exception.jl")
 include("Macros/fields.jl")
 
 # Load the auxiliary macros to create exceptions
@@ -26,7 +27,6 @@ include("Macros/fields.jl")
 include("Macros/exception_without_fields.jl")
 include("Macros/exception_with_file.jl")
 include("Macros/exception_with_line.jl")
-include("Macros/exception_with_symbol.jl")
 
 # Create exceptions
 

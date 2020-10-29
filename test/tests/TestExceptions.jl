@@ -6,45 +6,6 @@ using Test
 # Print the header
 println("\e[1;32mRUNNING\e[0m: TestExceptions.jl")
 
-@testset "@exception" begin
-
-    @test_throws(
-        LoadError,
-        try
-            eval(
-                quote
-                    PDFHighlights.Internal.Exceptions.@exception(
-                        name,
-                        arg::String,
-                        context = :(one),
-                        context = :(two),
-                    )
-                end
-            )
-        catch e
-            rethrow(e)
-        end
-    )
-
-    @test_throws(
-        LoadError,
-        try
-            eval(
-                quote
-                    PDFHighlights.Internal.Exceptions.@exception(
-                        name,
-                        arg::String,
-                        hello = "is it me you are looking for",
-                    )
-                end
-            )
-        catch e
-            rethrow(e)
-        end
-    )
-
-end
-
 PDFHighlights.Internal.Exceptions.@exception(
     exception_with_file,
     file::String,
@@ -93,32 +54,6 @@ PDFHighlights.Internal.Exceptions.@exception(
 
         Main.TestExceptions.ObjectsDestroyed:
         Death Stars destroyed: 2.
-        """
-    end
-
-end
-
-PDFHighlights.Internal.Exceptions.@exception(
-    exception_with_symbol,
-    symbol::Symbol,
-)
-
-@testset "@exception_with_symbol" begin
-
-    @exception_with_symbol(
-        KyloRenTraits,
-        "The exception thrown when Kylo Ren gets another «cool» trait.",
-        "Your ", e.symbol, " is not a symbol of courage, Kylo Ren.",
-    )
-
-    try
-        throw(KyloRenTraits(:scar))
-    catch e
-        @test sprint(showerror, e) == """
-
-
-        Main.TestExceptions.KyloRenTraits:
-        Your scar is not a symbol of courage, Kylo Ren.
         """
     end
 

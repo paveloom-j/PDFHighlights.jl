@@ -64,17 +64,9 @@ macro constant(name::Symbol, docstring::String, value::Union{Expr, String})
         A documentation constant for the [`$(docstring)`](@ref) exception.
         """
     end
-
     if typeof(value) == String
         docstring = """
             $(name) = "$(value)"
-
-        $(docstring)
-        """
-    else
-        value_copy = copy(value)
-        docstring = """
-            $(name) = $(linefilter!(value_copy))
 
         $(docstring)
         """
@@ -94,33 +86,6 @@ end
     HEADER,
     "Default (expected) header for CSV files.",
     "Highlight,Title,Author,Note,Location",
-)
-
-# For PDF
-
-# Specify the paths to the shared C libraries
-@constant(
-    PATH_TO_C_LIBRARIES,
-    "Path to the directory with C libraries.",
-    normpath(joinpath(@__DIR__, "..", "deps", "C")),
-)
-@constant(
-    PATH_TO_GET_LINES_COMMENTS_PAGES_LIBRARY,
-    "Path to the C library containing the `get_lines_comments_pages` function.",
-    joinpath(
-        PATH_TO_C_LIBRARIES,
-        "get_lines_comments_pages",
-        "get_lines_comments_pages",
-    ),
-)
-@constant(
-    PATH_TO_GET_AUTHOR_TITLE_LIBRARY,
-    "Path to the C library containing the `get_author_title` function.",
-    joinpath(
-        PATH_TO_C_LIBRARIES,
-        "get_author_title",
-        "get_author_title",
-    ),
 )
 
 # Documentation constants

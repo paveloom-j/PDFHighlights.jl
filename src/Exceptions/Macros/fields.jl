@@ -34,9 +34,6 @@ end |> linefilter!
 
 true
 ```
-
-See also: [`@exception`](@ref)
-
 """
 macro fields(strings::String...)
     return esc(

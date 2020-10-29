@@ -17,6 +17,7 @@ export _get_authors_from_PDF,
 
 using ..Constants
 using ..Exceptions
+using PDFHighlights_jll
 using SHA
 
 # Load the functions

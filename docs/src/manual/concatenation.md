@@ -27,7 +27,7 @@ result: highlight with the text "Minecraft" and an empty comment.
 ## The keyword
 
 The [`import_highlights`](@ref) function uses concatenation by default. Functions for
-[getting pieces](@ref ExtractingData) containing the word `highlights`, `comments` or
+[getting pieces](@ref ExtractingData) containing the words `highlights`, `comments`, or
 `pages` in their name support the keyword `concatenate`.
 
 Example without concatenation:

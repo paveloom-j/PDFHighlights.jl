@@ -17,30 +17,9 @@ from the Julia REPL, type `]` to enter the Pkg REPL mode and run:
 pkg> add PDFHighlights
 ```
 
-!!! note
-    At the moment, the package requires the `poppler-glib-dev` library (a C library).
-    You can install it like this:
-
-    - Linux:
-      ```bash
-      sudo apt-get update && sudo apt-get install -y --no-install-recommends libpoppler-glib-dev
-      ```
-
-    - macOS:
-      ```bash
-      brew update && brew install poppler
-      ```
-
-    On Windows, the only option, for now, is to use WSL.
-
-!!! note
-    During installation, the package compiles auxiliary shared C libraries. Check that you
-    have a `gcc` compiler available. The build process can be restarted using
-    `build PDFHighlights` in the Pkg REPL.
-
 ## [Importing highlights](@id Importing)
 
-You can now import highlights from a PDF file or a directory containing PDF files using
+You can import highlights from a PDF file or a directory containing PDF files using
 the [`import_highlights`](@ref) function:
 
 ```julia

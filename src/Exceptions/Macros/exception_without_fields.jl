@@ -15,9 +15,6 @@ Create an exception with no fields.
 
 # Returns
 - `Expr`: an exception definition (struct + `showerror` overload)
-
-See also: [`@exception`](@ref)
-
 """
 @exception exception_without_fields context = begin
     docstring = Meta.quot(
@@ -30,16 +27,3 @@ See also: [`@exception`](@ref)
         """
     )
 end
-
-@exception_without_fields(
-    OnlyOneContext,
-    "Exception thrown when more than one context has been passed.",
-    "Only one `context` specification is allowed.",
-)
-
-@exception_without_fields(
-    OnlyOneEquation,
-    "Exception thrown when non-context equation has been passed.",
-    "Equation is only available for one expression with the first argument " *
-    "equal to `context`.",
-)

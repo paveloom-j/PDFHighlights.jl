@@ -15,9 +15,6 @@ Create an exception with one field: a path to the file.
 
 # Returns
 - `Expr`: an exception definition (struct + `showerror` overload)
-
-See also: [`@exception`](@ref)
-
 """
 @exception exception_with_file file::String context = begin
     @fields(
