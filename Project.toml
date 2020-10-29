@@ -1,7 +1,7 @@
 name = "PDFHighlights"
 uuid = "e9eb520e-30fd-490c-8483-b9cf365267e3"
 authors = ["Pavel Sobolev <paveloom@mail.ru>"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 Exceptions = "25a0344a-2aab-46d0-b534-6f1410d4c65f"
