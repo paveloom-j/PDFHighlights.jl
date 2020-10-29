@@ -9,7 +9,7 @@ defaults:
 jobs:
   coverage:
     name: Codecov, Julia 1.5 (Linux, x64)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@latest
@@ -23,7 +23,7 @@ jobs:
           file: ./lcov.info
   docs:
     name: "Documentation Build, Julia 1.5 (Linux, x64)"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@latest

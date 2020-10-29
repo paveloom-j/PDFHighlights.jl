@@ -1,0 +1,40 @@
+name: Publish Docker
+
+on:
+  release:
+      types: [published]
+  push:
+    branches:
+      - develop
+
+jobs:
+  Update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Get release version
+      run: bash .github/scripts/publish-docker.bash
+    - name: Enabling experimental features
+      run: |
+        sudo bash -c 'echo "{\"cgroup-parent\": \"/actions_job\", \"experimental\":true}" > /etc/docker/daemon.json'
+        sudo systemctl restart docker.service
+    - name: Publish to Registry (with a tagged image)
+      if: ${{ env.PUBLISH_RELEASE_VERSION == 'true' }}
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: paveloom-j/PDFHighlights
+        username: paveloom
+        password: ${{ secrets.GHCR_PAT }}
+        registry: ghcr.io
+        tags: "latest,${{ env.RELEASE_VERSION }}"
+        buildoptions: "--force-rm --squash"
+    - name: Publish to Registry (without a tagged image)
+      if: ${{ env.PUBLISH_RELEASE_VERSION == 'false' }}
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: paveloom-j/PDFHighlights
+        username: paveloom
+        password: ${{ secrets.GHCR_PAT }}
+        registry: ghcr.io
+        tags: "latest"
+        buildoptions: "--force-rm --squash"

@@ -20,17 +20,17 @@ jobs:
       fail-fast: false
       matrix:
         julia-version: ['1.5', 'nightly']
-        os: [ubuntu-20.04, windows-latest, macOS-latest]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
         julia-arch: [x86, x64]
         exclude:
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             julia-version: '1.5'
             julia-arch: x64
           - os: macOS-latest
             julia-arch: x86
     name: Julia
           ${{ ( matrix.julia-version == 'nightly' && 'Nightly' ) || matrix.julia-version }}
-          (${{ ( matrix.os == 'ubuntu-20.04' && 'Linux' ) || ( matrix.os == 'windows-latest' && 'Windows' ) || ( matrix.os == 'macOS-latest' && 'macOS' ) }},
+          (${{ ( matrix.os == 'ubuntu-latest' && 'Linux' ) || ( matrix.os == 'windows-latest' && 'Windows' ) || ( matrix.os == 'macOS-latest' && 'macOS' ) }},
           ${{ matrix.julia-arch }})
     steps:
       - uses: actions/checkout@v2
