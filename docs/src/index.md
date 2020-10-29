@@ -14,6 +14,10 @@ _Export highlights from PDF files to a CSV file with one call._
       <th style="text-align: center; border: 1px solid lightgray; padding: 6px 12px;">
         Repository & License
       </th>
+
+      <th style="text-align: center; border: 1px solid lightgray; padding: 6px 12px;">
+        Playground
+      </th>
     </tr>
     <tr>
       <td style="text-align: center; border: 1px solid lightgray; padding: 6px 12px;">
@@ -28,6 +32,12 @@ _Export highlights from PDF files to a CSV file with one call._
         </a>
         <a href="https://github.com/paveloom-j/PDFHighlights.jl/blob/master/LICENSE.md" style="position: relative; bottom: -2px;">
           <img src="https://img.shields.io/badge/license-MIT-5DA399.svg">
+        </a>
+      </td>
+
+      <td style="text-align: center; border: 1px solid lightgray; padding: 6px 12px;">
+        <a href="https://mybinder.org/v2/gh/paveloom-j/PDFHighlights.jl/master?urlpath=lab/tree/playground.ipynb" style="position: relative; bottom: -2px;">
+          <img src="https://mybinder.org/badge_logo.svg">
         </a>
       </td>
     </tr>
